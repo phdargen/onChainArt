@@ -2,11 +2,11 @@ pragma solidity ^0.8.4;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/interfaces/IERC2981.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./ColorPalette.sol";
 import "./SVG.sol";
 import "./Helper.sol";
@@ -18,18 +18,15 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  uint public price = 0.0 ether;
-  uint public maxSupply = 1000;
-  uint public maxPerPerson = 10;
+  uint public price = 0.001 ether;
+  uint16 public maxSupply = 1000;
+  uint16 public maxPerPerson = 10;
 
+  uint16 public royalty = 1000; // 10%
   address public royaltyAddress = address(this);
-  uint public royalty = 1000; // 10%
 
 	ColorPalette colorPaletteSet; 
   SVG svgMaker;
-
-  // Events
-  event newNFT(address minter, uint tokenId, bytes32 rnd, bytes3 color, uint chub);
 
   constructor(address color, address svg) public ERC721("Onchain Art", "OCA") {
     colorPaletteSet = ColorPalette(color);
@@ -38,11 +35,10 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
 
   mapping (uint256 => uint256) public rnd;
 
-  function mintNFT() public payable returns (uint256)
-  {
+  function mintNFT() public payable returns (uint256){
       require(msg.value == price, "Wrong price");
       require(totalSupply() < maxSupply, "Sold out!");
-      require(balanceOf(msg.sender) + 1 <= maxPerPerson,"You cant mint more than limit");
+      require(balanceOf(msg.sender) + 1 <= maxPerPerson,"Mint over limit");
 
       _tokenIds.increment();
 
@@ -63,9 +59,9 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
       string memory image = getSVG(id) ; 
 
       uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
-      uint256 layers = Helper.expandRandom(rnd[id],0,15,25,1)[0];
+      uint layers = Helper.expandRandom(rnd[id],0,15,25,1)[0];
 
-      uint256[] memory figures = Helper.expandRandom(rnd[id],1,0,2,layers*3);
+      uint[] memory figures = Helper.expandRandom(rnd[id],1,0,2,layers*3);
       uint boxes = 0;
       uint triangles = 0;
       uint circles = 0;
@@ -133,16 +129,11 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
         return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  function royaltyInfo(uint256, uint256 _salePrice)
-        public
-        view
-        override
-        returns (address, uint256)
-  {
+  function royaltyInfo(uint256, uint256 _salePrice) public view override returns (address, uint256){
         return (royaltyAddress, (_salePrice * royalty) / 10000);
   }
 
-  function setPrice(uint256 newPrice) public onlyOwner {
+  function setPrice(uint256 newPrice) external onlyOwner {
         price = newPrice;
   }
 

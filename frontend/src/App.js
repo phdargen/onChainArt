@@ -1,11 +1,10 @@
-import './App.css';
 import React, { useEffect, useState } from "react";
-import squirrelImg from './assets/token1.svg';
+import img1 from './assets/token1.svg';
 import { ethers } from 'ethers';
 import contract from './contracts/myNFT.json';
 import { Fragment } from 'react/cjs/react.production.min';
-import Footer from './components/Footer';
-import Header from './components/Header';
+
+import Button from 'react-bootstrap/Button';
 
 // Constants
 const OPENSEA_LINK = 'https://testnets.opensea.io/collection/rinkeby-squirrels';
@@ -113,16 +112,20 @@ const App = () => {
 
   // Render Methods
   const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className="cta-button connect-wallet-button">
-      Connect to Wallet
-    </button>
+    <center>
+      <Button onClick={connectWallet} class="btn btn-primary connect-wallet-button">
+        Connect to Wallet
+      </Button>
+    </center>
   );
 
   const renderMintUI = () => {
     return (
-      <button onClick={mintNFT} className="cta-button connect-wallet-button" >
-        Mint a Rinkeby Squirrel NFT
-      </button >
+      <center>
+        <Button onClick={mintNFT} class="btn btn-primary connect-wallet-button" >
+          Mint NFT
+        </Button >
+      </center>
     );
   }
 
@@ -131,40 +134,80 @@ const App = () => {
       {metamaskError && <div className='metamask-error'>Please make sure you are connected to the Rinkeby Network on Metamask!</div>}
       <div className="App">
 
-
-
-        <div className="container">
-          <Header opensea={OPENSEA_LINK} />
-          <div className="header-container">
-            <div className='banner-img'>
-              <img src={squirrelImg} alt="Rinkeby Squirrels" />
+        <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"> DeepArt.NFT </a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Workshop</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#myArt">My Collection</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#gallery">Gallery</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">About</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="faq.html">FAQ</a></li>
+                        <button class="btn btn-primary btn-connect" type="button" id="btn-connect">Connect wallet</button>
+                    </ul>
+                </div>
             </div>
-            {currentAccount && mineStatus !== 'mining' && renderMintUI()}
-            {!currentAccount && !mineStatus && renderNotConnectedContainer()}
-            <div className='mine-submission'>
-              {mineStatus === 'success' && <div className={mineStatus}>
-                <p>NFT minting successful!</p>
-                <p className='success-link'>
-                  <a href={`https://testnets.opensea.io/${currentAccount}/`} target='_blank' rel='noreferrer'>Click here</a>
-                  <span> to view your NFT on OpenSea.</span>
-                </p>
-              </div>}
-              {mineStatus === 'mining' && <div className={mineStatus}>
-                <div className='loader' />
-                <span>Transaction is mining</span>
-              </div>}
-              {mineStatus === 'error' && <div className={mineStatus}>
-                <p>Transaction failed. Make sure you have at least 0.01 Rinkeby ETH in your Metamask wallet and try again.</p>
-              </div>}
+        </nav>
+
+        <section class="page-section bg-primary portfolio" id="portfolio">
+          <div className="container d-flex align-items-center flex-column">
+            {/* <Header opensea={OPENSEA_LINK} /> */}
+            <div className="header-container">
+              <div className='banner-img'>
+                <img class="img-big rounded" src={img1}  alt="" />
+              </div>
+              {currentAccount && mineStatus !== 'mining' && renderMintUI()}
+              {!currentAccount && !mineStatus && renderNotConnectedContainer()}
+              <div className='mine-submission'>
+                {mineStatus === 'success' && <div className={mineStatus}>
+                  <p>NFT minting successful!</p>
+                  <p className='success-link'>
+                    <a href={`https://testnets.opensea.io/${currentAccount}/`} target='_blank' rel='noreferrer'>Click here</a>
+                    <span> to view your NFT on OpenSea.</span>
+                  </p>
+                </div>}
+                {mineStatus === 'mining' && <div className={mineStatus}>
+                  <div className='loader' />
+                  <span>Transaction is mining</span>
+                </div>}
+                {mineStatus === 'error' && <div className={mineStatus}>
+                  <p>Transaction failed. Make sure you have at least 0.01 Rinkeby ETH in your Metamask wallet and try again.</p>
+                </div>}
+              </div>
             </div>
+            {/* {mineStatus !== 'mining' && mineStatus !== 'success' && <div className='guide'>
+              <p>Not sure what Rinkeby Squirrels are, what NFT minting is, or where to get Rinkeby ETH? &nbsp;
+              </p>
+            </div>} */}
+            {/* <Footer address={contractAddress} /> */}
           </div>
-          {mineStatus !== 'mining' && mineStatus !== 'success' && <div className='guide'>
-            <p>Not sure what Rinkeby Squirrels are, what NFT minting is, or where to get Rinkeby ETH? &nbsp;
-            </p>
-          </div>}
-          <Footer address={contractAddress} />
-        </div>
+        </section>
+
+        <section class="page-section bg-secondary text-white mb-0" id="about">
+            <div class="container">
+                {/* <!-- About Section Heading--> */}
+                <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+                {/* <!-- Icon Divider--> */}
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-robot"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                {/* <!-- About Section Content--> */}
+                <div class="row">
+                    <div class="col-lg-4 ml-auto"><p class="lead"> Get your unique artwork created by a deep learning algorithm that is seeded with your wallet address and transaction history.  </p></div>
+                    <div class="col-lg-4 mr-auto"><p class="lead"> Admire your masterpiece and give it a title. Pick your favorite and upgrade it to an animated artwork. </p></div>
+                </div>
+            </div>
+        </section>
+
       </div>
+
     </Fragment>
   );
 };

@@ -13,7 +13,7 @@ import img1 from '../assets/token1.svg';
 
 // import contractNftAbi from '../contracts/myNFT.json'
 import contractAdresses from "../contracts/contracts.json"
-import { useGetSVG, useMintNFT, usePrice} from "../hooks"
+import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex} from "../hooks"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
@@ -67,6 +67,14 @@ export const MintNFT = () => {
   const price: number = priceMint ? parseFloat(formatUnits(priceMint, 18)) : 0
   const priceUSD: number = price * formattedEtherPrice 
 
+  // Get NFTs of user
+  const accountAdress = account ? account : "0x"
+  const nftBalance = useBalanceOf(accountAdress);
+  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
+
+  // Get SVG of latest user NFT
+  const svg = useGetSVG(tokenId);  
+
   // Mint transaction
   const { send: mintSend, state: mintState } = useMintNFT()
 
@@ -92,32 +100,26 @@ export const MintNFT = () => {
   const isMining = mintState.status === "Mining"
   const isSuccess = mintState.status === "Success"
   const txId = mintState.receipt ? mintState.receipt.transactionHash : ""
-//   const tokenId = mintState.receipt ? mintState.receipt.logs[0].topics[2] : 0
 
   const handleCloseSnack = () => {
     showMintSuccess && setShowMintSuccess(false)
   }
 
-  // Get SVG
-  const svg = useGetSVG(1);
-  //console.log(svg ? svg : "")
-
   return (
         <>
         <div>
             <Card className={classes.Card}>
-                <CardMedia
-                    className={classes.Media}
-                    component="img"
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`}
-                    alt= {img1}
-                />
+                {!isSuccess ?  
+                    (<CardMedia className={classes.Media} component="img" src={img1} /> )
+                    : 
+                    (<CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} /> )
+                }
                 <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
-                </Typography>
-                {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
-                </CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                        Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
+                    </Typography>
+                    {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
+                    </CardContent>
                 <CardActions>
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>
                 </CardActions>

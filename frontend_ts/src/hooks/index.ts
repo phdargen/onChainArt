@@ -45,5 +45,32 @@ export function useGetSVG(tokenId:number) {
     args: [tokenId],
   }) ?? [];
   return svg;
+}
 
+export function useBalanceOf(address:string) {
+
+  const { account, chainId } = useEthers()
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  
+  const [balance]: any = useContractCall({
+    abi: contractInterface,
+    address: contractAdress,
+    method: "balanceOf",
+    args: [address],
+  }) ?? [];
+  return balance;
+}
+
+export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
+
+  const { account, chainId } = useEthers()
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  
+  const [id]: any = useContractCall({
+    abi: contractInterface,
+    address: contractAdress,
+    method: "tokenOfOwnerByIndex",
+    args: [address, tokenId],
+  }) ?? [];
+  return id;
 }

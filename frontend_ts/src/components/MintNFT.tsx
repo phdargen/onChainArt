@@ -141,7 +141,7 @@ export const MintNFT = () => {
                         Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
                     </Typography>
                     {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
-                    {userMinted == 0 && isConnected ? 
+                    {userMinted > 0 && isConnected ? 
                         ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + accountAdress} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 </CardContent>
                 <CardActions>

@@ -12,7 +12,8 @@ import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex} 
 
 import contractAdresses from "../contracts/contracts.json"
 import img1 from '../assets/examples.gif';
-const openSeaLink = "https://testnets.opensea.io/assets/"
+import { faLessThanEqual } from "@fortawesome/free-solid-svg-icons"
+const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
@@ -57,14 +58,6 @@ export const MintNFT = () => {
 
   // Get contract address
   const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-
-  // Get NFTs of user
-  const accountAdress = account ? account : constants.AddressZero
-  const nftBalance = useBalanceOf(accountAdress);
-  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
-
-  // Get SVG of latest user NFT
-  const svg = useGetSVG(tokenId ? tokenId : 0); 
 
   // Get account balance
   const balance = useEtherBalance(account)
@@ -125,6 +118,14 @@ export const MintNFT = () => {
     showMintFail && setShowMintFail(false)
   }
 
+  // Get NFTs of user
+  const accountAdress = account ? account : constants.AddressZero
+  const nftBalance = useBalanceOf(accountAdress);
+  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
+
+  // Get SVG of latest user NFT
+  const svg = useGetSVG(tokenId ? tokenId : 0); 
+
   // Render Mint UI
   return (
         <>
@@ -133,15 +134,15 @@ export const MintNFT = () => {
                 {userMinted == 0 ?  
                     (<CardMedia className={classes.Media} component="img" src={img1} /> )
                     : 
-                    (<CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} /> )
+                    (<CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> )
                 }
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
                     </Typography>
                     {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
-                    {userMinted > 0 && isConnected ? 
-                        ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + contractAdress + "/" + tokenId } underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
+                    {userMinted == 0 && isConnected ? 
+                        ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + accountAdress} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 </CardContent>
                 <CardActions>
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>

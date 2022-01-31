@@ -16,7 +16,7 @@ const openSeaLink = "https://testnets.opensea.io/assets/"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
-    // marginTop: theme.spacing(20),
+    marginTop: theme.spacing(5),
     margin:'auto',
     flexDirection: 'column',
     width: 400,

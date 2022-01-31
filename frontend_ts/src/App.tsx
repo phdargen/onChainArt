@@ -1,5 +1,6 @@
 import React from "react"
 import { Header } from "./components/Header"
+import { Footer } from "./components/Footer"
 import { Main } from "./components/Main"
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config, Rinkeby } from '@usedapp/core'
 import { Container } from "@material-ui/core"
@@ -16,9 +17,14 @@ export const App = () => {
   return (
     <DAppProvider config={config}>
       <Header />
+      
       <Container maxWidth="md">
         <Main />
       </Container>
+
+      <Footer />
+
+
     </DAppProvider>
   )
 }

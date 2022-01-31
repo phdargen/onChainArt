@@ -1,33 +1,19 @@
-/* eslint-disable spaced-comment */
-/// <reference types="react-scripts" />
-
 import React, { useEffect, useState } from "react"
 
 import { ChainId, useEthers } from "@usedapp/core"
-import { constants } from "ethers"
 
-import { Snackbar, Typography, makeStyles } from "@material-ui/core"
+import { Snackbar} from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
 import { MintNFT } from "./MintNFT"
-import contractAdresses from "../contracts/contracts.json"
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    color: theme.palette.common.white,
-    textAlign: "center",
-    padding: theme.spacing(4),
-  },
-}))
 
 export const Main = () => {
+
+  // Check connnection
   const { chainId, active, error, account } = useEthers()
   const isConnected = account !== undefined
 
-  const classes = useStyles()
-  console.log(chainId)
-  //const dappTokenAddress = chainId ? networkMapping[String(chainId)]["DappToken"][0] : constants.AddressZero
-
+  // Hanlde network errors
   const [showNetworkError, setShowNetworkError] = useState(false)
 
   const handleCloseNetworkError = (
@@ -49,17 +35,9 @@ export const Main = () => {
     }
   }, [error, showNetworkError, chainId, isConnected])
 
+  // Render UI
   return (
     <>
-      <Typography
-        variant="h2"
-        component="h1"
-        classes={{
-          root: classes.title,
-        }}
-      >
-        Onchain Art
-      </Typography>
       <MintNFT />
       <Snackbar
         open={showNetworkError}

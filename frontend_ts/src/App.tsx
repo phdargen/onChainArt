@@ -18,7 +18,7 @@ export const App = () => {
     <DAppProvider config={config}>
       <Header />
       
-      <Container maxWidth="md">
+      <Container >
         <Main />
       </Container>
 

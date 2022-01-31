@@ -5,7 +5,6 @@ import { Contract } from '@ethersproject/contracts'
 import contractNftAbi from '../contracts/myNFT.json'
 import contractAdresses from "../contracts/contracts.json"
 
-//const simpleContractInterface = new ethers.utils.Interface(simpleContractAbi);
 const contractInterface = new ethers.utils.Interface(contractNftAbi.abi)
 
 export const useMintNFT = () => {
@@ -22,7 +21,7 @@ export function usePrice() {
 
     const { account, chainId } = useEthers()
     const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-    
+
     const [price]: any = useContractCall({
       abi: contractInterface,
       address: contractAdress,
@@ -37,7 +36,7 @@ export function useGetSVG(tokenId:number) {
 
   const { account, chainId } = useEthers()
   const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-  
+
   const [svg]: any = useContractCall({
     abi: contractInterface,
     address: contractAdress,
@@ -51,7 +50,7 @@ export function useBalanceOf(address:string) {
 
   const { account, chainId } = useEthers()
   const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-  
+
   const [balance]: any = useContractCall({
     abi: contractInterface,
     address: contractAdress,
@@ -65,7 +64,7 @@ export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
 
   const { account, chainId } = useEthers()
   const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-  
+
   const [id]: any = useContractCall({
     abi: contractInterface,
     address: contractAdress,

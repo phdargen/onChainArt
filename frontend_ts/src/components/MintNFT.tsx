@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react"
+
 import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
 import { useCoingeckoPrice } from '@usedapp/coingecko'
-
 import { formatUnits } from "@ethersproject/units"
-import { Contract } from '@ethersproject/contracts'
 import { utils, constants } from "ethers"
 
-import { Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, CircularProgress, Snackbar } from "@material-ui/core"
+import { Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
-import img1 from '../assets/token1.svg';
-
-// import contractNftAbi from '../contracts/myNFT.json'
-import contractAdresses from "../contracts/contracts.json"
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex} from "../hooks"
+
+import contractAdresses from "../contracts/contracts.json"
+import img1 from '../assets/token1.svg';
+const openSeaLink = "https://testnets.opensea.io/assets/"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
@@ -55,6 +54,17 @@ export const MintNFT = () => {
     }
   }, [chainId, isConnected] )
 
+  // Get contract address
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+
+  // Get NFTs of user
+  const accountAdress = account ? account : constants.AddressZero
+  const nftBalance = useBalanceOf(accountAdress);
+  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
+
+  // Get SVG of latest user NFT
+  const svg = useGetSVG(tokenId ? tokenId : 0); 
+
   // Get account balance
   const balance = useEtherBalance(account)
   const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
@@ -67,49 +77,59 @@ export const MintNFT = () => {
   const price: number = priceMint ? parseFloat(formatUnits(priceMint, 18)) : 0
   const priceUSD: number = price * formattedEtherPrice 
 
-  // Get NFTs of user
-  const accountAdress = account ? account : "0x"
-  const nftBalance = useBalanceOf(accountAdress);
-  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
-
-  // Get SVG of latest user NFT
-  const svg = useGetSVG(tokenId);  
-
   // Mint transaction
   const { send: mintSend, state: mintState } = useMintNFT()
 
+  const [showMintSuccess, setShowMintSuccess] = useState(false)
+  const [showMintFail, setShowMintFail] = useState(false)
+  const [userMinted, setUserMinted] = useState(0)
+
+  const isMining = mintState.status === "Mining"
+  const txId = mintState.receipt ? mintState.receipt.transactionHash : ""
+
   const handleMint = () => {
+    setShowMintSuccess(false)
+    setShowMintFail(false)
     return mintSend({ value: utils.parseEther(price.toString()) })
   }
 
-  const [showMintSuccess, setShowMintSuccess] = useState(false)
-
+  // Search in notifactions for succesful/failed transactions
   useEffect(() => {
-    if (
-      notifications.filter(
-        (notification) =>
-          notification.type === "transactionSucceed" &&
-          notification.transactionName === "Mint NFT"
-      ).length > 0
-    ) {
-      !showMintSuccess && setShowMintSuccess(true)
-      console.log(mintState.receipt ? mintState.receipt : "")
-    }
-  }, [notifications, showMintSuccess])
+        if (
+            notifications.filter(
+                (notification) =>
+                notification.type === "transactionSucceed" &&
+                notification.transactionName === "Mint NFT"
+            ).length > 0
+        ) {
+            !showMintSuccess && setShowMintSuccess(true)
+            console.log(mintState.receipt ? mintState.receipt : "")
+            setUserMinted(userMinted+1)
+        }
 
-  const isMining = mintState.status === "Mining"
-  const isSuccess = mintState.status === "Success"
-  const txId = mintState.receipt ? mintState.receipt.transactionHash : ""
+        else if (
+            notifications.filter(
+                (notification) =>
+                    notification.type === "transactionFailed" &&
+                    notification.transactionName === "Mint NFT"
+                ).length > 0
+            ) {
+            !showMintFail && setShowMintFail(true)
+        }  
+
+  }, [notifications, showMintSuccess, showMintFail])
 
   const handleCloseSnack = () => {
     showMintSuccess && setShowMintSuccess(false)
+    showMintFail && setShowMintFail(false)
   }
 
+  // Render Mint UI
   return (
         <>
         <div>
             <Card className={classes.Card}>
-                {!isSuccess ?  
+                {userMinted == 0 ?  
                     (<CardMedia className={classes.Media} component="img" src={img1} /> )
                     : 
                     (<CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} /> )
@@ -119,23 +139,29 @@ export const MintNFT = () => {
                         Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
                     </Typography>
                     {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
-                    </CardContent>
+                    {userMinted > 0 && isConnected ? 
+                        ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + contractAdress + "/" + tokenId } underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
+                </CardContent>
                 <CardActions>
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>
                 </CardActions>
             </Card>
         </div>
-              <Snackbar
-              open={showMintSuccess}
-              autoHideDuration={10000}
-              onClose={handleCloseSnack}
-            >
+
+        <Snackbar open={showMintSuccess} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="success">
               <p>Transaction successful!</p>
-              {/* <p> TokenId = {tokenId.toNumber()} </p> */}
               <p><a href={"https://rinkeby.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
               </Alert>
-            </Snackbar>
+        </Snackbar>
+
+        <Snackbar open={showMintFail} autoHideDuration={10000} onClose={handleCloseSnack} >
+              <Alert onClose={handleCloseSnack} severity="error">
+              <p>Transaction failed!</p>
+              <p><a href={"https://rinkeby.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
+              </Alert>
+        </Snackbar>
+
         </>
   )
 }

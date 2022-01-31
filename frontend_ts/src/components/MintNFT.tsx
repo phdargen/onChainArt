@@ -11,7 +11,7 @@ import Alert from "@material-ui/lab/Alert"
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex} from "../hooks"
 
 import contractAdresses from "../contracts/contracts.json"
-import img1 from '../assets/token1.svg';
+import img1 from '../assets/examples.gif';
 const openSeaLink = "https://testnets.opensea.io/assets/"
 
 const useStyles = makeStyles((theme) => ({

@@ -2,6 +2,9 @@ const hre = require("hardhat");
 const { utils } = require("ethers");
 const fs = require('fs');
 
+const sharp = require('sharp');
+const xmldom = require('xmldom');
+
 async function main() {
 
   // Get owner/deployer's wallet address
@@ -34,7 +37,7 @@ async function main() {
   await contract.deployed();
   console.log("myNFT deployed to:", contract.address);
 
-  for(let i = 1; i < 2; i++){
+  for(let i = 1; i < 10; i++){
 
     let price =  await contract.price();
 
@@ -51,6 +54,7 @@ async function main() {
     let svg = await contract.getSVG(i)
     //console.log("svg: ", svg);
     fs.writeFileSync(`token${i}.svg`, svg);
+    await downloadPNG(svg, i)
 
     // Get metadata
     let uri = await contract.tokenURI(i)
@@ -59,6 +63,30 @@ async function main() {
 
   }
 
+}
+
+async function downloadPNG(svgdata, tokenId)
+{
+  let resizewidth = 500;
+  let resizedest = "token" + tokenId + "png";
+
+  let IMAGE = new xmldom.DOMParser().parseFromString(svgdata, 'text/xml');
+  let svgList = IMAGE.getElementsByTagName('svg');
+  if (!svgList) {
+      throw new Error(`No SVG in ${svgdata}`);
+  }
+  
+  let svg = svgList.item(0);
+  svg.setAttribute('width', '100em');
+  svg.setAttribute('height', '100em');
+  //svg.setAttribute('fill', 'black');
+  
+  let img = await sharp(Buffer.from(
+      new xmldom.XMLSerializer().serializeToString(IMAGE)
+  ));
+  
+  let resized = await img.resize(resizewidth);
+  await resized.toFile(resizedest);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

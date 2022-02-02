@@ -5,10 +5,10 @@ import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
 
-import { Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
+import { Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
-import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex} from "../hooks"
+import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
 
 import contractAdresses from "../contracts/contracts.json"
 import img1 from '../assets/examples.gif';
@@ -18,23 +18,42 @@ const openSeaLink = "https://testnets.opensea.io/"
 const useStyles = makeStyles((theme) => ({
   Card: {
     marginTop: theme.spacing(5),
-    marginBottom: theme.spacing(5),
+    marginBottom: '10%',
     margin:'auto',
     flexDirection: 'column',
+    //height: 'auto',
     width: 400,
+    //maxWidth: 400,
+    [theme.breakpoints.down("md")] : {
+        maxWidth: 200,
+    },
     align: "center",
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: "linear-gradient(#28282a, #28282a);" 
     backgroundColor: "#28282a" ,
-    color: "white"
+    color: "white",
+    //display: 'flex'
   },
   Media: {
     alignItems: "center",
     height:'100%',
     width: '100%',
-    color: "white" 
-  }
+    color: "white",
+    display: 'flex'
+  },
+  grid: {
+    backgroundColor:  "#28282a",
+    gap: theme.spacing(0),
+    //marginTop: "auto",
+    marginBottom: theme.spacing(0),
+    //width: '100%',
+    padding: theme.spacing(0),
+    margin: 0,
+    position: 'fixed',
+    bottom: 0,
+    //display: 'flex'
+  },
 
 }))
 
@@ -126,29 +145,41 @@ export const MintNFT = () => {
   // Get SVG of latest user NFT
   const svg = useGetSVG(tokenId ? tokenId : 0); 
 
+  // Get NFT supply
+  const totalSupply = useTotalSupply();
+  const totalSupplyFormatted: string = totalSupply ? String(totalSupply) : "?"
+
+  const maxSupply = useMaxSupply();
+  const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"
+
   // Render Mint UI
   return (
         <>
-        <div>
-            <Card className={classes.Card}>
+        <Card className={classes.Card}>
                 {userMinted == 0 ?  
                     (<CardMedia className={classes.Media} component="img" src={img1} /> )
                     : 
                     (<CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> )
                 }
                 <CardContent>
+                    
                     <Typography gutterBottom variant="h5" component="div">
-                        Price: ${price.toFixed(3)} ETH (~ ${priceUSD.toFixed(2)} $)
+                        Already minted: {totalSupplyFormatted} / {maxSupplyFormatted} 
+                    </Typography> 
+
+                    <Typography gutterBottom variant="h5" component="div">
+                        Price: {price.toFixed(3)}ETH (~{priceUSD.toFixed(2)}$)
                     </Typography>
+
                     {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
                     {userMinted > 0 && isConnected ? 
                         ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + accountAdress} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
+                
                 </CardContent>
                 <CardActions>
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>
                 </CardActions>
-            </Card>
-        </div>
+        </Card>
 
         <Snackbar open={showMintSuccess} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="success">

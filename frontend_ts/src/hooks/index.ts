@@ -31,6 +31,36 @@ export function usePrice() {
     return price;
   
 }
+
+export function useTotalSupply() {
+
+  const { account, chainId } = useEthers()
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+
+  const [supply]: any = useContractCall({
+    abi: contractInterface,
+    address: contractAdress,
+    method: "totalSupply",
+    args: [],
+  }) ?? [];
+  return supply;
+
+}
+
+export function useMaxSupply() {
+
+  const { account, chainId } = useEthers()
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+
+  const [supply]: any = useContractCall({
+    abi: contractInterface,
+    address: contractAdress,
+    method: "maxSupply",
+    args: [],
+  }) ?? [];
+  return supply;
+
+}
   
 export function useGetSVG(tokenId:number) {
 

@@ -3,18 +3,15 @@ import { useEthers } from "@usedapp/core"
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: theme.spacing(4),
     display: "flex",
     justifyContent: "flex-end",
-    gap: theme.spacing(1)
   },
   title: {
     color: theme.palette.common.white,
     textAlign: "center",
-    //spadding: theme.spacing(4),
   },
   appBar: {
-    backgroundColor:  "#28282a" 
+    backgroundColor:  "#28282a",
   }
 }))
 
@@ -41,9 +38,9 @@ export const Header = () => {
               <Button color="primary" variant="contained" size="large">
                 {`${account?.slice(0, 4)}...${account?.slice(-3)}`}
               </Button>
-              <Button color="primary" variant="contained" size="large" onClick={() => deactivate()}>
+              {/* <Button color="primary" variant="contained" size="large" onClick={() => deactivate()}>
                 Disconnect
-              </Button>
+              </Button> */}
             </>
           ) : (
             <Button color="primary" variant="contained" size="large" onClick={() => activateBrowserWallet()}>

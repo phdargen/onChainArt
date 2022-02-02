@@ -13,19 +13,12 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.white,
       textAlign: "center",
     },
+    box: {
+      paddingTop: 0,
+    },
+    container: {
+    },
     grid: {
-      backgroundColor:  "#28282a",
-      gap: theme.spacing(0),
-      marginTop: "auto",
-      marginBottom: theme.spacing(0),
-      width: '100%',
-      //height: '10%',
-      padding: theme.spacing(0),
-      margin: 0,
-      position: 'fixed',
-      bottom: 0,
-      top: '80%'
-      //display: 'flex'
     },
     gridItem: {
         alignItems: 'center',
@@ -35,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         padding: theme.spacing(0),
-        //marginLeft: theme.spacing(5),
-        //marginRight: theme.spacing(5),
         margin: 'auto',
         align: 'center',
         textAlign: 'center',
@@ -53,10 +44,10 @@ export const Footer = () => {
 
     return (
 
-        <Box px={{ xs: 3, sm: 10 }}  py={{ xs: 5, sm: 10 }} bgcolor="text.secondary" color="white">
-            <Container maxWidth="lg">
+        <Box className={classes.box} bgcolor="text.secondary" color="white">
+            <Container className={classes.container} maxWidth="lg">
 
-                <Grid container spacing={0}>
+                <Grid className={classes.grid} container spacing={0}>
                     <Grid item xs={12} sm={4} >
                         <p></p>
                         <Typography variant="h4" className={classes.title}> LICENSE </Typography>

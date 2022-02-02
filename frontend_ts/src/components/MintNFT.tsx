@@ -5,7 +5,7 @@ import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
 
-import { Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
+import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
@@ -17,15 +17,15 @@ const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
-    marginTop: theme.spacing(5),
-    marginBottom: '10%',
+    marginTop: '4%',
+    marginBottom: '4%',
     margin:'auto',
-    flexDirection: 'column',
-    //height: 'auto',
-    width: 400,
-    //maxWidth: 400,
+    paddingTop: '0%',
+    width: '30%',
+    maxWidth: 500,
     [theme.breakpoints.down("md")] : {
-        maxWidth: 200,
+        width: '60%',
+        marginTop: '10%',
     },
     align: "center",
     alignItems: "center",
@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: "linear-gradient(#28282a, #28282a);" 
     backgroundColor: "#28282a" ,
     color: "white",
-    //display: 'flex'
   },
   Media: {
     alignItems: "center",
@@ -42,19 +41,6 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     display: 'flex'
   },
-  grid: {
-    backgroundColor:  "#28282a",
-    gap: theme.spacing(0),
-    //marginTop: "auto",
-    marginBottom: theme.spacing(0),
-    //width: '100%',
-    padding: theme.spacing(0),
-    margin: 0,
-    position: 'fixed',
-    bottom: 0,
-    //display: 'flex'
-  },
-
 }))
 
 export const MintNFT = () => {
@@ -155,6 +141,9 @@ export const MintNFT = () => {
   // Render Mint UI
   return (
         <>
+        <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+        <Container maxWidth="lg">
+
         <Card className={classes.Card}>
                 {userMinted == 0 ?  
                     (<CardMedia className={classes.Media} component="img" src={img1} /> )
@@ -180,6 +169,9 @@ export const MintNFT = () => {
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>
                 </CardActions>
         </Card>
+
+        </Container>
+        </Box>
 
         <Snackbar open={showMintSuccess} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="success">

@@ -11,6 +11,8 @@ const config: Config = {
     [Rinkeby.chainId]: 'https://rinkeby.infura.io/v3/847c45b102374b7f917b1e360bf4eccb',
     [Mainnet.chainId]: '',
   },
+  autoConnect: false,
+  networks: [Rinkeby]
 }
 
 export const App = () => {

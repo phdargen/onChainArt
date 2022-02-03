@@ -1,5 +1,5 @@
 import { ethers, utils, constants } from "ethers";
-import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
+import { useContractCall, useContractCalls, useContractFunction, useEthers, ContractCall } from "@usedapp/core";
 import { Contract } from '@ethersproject/contracts'
 
 import contractNftAbi from '../contracts/myNFT.json'
@@ -74,6 +74,39 @@ export function useGetSVG(tokenId:number) {
     args: [tokenId],
   }) ?? [];
   return svg;
+}
+
+export function useGetAllSVGs(tokenIds:number[]) {
+
+  const { account, chainId } = useEthers()
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+
+  //const calls: Array<ContractCall> = 
+  
+  return useContractCalls(
+    tokenIds ?
+        tokenIds.map( (index) => ( {
+          abi: contractInterface,
+          address: contractAdress,
+          method: "getSVG",
+          args: [index],
+      }))
+      : []
+  );
+
+  // const call =   new  ContractCall(
+  //   contractInterface,
+  //   contractAdress,
+  //   "getSVG",
+  //   [1]
+  //   )
+
+  // const calls: Array<ContractCall> = [ 
+  //   call
+  // ]
+  // const results = useContractCalls(calls) ?? []
+
+  // return results;
 }
 
 export function useBalanceOf(address:string) {

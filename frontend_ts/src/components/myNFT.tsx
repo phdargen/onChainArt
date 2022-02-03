@@ -1,0 +1,102 @@
+import React, { useState, useEffect } from "react"
+
+import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
+import { formatUnits } from "@ethersproject/units"
+import { utils, constants } from "ethers"
+
+import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
+
+import { useGetSVG, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
+
+import contractAdresses from "../contracts/contracts.json"
+
+import img1 from "../assets/token1.svg"
+
+const openSeaLink = "https://testnets.opensea.io/"
+
+const useStyles = makeStyles((theme) => ({
+  Card: {
+    marginTop: '4%',
+    marginBottom: '4%',
+    margin:'auto',
+    paddingTop: '0%',
+    width: '30%',
+    maxWidth: 500,
+    [theme.breakpoints.down("md")] : {
+        width: '60%',
+        marginTop: '10%',
+    },
+    align: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "linear-gradient(#28282a, #28282a);" 
+    backgroundColor: "#28282a" ,
+    color: "white",
+  },
+  Media: {
+    alignItems: "center",
+    height:'100%',
+    width: '100%',
+    color: "white",
+    display: 'flex'
+  },
+}))
+
+export const myNFT = () => {
+
+  const classes = useStyles()
+
+  const { notifications } = useNotifications()
+  const { account, chainId } = useEthers()
+
+  // Check if account is connected to correct chain
+  const isConnected = account !== undefined
+  const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
+  useEffect( () => {
+    if( chainId == 4 && isConnected)  {
+        setIsConnectedAndCorrectChain(true)
+    } else {
+        setIsConnectedAndCorrectChain(false)
+    }
+  }, [chainId, isConnected] )
+
+  // Get contract address
+  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+
+  // Get account balance
+  const balance = useEtherBalance(account)
+  const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
+
+
+  // Get NFTs of user
+  const accountAdress = account ? account : constants.AddressZero
+  const nftBalance = useBalanceOf(accountAdress);
+  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
+
+  // Get SVG of latest user NFT
+  const svg = useGetSVG(tokenId ? tokenId : 0); 
+
+  // Get NFT supply
+  const totalSupply = useTotalSupply();
+  const totalSupplyFormatted: string = totalSupply ? String(totalSupply) : "?"
+
+  const maxSupply = useMaxSupply();
+  const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"
+
+  // Render Mint UI
+  return (
+        <>
+        <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+        <Container maxWidth="lg">
+
+        <Card className={classes.Card}>
+                <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
+                
+        </Card>
+
+        </Container>
+        </Box>
+
+        </>
+  )
+}

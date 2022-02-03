@@ -6,6 +6,8 @@ import { Snackbar} from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
 import { MintNFT } from "./MintNFT"
+import { myNFT } from "./myNFT"
+import { Gallery } from "./Gallery"
 
 export const Main = () => {
 
@@ -39,6 +41,8 @@ export const Main = () => {
   return (
     <>
       <MintNFT />
+      <Gallery />
+
       <Snackbar
         open={showNetworkError}
         autoHideDuration={5000}

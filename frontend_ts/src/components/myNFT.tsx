@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react"
 
 import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
-import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
 
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 
-import { useGetSVG, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
+import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply, useTokenOfOwner} from "../hooks"
 
 import contractAdresses from "../contracts/contracts.json"
 
@@ -16,20 +15,6 @@ const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
   Card: {
-    marginTop: '4%',
-    marginBottom: '4%',
-    margin:'auto',
-    paddingTop: '0%',
-    width: '30%',
-    maxWidth: 500,
-    [theme.breakpoints.down("md")] : {
-        width: '60%',
-        marginTop: '10%',
-    },
-    align: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    // backgroundColor: "linear-gradient(#28282a, #28282a);" 
     backgroundColor: "#28282a" ,
     color: "white",
   },
@@ -40,60 +25,63 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     display: 'flex'
   },
+  grid: {
+  },
+  gridItem: {
+    alignItems: 'center',
+    align: 'center',
+    verticalAlign: 'middle',  
+    height:'100%',
+    width: '100%',
+  },
+
 }))
 
-export const myNFT = () => {
+export const MyNFT = () => {
 
   const classes = useStyles()
-
-  const { notifications } = useNotifications()
   const { account, chainId } = useEthers()
-
-  // Check if account is connected to correct chain
-  const isConnected = account !== undefined
-  const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
-  useEffect( () => {
-    if( chainId == 4 && isConnected)  {
-        setIsConnectedAndCorrectChain(true)
-    } else {
-        setIsConnectedAndCorrectChain(false)
-    }
-  }, [chainId, isConnected] )
-
-  // Get contract address
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
-
-  // Get account balance
-  const balance = useEtherBalance(account)
-  const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
-
 
   // Get NFTs of user
   const accountAdress = account ? account : constants.AddressZero
   const nftBalance = useBalanceOf(accountAdress);
-  const tokenId = useTokenOfOwnerByIndex(accountAdress, nftBalance ? nftBalance-1 : 0);
+  const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0
 
-  // Get SVG of latest user NFT
-  const svg = useGetSVG(tokenId ? tokenId : 0); 
+  var ownedTokens: Array<number> = []
+  for (let i = 0; i < nftBalanceFormatted; i++) ownedTokens.push(i)
 
-  // Get NFT supply
-  const totalSupply = useTotalSupply();
-  const totalSupplyFormatted: string = totalSupply ? String(totalSupply) : "?"
+  const tokenIds = useTokenOfOwner(accountAdress, ownedTokens);
 
-  const maxSupply = useMaxSupply();
-  const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"
+  var tokenIdsFormatted: Array<number> = []
+  for (let i = 0; i< nftBalanceFormatted; i++) tokenIdsFormatted[i] = Number(tokenIds[i])
 
-  // Render Mint UI
+  // Get SVG of NFTs
+  var svgList = useGetAllSVGs(tokenIdsFormatted)
+
+  // Loop over all NFts 
+  const getCards = () => {
+    return svgList.map( (svg: string | any, i) => {
+        return (
+            <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
+            <Card className={classes.Card}>
+                    <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
+            </Card>
+            </Grid>
+        )
+    })
+  }
+
+  // Render UI
   return (
         <>
+
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
         <Container maxWidth="lg">
+        <Grid className={classes.grid} container spacing={2}>
 
-        <Card className={classes.Card}>
-                <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
-                
-        </Card>
+            {getCards()}
 
+        </Grid>
         </Container>
         </Box>
 

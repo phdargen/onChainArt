@@ -76,6 +76,8 @@ export const MintNFT = () => {
   const price: number = priceMint ? parseFloat(formatUnits(priceMint, 18)) : 0
   const priceUSD: number = price * formattedEtherPrice 
 
+  console.log(priceMint)
+
   // Mint transaction
   const { send: mintSend, state: mintState } = useMintNFT()
 

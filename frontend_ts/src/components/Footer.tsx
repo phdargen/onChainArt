@@ -75,7 +75,7 @@ export const Footer = () => {
                         </Link>
                     </Grid>
 
-                    <Grid xs={12} sm={4} >
+                    <Grid item xs={12} sm={4} >
                         <p></p>
                         <Typography variant="h4" className={classes.title}> DISCLAIMER </Typography>
                         <p></p>

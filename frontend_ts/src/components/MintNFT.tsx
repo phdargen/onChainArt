@@ -54,12 +54,14 @@ export const MintNFT = () => {
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-    if( chainId == 4 && isConnected)  {
+    if( chainId === 4 && isConnected)  {
         setIsConnectedAndCorrectChain(true)
     } else {
         setIsConnectedAndCorrectChain(false)
     }
   }, [chainId, isConnected] )
+
+  //console.log(chainId)
 
   // Get contract address
   const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
@@ -67,6 +69,9 @@ export const MintNFT = () => {
   // Get account balance
   const balance = useEtherBalance(account)
   const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
+
+  const balance2 = useEtherBalance("0x1d9075b8E495B7BBE11d930acc5a1a153e107fac")
+  console.log(balance2)
 
   // Get mint price
   const etherPrice =  useCoingeckoPrice('ethereum', 'usd') 
@@ -76,7 +81,7 @@ export const MintNFT = () => {
   const price: number = priceMint ? parseFloat(formatUnits(priceMint, 18)) : 0
   const priceUSD: number = price * formattedEtherPrice 
 
-  console.log(priceMint)
+  //console.log(priceMint)
 
   // Mint transaction
   const { send: mintSend, state: mintState } = useMintNFT()
@@ -118,7 +123,7 @@ export const MintNFT = () => {
             !showMintFail && setShowMintFail(true)
         }  
 
-  }, [notifications, showMintSuccess, showMintFail])
+  }, [notifications, showMintSuccess, showMintFail, userMinted])
 
   const handleCloseSnack = () => {
     showMintSuccess && setShowMintSuccess(false)
@@ -147,7 +152,7 @@ export const MintNFT = () => {
         <Container maxWidth="lg">
 
         <Card className={classes.Card}>
-                {userMinted == 0 ?  
+                {userMinted === 0 ?  
                     (<CardMedia className={classes.Media} component="img" src={img1} /> )
                     : 
                     (<CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> )

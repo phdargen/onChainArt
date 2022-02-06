@@ -9,6 +9,12 @@ import { MintNFT } from "./MintNFT"
 import { MyNFT } from "./MyNFT"
 import { Gallery } from "./Gallery"
 
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+
 export const Main = () => {
 
   // Check connnection
@@ -30,7 +36,7 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId != 4 && isConnected) ) {
+    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== 4 && isConnected) ) {
       !showNetworkError && setShowNetworkError(true)
     } else {
       showNetworkError && setShowNetworkError(false)
@@ -40,11 +46,18 @@ export const Main = () => {
   // Render UI
   return (
     <>
-      <MintNFT />
 
-      <MyNFT />
+      {/* <BrowserRouter> */}
+        <Routes>
+          <Route path="/" element={<MintNFT />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="myNFT" element={<MyNFT />} />
+        </Routes>
+      {/* </BrowserRouter>, */}
 
-      <Gallery />
+      {/* <MintNFT /> */}
+      {/* <MyNFT />
+      <Gallery /> */}
 
       <Snackbar
         open={showNetworkError}

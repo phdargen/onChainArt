@@ -5,7 +5,7 @@ import { Main } from "./components/Main"
 import { Mainnet, DAppProvider, Config, Rinkeby } from '@usedapp/core'
 import { Container } from "@material-ui/core"
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const config: Config = {
   readOnlyChainId: Rinkeby.chainId,
@@ -21,24 +21,15 @@ export const App = () => {
   return (
     <DAppProvider config={config}>
 
-    {/* <Router>
-    <Route exact path="/" component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route path="/faq" component={Faq} />
-      </Router> */}
+      <Router>
 
-    <Router>
+        <Header />
 
-      <Header />
-      
-      {/* <Container  > */}
         <Main />
-      {/* </Container> */}
 
-      <Footer />
+        <Footer />
 
-    </Router> 
+      </Router> 
 
     </DAppProvider>
   )

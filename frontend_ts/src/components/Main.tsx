@@ -9,11 +9,7 @@ import { MintNFT } from "./MintNFT"
 import { MyNFT } from "./MyNFT"
 import { Gallery } from "./Gallery"
 
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 export const Main = () => {
 
@@ -47,17 +43,11 @@ export const Main = () => {
   return (
     <>
 
-      {/* <BrowserRouter> */}
-        <Routes>
+      <Routes>
           <Route path="/" element={<MintNFT />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="myNFT" element={<MyNFT />} />
-        </Routes>
-      {/* </BrowserRouter>, */}
-
-      {/* <MintNFT /> */}
-      {/* <MyNFT />
-      <Gallery /> */}
+      </Routes>
 
       <Snackbar
         open={showNetworkError}

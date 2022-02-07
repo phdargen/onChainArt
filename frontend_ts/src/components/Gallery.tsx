@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
+import { useEthers, useEtherBalance } from "@usedapp/core"
 import { utils, constants } from "ethers"
 
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
@@ -16,9 +16,9 @@ const openSeaLink = "https://testnets.opensea.io/"
 const useStyles = makeStyles((theme) => ({
     box:{
         width: '100%',
-        //backgroundColor: "#28282a" ,
-        margin: 0,
-        paddding: 0
+        marginTop: 100,
+        marginBottom: 100,
+        padddingTop: 0
     },
     Card: {
       backgroundColor: "#28282a" ,
@@ -40,7 +40,12 @@ const useStyles = makeStyles((theme) => ({
       height:'100%',
       width: '100%',
     },
-  
+    notConnected: {
+        minHeight: 400,
+        marginTop: '20%',
+        color: 'white'
+    }
+
 }))
 
 export const Gallery = () => {
@@ -74,15 +79,26 @@ export const Gallery = () => {
   return (
         <>
 
-        <Box className={classes.box} textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 } }  bgcolor="text.secondary" color="white">
-        <Container maxWidth="lg">
-        <Grid className={classes.grid} container spacing={2}>
+        {svgList[0] ? 
+            (
+                <Box className={classes.box} textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 } } color="white">
+                <Container maxWidth="lg">
+                <Grid className={classes.grid} container spacing={2}>
 
-            {getCards()}
+                    {getCards()}
 
-        </Grid>
-        </Container>
-        </Box>
+                </Grid>
+                </Container>
+                </Box>
+            ) :
+            (
+                <Box textAlign="center" color='white' className={classes.notConnected}>
+                    <Container >
+                        <Typography variant="h4" component="h2" > Please connect wallet </Typography>
+                    </Container>
+                 </Box>
+            )
+        }
 
         </>
   )

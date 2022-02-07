@@ -3,17 +3,21 @@ import React, { useState, useEffect } from "react"
 import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
 import { utils, constants } from "ethers"
 
-import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
+import { Container, Grid, Card, CardMedia, Typography, makeStyles, Box  } from "@material-ui/core"
 
-import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply, useTokenOfOwner} from "../hooks"
-
-import contractAdresses from "../contracts/contracts.json"
+import { useGetAllSVGs, useBalanceOf, useTokenOfOwner} from "../hooks"
 
 import img1 from "../assets/token1.svg"
 
 const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
+  box:{
+        width: '100%',
+        marginTop: 100,
+        marginBottom: 100,
+        padddingTop: 0
+  },
   Card: {
     backgroundColor: "#28282a" ,
     color: "white",
@@ -34,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     height:'100%',
     width: '100%',
   },
+  notConnected: {
+      minHeight: 400,
+      marginTop: '20%',
+      color: 'white'
+  }
 
 }))
 
@@ -41,6 +50,17 @@ export const MyNFT = () => {
 
   const classes = useStyles()
   const { account, chainId } = useEthers()
+
+  // Check if account is connected to correct chain
+  const isConnected = account !== undefined
+  const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
+  useEffect( () => {
+      if( chainId === 4 && isConnected)  {
+          setIsConnectedAndCorrectChain(true)
+      } else {
+          setIsConnectedAndCorrectChain(false)
+      }
+   }, [chainId, isConnected] )
 
   // Get NFTs of user
   const accountAdress = account ? account : constants.AddressZero
@@ -75,15 +95,29 @@ export const MyNFT = () => {
   return (
         <>
 
-        <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
-        <Container maxWidth="lg">
-        <Grid className={classes.grid} container spacing={2}>
+        {isConnectedAndCorrectChain ?
 
-            {getCards()}
+            (
+            <Box className={classes.box} textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+            <Container>    
+        
+            <Grid className={classes.grid} container spacing={2}>
 
-        </Grid>
-        </Container>
-        </Box>
+                {getCards()}
+
+            </Grid>
+
+            </Container>
+             </Box>
+
+            ): (
+                <Box textAlign="center" color='white' className={classes.notConnected}>
+                    <Container >
+                        <Typography variant="h4" component="h2" > Please connect wallet </Typography>
+                    </Container>
+                 </Box>
+            )
+        }
 
         </>
   )

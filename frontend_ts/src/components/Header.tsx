@@ -1,8 +1,10 @@
-import { Button, makeStyles, AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme } from "@material-ui/core"
-import { useEthers } from "@usedapp/core"
-
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import DrawerComponent from "./Drawer";
+
+import { Button, makeStyles, AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme, List, ListItem, ListItemText, Drawer, Divider, IconButton} from "@material-ui/core"
+import MenuIcon from "@material-ui/icons/Menu";
+
+import { useEthers } from "@usedapp/core"
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,10 +29,39 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(5),
     marginRight: theme.spacing(5),
     "&:hover": {
-      color: "red",
+      //color: "red",
       //borderBottom: "2px solid red",
     },
-  }
+  },
+  button: {
+      marginRight: theme.spacing(5),
+  },
+
+  linkDrawer:{
+    textDecoration:"none",
+    color: "white",
+    fontSize: "25px",
+  },
+  listDrawer: {
+      color: "white",
+      backgroundColor:  "#28282a",
+      padding: 0,
+      textAlign: 'left'
+  },
+  iconDrawer:{
+      color: "white"
+  },
+  drawer:{
+      anchor: "right",
+  },
+  paperDrawer: {
+      background: '#28282a',
+      color: 'white'
+  },
+  buttonDrawer: {
+      width: '100%'
+  },
+  
 }))
 
 export const Header = () => {
@@ -42,6 +73,15 @@ export const Header = () => {
   const { account, activateBrowserWallet, deactivate } = useEthers()
   const isConnected = account !== undefined
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const [selectedIndex, setSelectedIndex] = useState(1);
+  const handleListItemClick = (
+    index: number
+  ) => {
+    setSelectedIndex(index);
+  };
+
   return (
    
     <div className={classes.container}>
@@ -51,7 +91,7 @@ export const Header = () => {
         <Box display='flex' flexGrow={1}>
 
           {isMobile ? (
-            <Typography variant="h4" component="h1" classes={{ root: classes.title,}}>
+            <Typography variant="h5" component="h1" classes={{ root: classes.title,}}>
               Onchain Art
             </Typography>
           ) : (
@@ -62,38 +102,92 @@ export const Header = () => {
 
         </Box>
 
+
         {isMobile ? (
-          <DrawerComponent />
+            <>
+            <Drawer className={classes.drawer} anchor="right" classes={{ paper: classes.paperDrawer }} PaperProps={{ elevation: 9 }}
+              open={openDrawer}
+              onClose={() => setOpenDrawer(false)}
+            >
+              <List className={classes.listDrawer}>
+
+                  <Button className={classes.buttonDrawer} color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
+                  <ListItem onClick={() => setOpenDrawer(false)}>
+                      <ListItemText>
+                      <Link to="/" className={classes.link}>Mint</Link>
+                      </ListItemText>
+                  </ListItem>
+                  </Button>
+
+                  <Divider/>
+
+                  <Button className={classes.buttonDrawer} color="primary" variant={selectedIndex === 2 ? "contained" : "text"} onClick={ () => handleListItemClick(2)}>
+                  <ListItem onClick={() => setOpenDrawer(false)}>
+                      <ListItemText>
+                      <Link to="/gallery" className={classes.link}>Gallery</Link>
+                      </ListItemText>
+                  </ListItem>
+                  </Button>
+
+                  <Divider/>
+
+
+                  <Button className={classes.buttonDrawer} color="primary" variant={selectedIndex === 3 ? "contained" : "text"} onClick={ () => handleListItemClick(3)}>
+                  <ListItem onClick={() => setOpenDrawer(false)}>
+                      <ListItemText>
+                      <Link to="/myNFT" className={classes.link}>My NFTs</Link>
+                      </ListItemText>
+                  </ListItem>
+                  </Button>
+
+              </List>
+
+            </Drawer>
+
+            <IconButton onClick={() => setOpenDrawer(!openDrawer)}className={classes.iconDrawer}>
+              <MenuIcon />
+            </IconButton>
+
+            </>
+
+
         ) : (
           <div className={classes.navlinks}>
-            <Link to="/" className={classes.link}>
-              Mint
-            </Link>
-            <Link to="/gallery" className={classes.link}>
-              Gallery
-            </Link>
-            <Link to="/myNFT" className={classes.link}>
-              My NFTs
-            </Link>
+
+            <Button color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
+              <Link to="/" className={classes.link}>
+              Mint 
+              </Link>
+            </Button>
+
+            <Button color="primary" variant={selectedIndex === 2 ? "contained" : "text"} onClick={ () => handleListItemClick(2)}>
+              <Link to="/gallery" className={classes.link}>
+                Gallery
+              </Link>
+            </Button>
+
+            <Button color="primary" variant={selectedIndex === 3 ? "contained" : "text"} onClick={ () => handleListItemClick(3)} className={classes.button}>
+              <Link to="/myNFT" className={classes.link}>
+                My NFTs
+              </Link>
+            </Button>
+
           </div>
+            
         )}
 
         {isConnected ? (
-            <>
-              <Button color="primary" variant="contained" size="large">
+              <Button color="primary" variant="contained" size={isMobile ? "small" : "large"}>
                 {`${account?.slice(0, 4)}...${account?.slice(-3)}`}
               </Button>
-              {/* <Button color="primary" variant="contained" size="large" onClick={() => deactivate()}>
-                Disconnect
-              </Button> */}
-            </>
           ) : (
-            <Button color="primary" variant="contained" size="large" onClick={() => activateBrowserWallet()}>
+            <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => activateBrowserWallet()}>
               Connect
             </Button>
         )}
 
-            
+      
+
       </Toolbar>
       </AppBar>
     </div>

@@ -5,7 +5,7 @@ import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
 
-import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
+import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar, useTheme, useMediaQuery } from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
 export const MintNFT = () => {
 
   const classes = useStyles()
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const { notifications } = useNotifications()
   const { account, chainId } = useEthers()
@@ -159,11 +161,11 @@ export const MintNFT = () => {
                 }
                 <CardContent>
                     
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant={isMobile? "h6" :"h5"} component="div">
                         Already minted: {totalSupplyFormatted} / {maxSupplyFormatted} 
                     </Typography> 
 
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant={isMobile? "h6" :"h5"} component="div">
                         Price: {price.toFixed(3)}ETH (~{priceUSD.toFixed(2)}$)
                     </Typography>
 

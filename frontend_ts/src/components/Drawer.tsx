@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  makeStyles,
+  makeStyles, Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,8 @@ const useStyles = makeStyles(()=>({
     list: {
         color: "white",
         backgroundColor:  "#28282a",
-        padding: 0
+        padding: 0,
+        textAlign: 'left'
     },
     icon:{
         color: "white"
@@ -33,13 +34,24 @@ const useStyles = makeStyles(()=>({
     paper: {
         background: '#28282a',
         color: 'white'
-      }
+    },
+    button: {
+        width: '100%'
+    },
 }));
 
 function DrawerComponent() {
 
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
+  const handleListItemClick = (
+    index: number
+  ) => {
+    setSelectedIndex(index);
+  };
   
   return (
     <>
@@ -48,28 +60,44 @@ function DrawerComponent() {
         onClose={() => setOpenDrawer(false)}
       >
         <List className={classes.list}>
-        <ListItem onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <Link to="/" className={classes.link}>Mint</Link>
-            </ListItemText>
-          </ListItem>
-          <Divider/>
-          <ListItem onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <Link to="/gallery" className={classes.link}>Gallery</Link>
-            </ListItemText>
-          </ListItem>
-          <Divider/>
-          <ListItem onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <Link to="/myNFT" className={classes.link}>My NFTs</Link>
-            </ListItemText>
-          </ListItem>
+
+            <Button className={classes.button} color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
+            <ListItem onClick={() => setOpenDrawer(false)}>
+                <ListItemText>
+                <Link to="/" className={classes.link}>Mint</Link>
+                </ListItemText>
+            </ListItem>
+            </Button>
+
+            <Divider/>
+
+            <Button className={classes.button} color="primary" variant={selectedIndex === 2 ? "contained" : "text"} onClick={ () => handleListItemClick(2)}>
+            <ListItem onClick={() => setOpenDrawer(false)}>
+                <ListItemText>
+                <Link to="/gallery" className={classes.link}>Gallery</Link>
+                </ListItemText>
+            </ListItem>
+            </Button>
+
+            <Divider/>
+
+
+            <Button className={classes.button} color="primary" variant={selectedIndex === 3 ? "contained" : "text"} onClick={ () => handleListItemClick(3)}>
+            <ListItem onClick={() => setOpenDrawer(false)}>
+                <ListItemText>
+                <Link to="/myNFT" className={classes.link}>My NFTs</Link>
+                </ListItemText>
+            </ListItem>
+            </Button>
+
         </List>
+
       </Drawer>
+
       <IconButton onClick={() => setOpenDrawer(!openDrawer)}className={classes.icon}>
         <MenuIcon />
       </IconButton>
+
     </>
   );
 }

@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   notConnected: {
       minHeight: 400,
       marginTop: '20%',
+      marginBottom: '20%',
       color: 'white'
   }
 

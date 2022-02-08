@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
     box: {
       paddingTop: 0,
+      bottom: 0
     },
     container: {
     },

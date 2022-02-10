@@ -26,6 +26,7 @@ module.exports = {
           rinkeby: {
               url: apiKey,
               accounts: { mnemonic: mnemonic },
+              //timeout: 10000000
           },
   },
   settings: {

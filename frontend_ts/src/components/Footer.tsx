@@ -12,10 +12,12 @@ const useStyles = makeStyles((theme) => ({
     title: {
       color: theme.palette.common.white,
       textAlign: "center",
+      opacity: 1
     },
     box: {
       paddingTop: 0,
-      bottom: 0
+      bottom: 0,
+      zIndex: 1000,
     },
     container: {
     },
@@ -86,7 +88,7 @@ export const Footer = () => {
                 </Grid>
 
                 <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
-                    Copyright {'© '} OnChainArt {' '} {new Date().getFullYear()}
+                    Copyright {'© '} Xonin {' '} {new Date().getFullYear()}
                 </Box>
         
             </Container>

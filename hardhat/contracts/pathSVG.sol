@@ -5,9 +5,17 @@ import "./Helper.sol";
 
 contract pathSVG {
 
-  function getSVG(uint256 rnd, string[] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType  ) public view returns (string memory) {
+  function getSVG(uint256 rnd, string[] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public view returns (string memory) {
 
     string memory render =  string(abi.encodePacked(
+      // "<filter id='f1' width='200%' height='200%'>",
+		  //   	"<feOffset in='SourceGraphic' result='r' dx='", Helper.uint2str(filter[0]*10) , "' dy='" , Helper.uint2str(filter[1]*10) , "' />",
+			//   	"<feGaussianBlur in='r' result='rb' stdDeviation='" , Helper.uint2str(filter[2]) ,"'/>",
+			//   	"<feMerge>",
+			// 		"<feMergeNode in='rb' />",
+			// 		"<feMergeNode in='SourceGraphic' />" ,
+      //     "</feMerge>",
+			// "</filter>"	,
       "<symbol id='p' viewBox='0 0 500 500'>"
     ));
 
@@ -20,7 +28,7 @@ contract pathSVG {
         uint256[] memory sign_prob = Helper.expandRandom(rnd, i*10+5, 3, 7, 2);
 
         grad =  string(abi.encodePacked(grad,
-          "<radialGradient id='g", Helper.uint2str(i) ,"'>",
+          "<radialGradient id='g", Helper.uint2str(i) ,"' r='1' spreadMethod='reflect'>",
             "<stop offset='0%' style='stop-color:", colorPalette[colors[0]]  ,";stop-opacity:0." , Helper.uint2str(opacity[0]) , "'/>",
             "<stop offset='100%' style='stop-color:", colorPalette[colors[1]]  ,";stop-opacity:1'/>",
           "</radialGradient>"
@@ -47,6 +55,7 @@ contract pathSVG {
   		"<g fill='",colorPalette[0], "'>",
 			  "<rect width='500' height='500' />",
 			  "<use href='#p'",
+         //filter[3] > 3 ? " filter='url(#f1)'" : "",
         "/>",
 		  "</g>" 
     ));

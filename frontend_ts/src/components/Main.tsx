@@ -5,6 +5,7 @@ import { ChainId, useEthers } from "@usedapp/core"
 import { Snackbar} from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
+import { Home } from "./Home"
 import { MintNFT } from "./MintNFT"
 import { MyNFT } from "./MyNFT"
 import { Gallery } from "./Gallery"
@@ -44,7 +45,8 @@ export const Main = () => {
     <>
 
       <Routes>
-          <Route path="/" element={<MintNFT />} />
+          <Route path="/" element={<Home />} />
+          <Route path="mint" element={<MintNFT />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="myNFT" element={<MyNFT />} />
       </Routes>

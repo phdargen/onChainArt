@@ -75,7 +75,7 @@ export const Header = () => {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (
     index: number
   ) => {
@@ -91,12 +91,12 @@ export const Header = () => {
         <Box display='flex' flexGrow={1}>
 
           {isMobile ? (
-            <Typography variant="h5" component="h1" classes={{ root: classes.title,}}>
-              Onchain Art
+            <Typography variant="h4" component="h1" classes={{ root: classes.title,}}>
+              Xonin
             </Typography>
           ) : (
-            <Typography variant="h2" component="h1" classes={{ root: classes.title,}}>
-              Onchain Art
+            <Typography variant="h1" component="h1" classes={{ root: classes.title,}}>
+              Xonin
             </Typography>
           )}
 
@@ -111,10 +111,18 @@ export const Header = () => {
             >
               <List className={classes.listDrawer}>
 
+                  <Button className={classes.buttonDrawer} color="primary" variant={selectedIndex === 0 ? "contained" : "text"} onClick={ () => handleListItemClick(0)}>
+                  <ListItem onClick={() => setOpenDrawer(false)}>
+                      <ListItemText>
+                      <Link to="/" className={classes.link}>Home</Link>
+                      </ListItemText>
+                  </ListItem>
+                  </Button>
+
                   <Button className={classes.buttonDrawer} color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
                   <ListItem onClick={() => setOpenDrawer(false)}>
                       <ListItemText>
-                      <Link to="/" className={classes.link}>Mint</Link>
+                      <Link to="/mint" className={classes.link}>Mint</Link>
                       </ListItemText>
                   </ListItem>
                   </Button>
@@ -154,8 +162,15 @@ export const Header = () => {
         ) : (
           <div className={classes.navlinks}>
 
-            <Button color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
+            <Button color="primary" variant={selectedIndex === 0 ? "contained" : "text"} onClick={ () => handleListItemClick(0)}>
               <Link to="/" className={classes.link}>
+              Home 
+              </Link>
+            </Button>
+
+
+            <Button color="primary" variant={selectedIndex === 1 ? "contained" : "text"} onClick={ () => handleListItemClick(1)}>
+              <Link to="/mint" className={classes.link}>
               Mint 
               </Link>
             </Button>

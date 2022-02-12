@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
 import "./pathSVG.sol";
 import "./Helper.sol";
-//import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
 
@@ -121,9 +121,15 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
     uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
     string[] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
 
-    uint256 layers = Helper.expandRandom(rnd[id],0,2,5,1)[0];
-    uint256[] memory points = Helper.expandRandom(rnd[id],1,50,200,layers);
+    uint256 layers = Helper.expandRandom(rnd[id],0,2,6,1)[0];
+    uint256[] memory points = Helper.expandRandom(rnd[id],1,50,150,layers);
     uint256[] memory curveType = Helper.expandRandom(rnd[id],2,1,4,layers);
+    //uint256[] memory filter = Helper.expandRandom(rnd[id],9,0,6,4);
+
+    console.log("layers %d",layers);
+    // console.log(points);
+    // console.log(curveType);
+
 
     return svgMaker.getSVG(rnd[id], colorPalette, layers, points, curveType );
   }

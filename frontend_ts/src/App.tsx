@@ -10,11 +10,12 @@ import { BrowserRouter as Router } from "react-router-dom";
 const config: Config = {
   readOnlyChainId: Rinkeby.chainId,
   readOnlyUrls: {
-    [Rinkeby.chainId]: 'https://rinkeby.infura.io/v3/14a0951f47e646c1b241aa533e150219'
+    [Mainnet.chainId]: 'https://mainnet.infura.io/v3/847c45b102374b7f917b1e360bf4eccb',
+    [Rinkeby.chainId]: 'https://rinkeby.infura.io/v3/847c45b102374b7f917b1e360bf4eccb'
   },
   autoConnect: false,
   //multicallVersion: 2 as const,
-  networks: [Rinkeby]
+  //networks: [Rinkeby]
 }
 
 export const App = () => {

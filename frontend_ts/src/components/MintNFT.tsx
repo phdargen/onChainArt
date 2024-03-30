@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
+import { useEthers, useEtherBalance, useContractFunction, useNotifications,  Mainnet, Rinkeby } from "@usedapp/core"
 import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
@@ -72,7 +72,7 @@ export const MintNFT = () => {
   const balance = useEtherBalance(account)
   const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
 
-  const balance2 = useEtherBalance("0x1d9075b8E495B7BBE11d930acc5a1a153e107fac")
+  const balance2 = useEtherBalance("0x1d9075b8E495B7BBE11d930acc5a1a153e107fac", {chainId: Rinkeby.chainId})
   console.log(balance2)
 
   // Get mint price
@@ -141,8 +141,10 @@ export const MintNFT = () => {
   const svg = useGetSVG(tokenId ? tokenId : 0); 
 
   // Get NFT supply
-  const totalSupply = useTotalSupply();
+  const totalSupply = useTotalSupply(); // useEtherBalance(accountAdress, { chainId: Rinkeby.chainId } ) ; //useTotalSupply( { chainId: Rinkeby.chainId } );
   const totalSupplyFormatted: string = totalSupply ? String(totalSupply) : "?"
+
+  console.log(totalSupply)
 
   const maxSupply = useMaxSupply();
   const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"

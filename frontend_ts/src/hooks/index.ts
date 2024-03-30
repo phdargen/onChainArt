@@ -1,11 +1,15 @@
 import { ethers, utils, constants } from "ethers";
-import { useContractCall, useContractCalls, useContractFunction, useEthers } from "@usedapp/core";
+import { useContractCall, useContractCalls, useContractFunction, useEthers, useEtherBalance, useCall, Rinkeby } from "@usedapp/core";
 import { Contract } from '@ethersproject/contracts'
+import { BigNumber } from '@ethersproject/bignumber'
+
+//import { QueryParams } from '@usedapp/core/constants/type/QueryParams'
 
 import contractNftAbi from '../contracts/myNFT.json'
 import contractAdresses from "../contracts/contracts.json"
 
-const contractInterface = new ethers.utils.Interface(contractNftAbi.abi)
+const contractInterface = new utils.Interface(contractNftAbi.abi)
+//const contractInterface = new ethers.utils.Interface(contractNftAbi.abi)
 //const contractAdress = contractAdresses["4"]["myNFT"] 
 
 export const useMintNFT = () => {
@@ -31,18 +35,26 @@ export function usePrice() {
   
 }
 
-export function useTotalSupply() {
+export function useTotalSupply( ) {
 
-  const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  //const { account, chainId } = useEthers()
+  const contractAdress =  contractAdresses["4"]["myNFT"] 
+  //console.log(chainId)
 
-  const [supply]: any = useContractCall({
-    abi: contractInterface,
-    address: contractAdress,
+  const { value, error } = useCall( contractAdress && {
+    contract: new Contract(contractAdress, contractInterface),
+    //abi: contractInterface,
+    //address: contractAdress,
     method: "totalSupply",
     args: [],
-  }) ?? [];
-  return supply;
+    },
+    { chainId: Rinkeby.chainId }) ?? {};
+
+  if(error) {
+      console.error(error.message)
+      return undefined
+  }
+  return value?.[0]
 
 }
 

@@ -5,6 +5,9 @@ const fs = require('fs');
 const sharp = require('sharp');
 const xmldom = require('xmldom');
 
+const numberOfMints = 10
+const outDir = "examples/myNFT/"
+
 async function main() {
 
   // Get owner/deployer's wallet address
@@ -37,7 +40,7 @@ async function main() {
   await contract.deployed();
   console.log("myNFT deployed to:", contract.address);
 
-  for(let i = 1; i < 10; i++){
+  for(let i = 1; i < numberOfMints; i++){
 
     let price =  await contract.price();
 
@@ -53,13 +56,13 @@ async function main() {
     // Get svg
     let svg = await contract.getSVG(i)
     //console.log("svg: ", svg);
-    fs.writeFileSync(`token${i}.svg`, svg);
+    fs.writeFileSync(outDir+`SVG/token${i}.svg`, svg);
     await downloadPNG(svg, i)
 
     // Get metadata
     let uri = await contract.tokenURI(i)
     //console.log("uri: ", uri);
-    fs.writeFileSync(`token${i}.json`, uri);
+    fs.writeFileSync(outDir+`JSON/token${i}.json`, uri);
 
   }
 
@@ -68,7 +71,7 @@ async function main() {
 async function downloadPNG(svgdata, tokenId)
 {
   let resizewidth = 500;
-  let resizedest = "token" + tokenId + "png";
+  let resizedest = outDir+"PNG/token" + tokenId + ".png";
 
   let IMAGE = new xmldom.DOMParser().parseFromString(svgdata, 'text/xml');
   let svgList = IMAGE.getElementsByTagName('svg');

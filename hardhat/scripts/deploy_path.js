@@ -15,7 +15,7 @@ async function main() {
 
   // Deploy contracts
   const contractFactoryColor = await hre.ethers.getContractFactory("ColorPalette");
-  const contractColor = await contractFactoryColor.deploy();
+  const contractColor = await contractFactoryColor.deploy(owner.address);
   await contractColor.deployed();
   console.log("ColorPalette deployed to:", contractColor.address);
 
@@ -36,11 +36,11 @@ async function main() {
   console.log("SVG deployed to:", contractSVG.address);
 
   const contractFactory = await hre.ethers.getContractFactory("pathNFT");
-  const contract = await contractFactory.deploy(contractColor.address,contractSVG.address);
+  const contract = await contractFactory.deploy(contractColor.address,contractSVG.address,owner.address);
   await contract.deployed();
   console.log("myNFT deployed to:", contract.address);
 
-  for(let i = 1; i < numberOfMints; i++){
+  for(let i = 0; i < numberOfMints; i++){
 
     let price =  await contract.price();
 

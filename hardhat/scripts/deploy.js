@@ -15,7 +15,7 @@ async function main() {
 
   // Deploy contracts
   const contractFactoryColor = await hre.ethers.getContractFactory("ColorPalette");
-  const contractColor = await contractFactoryColor.deploy();
+  const contractColor = await contractFactoryColor.deploy(owner.address);
   await contractColor.deployed();
   console.log("ColorPalette deployed to:", contractColor.address);
 
@@ -36,18 +36,19 @@ async function main() {
   console.log("SVG deployed to:", contractSVG.address);
 
   const contractFactory = await hre.ethers.getContractFactory("myNFT");
-  const contract = await contractFactory.deploy(contractColor.address,contractSVG.address);
+  const contract = await contractFactory.deploy(contractColor.address,contractSVG.address,owner.address);
   await contract.deployed();
   console.log("myNFT deployed to:", contract.address);
 
-  for(let i = 1; i < numberOfMints; i++){
+  for(let i = 0; i < numberOfMints; i++){
 
     let price =  await contract.price();
 
     // Mint NFT
     txn = await contract.mintNFT( { value: price});
-    await txn.wait()
+    let receipt = await txn.wait()
     //console.log("txn: ", txn);
+    //console.log("txn: ", receipt);
 
     // Get all token IDs of the owner
     let tokens = await contract.balanceOf(owner.address)

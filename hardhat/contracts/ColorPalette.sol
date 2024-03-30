@@ -1,13 +1,12 @@
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.20;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ColorPalette is Ownable {
 
-  constructor() public {
-  }
-
+  constructor(address initialOwner) Ownable(initialOwner) {}
+  
   string[][] colorPalettes  = [
     ["#69d2e7","#a7dbd8","#e0e4cc","#f38630","#fa6900"],
     ["#fe4365","#fc9d9a","#f9cdad","#c8c8a9","#83af9b"],

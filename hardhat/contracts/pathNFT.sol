@@ -1,10 +1,10 @@
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.20;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
@@ -15,8 +15,7 @@ import "hardhat/console.sol";
 contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
 
   using Strings for uint256;
-  using Counters for Counters.Counter;
-  Counters.Counter private _tokenIds;
+  uint256 private _nextTokenId;
 
   uint public price = 0.001 ether;
   uint16 public maxSupply = 1000;
@@ -28,7 +27,7 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
   ColorPalette colorPaletteSet; 
   pathSVG svgMaker;
 
-  constructor(address color, address svg) public ERC721("Onchain Art", "OCA") {
+  constructor(address color, address svg, address initialOwner) ERC721("Onchain Art", "OCA") Ownable(initialOwner) {
     colorPaletteSet = ColorPalette(color);
     svgMaker = pathSVG(svg);    
   }
@@ -40,9 +39,7 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
       require(totalSupply() < maxSupply, "Sold out!");
       require(balanceOf(msg.sender) + 1 <= maxPerPerson,"Mint over limit");
 
-      _tokenIds.increment();
-
-      uint256 id = _tokenIds.current();
+      uint256 id = _nextTokenId++;
       _safeMint(msg.sender, id);
 
       rnd[id] = uint256(keccak256(abi.encodePacked(id, blockhash(block.number-1), msg.sender, address(this)))); 
@@ -51,7 +48,7 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
   }
 
   function tokenURI(uint256 id) public view override returns (string memory) {
-      require(_exists(id), "not exist");
+      _requireOwned(id);
       
       string memory name = string(abi.encodePacked('RandomArt #',id.toString()));
       string memory description = string(abi.encodePacked('Onchain generative art'));
@@ -168,10 +165,10 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
         IERC20(token).transfer(owner(), IERC20(token).balanceOf(address(this)));
   }
 
-  // Withdraw any ERC721 token
-  function withdrawERC721(address token, uint256 tokenId) external onlyOwner {
-        IERC721(token).transferFrom(address(this), owner(), tokenId);
-  }
+  //Withdraw any ERC721 token
+//   function withdrawERC721(address token, uint256 tokenId) external onlyOwner {
+//         IERC721(token).transferFrom(address(this), owner(), tokenId);
+//   }
 
   receive() external payable {}
 }

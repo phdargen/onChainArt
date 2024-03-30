@@ -22,13 +22,13 @@ describe("myNFT", function () {
 
     // Deploy contracts
     const contractFactoryColor = await ethers.getContractFactory("ColorPalette");
-    contractColor = await contractFactoryColor.deploy();
+    contractColor = await contractFactoryColor.deploy(owner.address);
 
     const contractFactorySVG = await hre.ethers.getContractFactory("SVG");
     contractSVG = await contractFactorySVG.deploy();
   
     const contractFactory = await hre.ethers.getContractFactory("myNFT");
-    contract = await contractFactory.deploy(contractColor.address,contractSVG.address);
+    contract = await contractFactory.deploy(contractColor.address,contractSVG.address,owner.address);
 
     price = contract.price();
 
@@ -89,7 +89,7 @@ describe("myNFT", function () {
 
         await expect( 
            contract.connect(minter1).withdraw()
-        ).to.be.revertedWith("Ownable: caller is not the owner");
+        ).to.be.reverted;
 
       });
 

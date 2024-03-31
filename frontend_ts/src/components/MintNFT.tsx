@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useEtherBalance, useContractFunction, useNotifications,  Mainnet, Rinkeby } from "@usedapp/core"
+import { useEthers, useEtherBalance, useContractFunction, useNotifications,  Mainnet, Rinkeby, Sepolia } from "@usedapp/core"
 import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
@@ -56,24 +56,22 @@ export const MintNFT = () => {
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-    if( chainId === 4 && isConnected)  {
+    if( chainId === 11155111 && isConnected)  {
         setIsConnectedAndCorrectChain(true)
     } else {
         setIsConnectedAndCorrectChain(false)
     }
   }, [chainId, isConnected] )
 
-  //console.log(chainId)
+  console.log(chainId)
 
   // Get contract address
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   // Get account balance
   const balance = useEtherBalance(account)
   const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
-
-  const balance2 = useEtherBalance("0x1d9075b8E495B7BBE11d930acc5a1a153e107fac", {chainId: Rinkeby.chainId})
-  console.log(balance2)
+  console.log(formattedTokenBalance)
 
   // Get mint price
   const etherPrice =  useCoingeckoPrice('ethereum', 'usd') 
@@ -82,8 +80,7 @@ export const MintNFT = () => {
   const priceMint = usePrice();
   const price: number = priceMint ? parseFloat(formatUnits(priceMint, 18)) : 0
   const priceUSD: number = price * formattedEtherPrice 
-
-  //console.log(priceMint)
+  console.log(price)
 
   // Mint transaction
   const { send: mintSend, state: mintState } = useMintNFT()
@@ -141,10 +138,9 @@ export const MintNFT = () => {
   const svg = useGetSVG(tokenId ? tokenId : 0); 
 
   // Get NFT supply
-  const totalSupply = useTotalSupply(); // useEtherBalance(accountAdress, { chainId: Rinkeby.chainId } ) ; //useTotalSupply( { chainId: Rinkeby.chainId } );
+  const totalSupply = useTotalSupply(); 
   const totalSupplyFormatted: string = totalSupply ? String(totalSupply) : "?"
-
-  console.log(totalSupply)
+  console.log(totalSupplyFormatted)
 
   const maxSupply = useMaxSupply();
   const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"
@@ -164,14 +160,14 @@ export const MintNFT = () => {
                 <CardContent>
                     
                     <Typography gutterBottom variant={isMobile? "h6" :"h5"} component="div">
-                        Already minted: {totalSupplyFormatted} / {maxSupplyFormatted} 
+                        Minted: {totalSupplyFormatted} / {maxSupplyFormatted} 
                     </Typography> 
 
                     <Typography gutterBottom variant={isMobile? "h6" :"h5"} component="div">
                         Price: {price.toFixed(3)}ETH (~{priceUSD.toFixed(2)}$)
                     </Typography>
 
-                    {!isConnected ? ( <Typography variant="body2" > Please connect your Metamask account </Typography> ) : ( [] ) }
+                    {!isConnected ? ( <Typography variant="body2" > Please connect your wallet </Typography> ) : ( [] ) }
                     {userMinted > 0 && isConnected ? 
                         ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + accountAdress} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
@@ -187,14 +183,14 @@ export const MintNFT = () => {
         <Snackbar open={showMintSuccess} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="success">
               <p>Transaction successful!</p>
-              <p><a href={"https://rinkeby.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
+              <p><a href={"https://sepolia.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
               </Alert>
         </Snackbar>
 
         <Snackbar open={showMintFail} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="error">
               <p>Transaction failed!</p>
-              <p><a href={"https://rinkeby.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
+              <p><a href={"https://sepolia.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
               </Alert>
         </Snackbar>
 

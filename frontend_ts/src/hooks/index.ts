@@ -1,5 +1,5 @@
 import { ethers, utils, constants } from "ethers";
-import { useContractCall, useContractCalls, useContractFunction, useEthers, useEtherBalance, useCall, Rinkeby } from "@usedapp/core";
+import { useContractCall, useContractCalls, useContractFunction, useEthers, useEtherBalance, useCall, Rinkeby, Sepolia } from "@usedapp/core";
 import { Contract } from '@ethersproject/contracts'
 import { BigNumber } from '@ethersproject/bignumber'
 
@@ -14,16 +14,16 @@ const contractInterface = new utils.Interface(contractNftAbi.abi)
 
 export const useMintNFT = () => {
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
-  const contract = new Contract(contractAdress, contractInterface)
+  const contract = new Contract(contractAdress, contractInterface) as any
 
   return useContractFunction(contract, "mintNFT", { transactionName: "Mint NFT", }) 
 }
 
 export function usePrice() {
 
-    const contractAdress =  contractAdresses["4"]["myNFT"] 
+    const contractAdress =  contractAdresses["11155111"]["myNFT"] 
 
     const [price]: any = useContractCall({
       abi: contractInterface,
@@ -37,31 +37,22 @@ export function usePrice() {
 
 export function useTotalSupply( ) {
 
-  //const { account, chainId } = useEthers()
-  const contractAdress =  contractAdresses["4"]["myNFT"] 
-  //console.log(chainId)
+  const contractAdress =  contractAdresses["11155111"]["myNFT"] 
 
-  const { value, error } = useCall( contractAdress && {
-    contract: new Contract(contractAdress, contractInterface),
-    //abi: contractInterface,
-    //address: contractAdress,
+  const [totalSupply]: any = useContractCall({
+    abi: contractInterface,
+    address: contractAdress,
     method: "totalSupply",
     args: [],
-    },
-    { chainId: Rinkeby.chainId }) ?? {};
-
-  if(error) {
-      console.error(error.message)
-      return undefined
-  }
-  return value?.[0]
+  }) ?? [];
+  return totalSupply;
 
 }
 
 export function useMaxSupply() {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   const [supply]: any = useContractCall({
     abi: contractInterface,
@@ -76,7 +67,7 @@ export function useMaxSupply() {
 export function useGetSVG(tokenId:number) {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   const [svg]: any = useContractCall({
     abi: contractInterface,
@@ -90,7 +81,7 @@ export function useGetSVG(tokenId:number) {
 export function useGetAllSVGs(tokenIds:number[]) {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   return useContractCalls(
     tokenIds ?
@@ -107,7 +98,7 @@ export function useGetAllSVGs(tokenIds:number[]) {
 export function useBalanceOf(address:string) {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   const [balance]: any = useContractCall({
     abi: contractInterface,
@@ -121,7 +112,7 @@ export function useBalanceOf(address:string) {
 export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   const [id]: any = useContractCall({
     abi: contractInterface,
@@ -136,7 +127,7 @@ export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
 export function useTokenOfOwner(address:string, ownedTokens:number[]) {
 
   const { account, chainId } = useEthers()
-  const contractAdress = chainId ? contractAdresses["4"]["myNFT"] : constants.AddressZero
+  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
  
   return useContractCalls(
     ownedTokens ?

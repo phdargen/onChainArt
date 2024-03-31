@@ -7,7 +7,7 @@ import Alert from "@material-ui/lab/Alert"
 
 import { Home } from "./Home"
 import { MintNFT } from "./MintNFT"
-import { MyNFT } from "./MyNFT"
+import { MyNFT } from "./myNFT"
 import { Gallery } from "./Gallery"
 
 import {BrowserRouter, Routes, Route} from "react-router-dom";
@@ -33,7 +33,7 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== 4 && isConnected) ) {
+    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== 11155111 && isConnected) ) {
       !showNetworkError && setShowNetworkError(true)
     } else {
       showNetworkError && setShowNetworkError(false)

@@ -56,7 +56,7 @@ export const MyNFT = () => {
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-      if( chainId === 4 && isConnected)  {
+      if( chainId === 11155111 && isConnected)  {
           setIsConnectedAndCorrectChain(true)
       } else {
           setIsConnectedAndCorrectChain(false)

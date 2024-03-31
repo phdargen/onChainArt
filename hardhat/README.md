@@ -12,5 +12,8 @@ npx hardhat clean
 npx hardhat test
 npx hardhat node
 npx hardhat run --network localhost scripts/deploy.js
+npx hardhat run --network baseSepolia scripts/deploy.js
+npx hardhat run --network sepolia scripts/deploy.js
+npx hardhat verify --network sepolia contract.address contractColor.address contractSVG.address owner.address
 npx hardhat help
 ```

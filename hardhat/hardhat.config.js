@@ -21,18 +21,23 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const { apiKey, mnemonic } = require('./secrets.json');
 
 module.exports = {
-  solidity: "0.8.4",
+  solidity: "0.8.20",
   networks: {
           rinkeby: {
               url: apiKey,
               accounts: { mnemonic: mnemonic },
               //timeout: 10000000
           },
+          hardhat: {
+              allowUnlimitedContractSize: true ,
+              gasMultiplier: 2,
+              blockGasLimit: 100_000_000
+          }
   },
   settings: {
     optimizer: {
       enabled: true,
-      runs: 1,
+      runs: 200,
     }
   },
 

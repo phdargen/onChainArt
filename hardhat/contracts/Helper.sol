@@ -1,3 +1,5 @@
+pragma solidity ^0.8.20;
+//SPDX-License-Identifier: MIT
 library Helper {
 
   function uint2str(uint _i) internal pure returns (string memory _uintAsString) {

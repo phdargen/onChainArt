@@ -2,7 +2,7 @@ pragma solidity ^0.8.20;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -10,7 +10,7 @@ import "./ColorPalette.sol";
 import "./SVG.sol";
 import "./Helper.sol";
 
-contract myNFT is ERC721Enumerable, ERC721Royalty, Ownable {
+contract myNFT is ERC721Enumerable, IERC2981, Ownable {
 
   using Strings for uint256;
   uint256 private _nextTokenId = 0;
@@ -117,8 +117,27 @@ contract myNFT is ERC721Enumerable, ERC721Royalty, Ownable {
     return svgMaker.getSVG(rnd[id], colorPalette);
   }
 
+  /// @dev Support for IERC-2981, royalties
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable, IERC165) returns (bool) {
+        return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
+  }
+
+  function royaltyInfo(uint256, uint256 _salePrice) public view override returns (address, uint256){
+        return (royaltyAddress, (_salePrice * royalty) / 10000);
+  }
+
   function setPrice(uint256 newPrice) external onlyOwner {
         price = newPrice;
+  }
+
+  function setRoyalty(uint16 _royalty) external onlyOwner {
+        require(_royalty >= 0, "Royalty must be >= 0%");
+        require(_royalty <= 1000, "Royalty must be <= 10%" );
+        royalty = _royalty;
+  }
+    
+  function setRoyaltyAddress(address _royaltyAddress) external onlyOwner {
+        royaltyAddress = _royaltyAddress;
   }
 
   // Withdraw from contract
@@ -131,19 +150,6 @@ contract myNFT is ERC721Enumerable, ERC721Royalty, Ownable {
   function withdrawERC20(address token) external onlyOwner {
         IERC20(token).transfer(owner(), IERC20(token).balanceOf(address(this)));
   }
-
-   // The following functions are overrides required by Solidity
-   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable, ERC721Royalty) returns (bool) {
-          return super.supportsInterface(interfaceId);
-   }
-
-   function _update(address to, uint256 tokenId, address auth) internal virtual override(ERC721,ERC721Enumerable) returns (address) {
-      return super._update(to,tokenId,auth);
-   }
-
-   function _increaseBalance(address account, uint128 value) internal virtual override(ERC721,ERC721Enumerable)  {
-      return super._increaseBalance(account,value);
-   }
 
   receive() external payable {}
 }

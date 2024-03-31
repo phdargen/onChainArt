@@ -5,7 +5,7 @@ import "./Helper.sol";
 
 contract pathSVG {
 
-  function getSVG(uint256 rnd, string[] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public view returns (string memory) {
+  function getSVG(uint256 rnd, string[] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public pure returns (string memory) {
 
     string memory render =  string(abi.encodePacked(
       // "<filter id='f1' width='200%' height='200%'>",

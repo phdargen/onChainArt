@@ -5,7 +5,7 @@ import "./Helper.sol";
 
 contract SVG {
 
-  function getSVG(uint256 rnd, string[] memory colorPalette ) public view returns (string memory) {
+  function getSVG(uint256 rnd, string[] memory colorPalette ) public pure returns (string memory) {
 
     uint256 layers = Helper.expandRandom(rnd,0,15,25,1)[0];
     uint256[] memory figures = Helper.expandRandom(rnd,1,0,2,layers*3);

@@ -3,9 +3,23 @@ import { useEthers, useEtherBalance } from "@usedapp/core"
 import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
-
 import img1 from "../assets/token1.svg"
+
+// Get contract
+import network from "../contracts/network.json"
+import { Contract } from '@ethersproject/contracts'
+import contractAdresses from "../contracts/contracts.json"
+import contractNftAbi from '../contracts/myNFT.json'
+
+const networkId = network.ChainId 
+const contractInterface = new utils.Interface(contractNftAbi.abi)
+const contractAdress = (contractAdresses as any)[networkId.toString()]?.shapeNFT 
+const contract = new Contract(contractAdress, contractInterface) as any
+const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT 
+const contract2 = new Contract(contractAdress2, contractInterface) as any
+
 const openSeaLink = "https://testnets.opensea.io/"
+const maxDisplayed = 12
 
 const useStyles = makeStyles((theme) => ({
     box:{
@@ -26,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex'
     },
     grid: {
+      align: 'center',
+      justifyContent: 'center', 
+      alignItems: 'center', 
     },
     gridItem: {
       alignItems: 'center',
@@ -43,24 +60,44 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+const useTokenIdsToDisplay = (contract: any, maxDisplayed = Infinity): number[] => {
+  const [tokenIds, setTokenIds] = useState<number[]>([]);
+  const totalSupply = useTotalSupply(contract);
+  const totalSupplyFormatted: number = totalSupply ? parseInt(totalSupply) : 0;
+
+  useEffect(() => {
+    const newTokenIds: number[] = [];
+    for (let index = Math.min(totalSupplyFormatted, maxDisplayed); index > 0; index--) {
+      newTokenIds.push(index);
+    }
+    setTokenIds(newTokenIds);
+  }, [totalSupplyFormatted, maxDisplayed]);
+
+  return tokenIds;
+};
+
 export const Gallery = () => {
 
   const classes = useStyles()
-  const { account, chainId } = useEthers()
 
-  // Get NFT supply
-  const totalSupply = useTotalSupply();
-  const totalSupplyFormatted: number = totalSupply ? parseInt(totalSupply) : 0
-  var tokenIds: Array<number> = []
-  for (let index = 0; index < totalSupplyFormatted; index++) tokenIds.push(index)
-  //for (let index = 0; index < 21; index++) tokenIds.push(index)
+  // Get recent mints
+  var tokenIds = useTokenIdsToDisplay(contract,maxDisplayed);
+  var tokenIds2 = useTokenIdsToDisplay(contract2,maxDisplayed);
 
   // Get SVG of NFTs
-  var svgList = useGetAllSVGs(tokenIds)
+  var svgList = useGetAllSVGs(contract,tokenIds)
+  var svgList2 = useGetAllSVGs(contract2,tokenIds2)
 
-  // Loop over all NFts 
+  // Loop over all NFTs 
   const getCards = () => {
-    return svgList.map( (svg: string | any, i) => {
+    // Alternate lists
+    const combinedSvgList = [];
+    const maxLength = Math.max(svgList.length, svgList2.length);    
+    for (let i = 0; i < maxLength; i++) {
+      if (i < svgList.length) combinedSvgList.push(svgList[i]);
+      if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
+    }
+    return combinedSvgList.map( (svg: string | any, i) => {
         return (
             <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
             <Card className={classes.Card}>

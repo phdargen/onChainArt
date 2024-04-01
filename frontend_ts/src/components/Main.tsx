@@ -61,7 +61,7 @@ export const Main = () => {
         onClose={handleCloseNetworkError}
       >
         <Alert onClose={handleCloseNetworkError} severity="warning">
-          Please connect to the {networkName} network!
+          Please switch to {networkName} network!
         </Alert>
       </Snackbar>
     </>

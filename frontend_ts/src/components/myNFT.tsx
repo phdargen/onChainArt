@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from "react"
-
 import { useEthers} from "@usedapp/core"
-import { constants } from "ethers"
-
+import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardMedia, Typography, makeStyles, Box  } from "@material-ui/core"
-
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwner} from "../hooks"
-
 import img1 from "../assets/token1.svg"
+
+// Get contract
 import network from "../contracts/network.json"
+import { Contract } from '@ethersproject/contracts'
+import contractAdresses from "../contracts/contracts.json"
+import contractNftAbi from '../contracts/myNFT.json'
+
 const networkId = network.ChainId 
-const networkName = network.Name 
+const contractInterface = new utils.Interface(contractNftAbi.abi)
+const contractAdress = (contractAdresses as any)[networkId.toString()]?.shapeNFT 
+const contract = new Contract(contractAdress, contractInterface) as any
+const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT 
+const contract2 = new Contract(contractAdress2, contractInterface) as any
 
 const openSeaLink = "https://testnets.opensea.io/"
+const maxDisplayed = 12
 
 const useStyles = makeStyles((theme) => ({
   box:{
       width: '100%',
       marginTop: 100,
       marginBottom: 100,
-      paddingTop: 50
+      paddingTop: 50,
+      paddingBottom: 50,
   },
   Card: {
     backgroundColor: "#28282a" ,
@@ -33,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex'
   },
   grid: {
+    align: 'center',
+    justifyContent: 'center', 
+    alignItems: 'center', 
   },
   gridItem: {
     alignItems: 'center',
@@ -50,6 +61,31 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = Infinity): number[] => {
+    const [tokenIdsFormatted, setTokenIdsFormatted] = useState<number[]>([]);
+
+    const accountAddress = account || constants.AddressZero;
+  
+    // Fetch the balance of NFTs owned by the account
+    const nftBalance = useBalanceOf(contract, accountAddress);
+    const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0;
+
+    // Token ids of the owend tokens
+    var ownedTokens: Array<number> = []
+    for (let i = 0; i < nftBalanceFormatted; i++) ownedTokens.push(i)
+    const tokenIds = useTokenOfOwner(contract, accountAddress, ownedTokens);
+
+    useEffect(() => {
+      const newTokenIds: number[] = [];
+      for (let index = Math.min(nftBalanceFormatted, maxDisplayed); index > 0; index--) {
+        newTokenIds.push(tokenIds[index]);
+      }
+      setTokenIdsFormatted(newTokenIds);
+    }, [nftBalanceFormatted, maxDisplayed, tokenIds]);
+    
+    return tokenIdsFormatted;
+  };
+
 export const MyNFT = () => {
 
   const classes = useStyles()
@@ -66,25 +102,24 @@ export const MyNFT = () => {
       }
    }, [chainId, isConnected] )
 
-  // Get NFTs of user
-  const accountAdress = account ? account : constants.AddressZero
-  const nftBalance = useBalanceOf(accountAdress);
-  const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0
-
-  var ownedTokens: Array<number> = []
-  for (let i = 0; i < nftBalanceFormatted; i++) ownedTokens.push(i)
-
-  const tokenIds = useTokenOfOwner(accountAdress, ownedTokens);
-
-  var tokenIdsFormatted: Array<number> = []
-  for (let i = 0; i< nftBalanceFormatted; i++) tokenIdsFormatted[i] = Number(tokenIds[i])
+  // Get recent mints
+  var tokenIds = useOwnedTokenIds(contract,account,maxDisplayed);
+  var tokenIds2 = useOwnedTokenIds(contract2,account,maxDisplayed);
 
   // Get SVG of NFTs
-  var svgList = useGetAllSVGs(tokenIdsFormatted)
+  var svgList = useGetAllSVGs(contract,tokenIds)
+  var svgList2 = useGetAllSVGs(contract2,tokenIds2)
 
   // Loop over all NFts 
   const getCards = () => {
-    return svgList.map( (svg: string | any, i) => {
+    // Alternate lists
+    const combinedSvgList = [];
+    const maxLength = Math.max(svgList.length, svgList2.length);    
+    for (let i = 0; i < maxLength; i++) {
+      if (i < svgList.length) combinedSvgList.push(svgList[i]);
+      if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
+    }
+    return combinedSvgList.map( (svg: string | any, i) => {
         return (
             <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
             <Card className={classes.Card}>

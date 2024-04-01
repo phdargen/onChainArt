@@ -6,18 +6,18 @@ import contractNftAbi from '../contracts/myNFT.json'
 import contractAdresses from "../contracts/contracts.json"
 
 // Get contract
-import network from "../contracts/network.json"
-const networkId = network.ChainId 
+// import network from "../contracts/network.json"
+// const networkId = network.ChainId 
 
-const contractInterface = new utils.Interface(contractNftAbi.abi)
-const contractAdress = (contractAdresses as any)[networkId.toString()]?.myNFT 
-const contract = new Contract(contractAdress, contractInterface) as any
+// const contractInterface = new utils.Interface(contractNftAbi.abi)
+// const contractAdress = (contractAdresses as any)[networkId.toString()]?.myNFT 
+// const contract = new Contract(contractAdress, contractInterface) as any
 
-export const useMintNFT = () => {
+export const useMintNFT = (contract: any) => {
   return useContractFunction(contract, "mintNFT", { transactionName: "Mint NFT", }) 
 }
 
-export function usePrice() {
+export function usePrice(contract: any) {
   const { value, error } =
   useCall(
        {
@@ -33,7 +33,7 @@ export function usePrice() {
   return value?.[0]
 }
 
-export function useTotalSupply( ) {
+export function useTotalSupply(contract: any) {
   const { value, error } =
   useCall(
        {
@@ -49,7 +49,7 @@ export function useTotalSupply( ) {
   return value?.[0]
 }
 
-export function useMaxSupply() {
+export function useMaxSupply(contract: any) {
   const { value, error } =
   useCall(
        {
@@ -65,7 +65,7 @@ export function useMaxSupply() {
   return value?.[0]
 }
   
-export function useGetSVG(tokenId:number) {
+export function useGetSVG(contract: any, tokenId:number) {
   const { value, error } =
   useCall(
        {
@@ -81,7 +81,7 @@ export function useGetSVG(tokenId:number) {
   return value?.[0]
 }
 
-export function useGetAllSVGs(tokenIds:number[]) {
+export function useGetAllSVGs(contract: any, tokenIds:number[]) {
   const calls = tokenIds?.map(index => ({
     contract: contract,
     method: 'getSVG',
@@ -96,7 +96,7 @@ export function useGetAllSVGs(tokenIds:number[]) {
   return results.map(result => result?.value?.[0])
 }
 
-export function useBalanceOf(address:string) {
+export function useBalanceOf(contract: any, address:string) {
   const { value, error } =
   useCall(
        {
@@ -112,7 +112,7 @@ export function useBalanceOf(address:string) {
   return value?.[0]
 }
 
-export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
+export function useTokenOfOwnerByIndex(contract: any, address:string, tokenId:number) {
   const { value, error } =
   useCall(
        {
@@ -128,8 +128,7 @@ export function useTokenOfOwnerByIndex(address:string, tokenId:number) {
   return value?.[0]
 }
 
-
-export function useTokenOfOwner(address:string, ownedTokens:number[]) {
+export function useTokenOfOwner(contract: any, address:string, ownedTokens:number[]) {
   const calls = ownedTokens?.map(index => ({
     contract: contract,
     method: 'tokenOfOwnerByIndex',

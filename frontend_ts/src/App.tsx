@@ -3,7 +3,6 @@ import { Header } from "./components/Header"
 import { Footer } from "./components/Footer"
 import { Main } from "./components/Main"
 import { Mainnet, DAppProvider, Config, Goerli, Sepolia } from '@usedapp/core'
-import { Container } from "@material-ui/core"
 
 import { BrowserRouter as Router } from "react-router-dom";
 

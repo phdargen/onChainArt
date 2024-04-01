@@ -3,7 +3,6 @@ import { useEthers, useEtherBalance } from "@usedapp/core"
 import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
-import contractAdresses from "../contracts/contracts.json"
 
 import img1 from "../assets/token1.svg"
 const openSeaLink = "https://testnets.opensea.io/"

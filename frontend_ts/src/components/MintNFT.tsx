@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useNotifications, useConfig, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core"
+import { useEthers, useNotifications } from "@usedapp/core"
 import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
@@ -11,6 +11,11 @@ import Alert from "@material-ui/lab/Alert"
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
 
 import img1 from '../assets/examples.gif';
+
+import network from "../contracts/network.json"
+const networkId = network.ChainId 
+const networkName = network.Name 
+
 const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
@@ -50,15 +55,11 @@ export const MintNFT = () => {
   const { notifications } = useNotifications()
   const { account, chainId } = useEthers()
 
-  // Get network id
-  const { readOnlyChainId } = useConfig()
-  const readOnlyChainName = DEFAULT_SUPPORTED_CHAINS.find((network) => network.chainId === readOnlyChainId)?.chainName
-
   // Check if account is connected to correct chain
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-    if( chainId === readOnlyChainId && isConnected)  {
+    if( chainId === networkId && isConnected)  {
         setIsConnectedAndCorrectChain(true)
     } else {
         setIsConnectedAndCorrectChain(false)
@@ -94,7 +95,7 @@ export const MintNFT = () => {
   const handleMint = () => {
     setShowMintSuccess(false)
     setShowMintFail(false)
-    if(chainId != readOnlyChainId ) {
+    if(chainId != networkId ) {
       console.error("handleMint::wrong chain Id")
       return undefined
     }

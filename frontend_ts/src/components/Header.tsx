@@ -4,7 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 import { Button, makeStyles, AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme, List, ListItem, ListItemText, Drawer, Divider, IconButton} from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu";
 
-import { useEthers } from "@usedapp/core"
+import { useEthers} from "@usedapp/core"
+
+import network from "../contracts/network.json"
+const networkId = network.ChainId 
+const networkName = network.Name 
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -70,8 +74,9 @@ export const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const { account, activateBrowserWallet, deactivate } = useEthers()
+  const { account, activateBrowserWallet, deactivate, chainId, switchNetwork } = useEthers()
   const isConnected = account !== undefined
+  const isCorrectChain = chainId == networkId
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -200,9 +205,15 @@ export const Header = () => {
         )}
 
         {isConnected ? (
-              <Button color="primary" variant="contained" size={isMobile ? "small" : "large"}>
-                {`${account?.slice(0, 4)}...${account?.slice(-3)}`}
-              </Button>
+              isCorrectChain ? (
+                <Button color="primary" variant="contained" size={isMobile ? "small" : "large"}>
+                    {`${account?.slice(0, 4)}...${account?.slice(-3)}`}
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => switchNetwork(networkId)} disabled={chainId === networkId}>
+                    Switch to {networkName}
+               </Button>
+            )
           ) : (
             <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => activateBrowserWallet()}>
               Connect

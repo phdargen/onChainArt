@@ -1,13 +1,16 @@
 import { ethers, utils, constants } from "ethers";
-import { useContractFunction, useConfig, useCall, useCalls, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core";
+import { useContractFunction, useCall, useCalls } from "@usedapp/core";
 import { Contract } from '@ethersproject/contracts'
 
 import contractNftAbi from '../contracts/myNFT.json'
 import contractAdresses from "../contracts/contracts.json"
 
 // Get contract
+import network from "../contracts/network.json"
+const networkId = network.ChainId 
+
 const contractInterface = new utils.Interface(contractNftAbi.abi)
-const contractAdress = contractAdresses["11155111"]["myNFT"] 
+const contractAdress = (contractAdresses as any)[networkId.toString()]?.myNFT 
 const contract = new Contract(contractAdress, contractInterface) as any
 
 export const useMintNFT = () => {

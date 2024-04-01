@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { useConfig, useEthers, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core"
+import { useEthers } from "@usedapp/core"
 
 import { Snackbar} from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
@@ -12,11 +12,11 @@ import { Gallery } from "./Gallery"
 
 import {Routes, Route} from "react-router-dom";
 
-export const Main = () => {
+import network from "../contracts/network.json"
+const networkId = network.ChainId 
+const networkName = network.Name 
 
-  // Get network id
-  const { readOnlyChainId } = useConfig()
-  const readOnlyChainName = DEFAULT_SUPPORTED_CHAINS.find((network) => network.chainId === readOnlyChainId)?.chainName
+export const Main = () => {
 
   // Check connnection
   const { chainId, active, error, account } = useEthers()
@@ -37,7 +37,7 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== readOnlyChainId && isConnected) ) {
+    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== networkId && isConnected) ) {
       !showNetworkError && setShowNetworkError(true)
     } else {
       showNetworkError && setShowNetworkError(false)
@@ -61,7 +61,7 @@ export const Main = () => {
         onClose={handleCloseNetworkError}
       >
         <Alert onClose={handleCloseNetworkError} severity="warning">
-          Please connect to the {readOnlyChainName} network!
+          Please connect to the {networkName} network!
         </Alert>
       </Snackbar>
     </>

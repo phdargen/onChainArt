@@ -69,9 +69,9 @@ export const MintNFT = () => {
   const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   // Get account balance
-  const balance = useEtherBalance(account)
-  const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
-  console.log(formattedTokenBalance)
+  //const balance = useEtherBalance(account)
+  //const formattedTokenBalance: number = balance ? parseFloat(formatUnits(balance, 18)) : 0
+  //console.log(formattedTokenBalance)
 
   // Get mint price
   const etherPrice =  useCoingeckoPrice('ethereum', 'usd') 
@@ -144,6 +144,7 @@ export const MintNFT = () => {
 
   const maxSupply = useMaxSupply();
   const maxSupplyFormatted: string = maxSupply ? String(maxSupply) : "?"
+  console.log(maxSupplyFormatted)
 
   // Render Mint UI
   return (
@@ -172,7 +173,7 @@ export const MintNFT = () => {
                         ( <Typography variant="body2" >  <Link color="inherit" href={openSeaLink + accountAdress} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
                 </CardContent>
-                <CardActions>
+                <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button color="primary" variant="contained" size="large" onClick={handleMint} disabled={!isConnectedAndCorrectChain || isMining} > {isMining ? <CircularProgress size={26} /> : 'Mint' } </Button>
                 </CardActions>
         </Card>

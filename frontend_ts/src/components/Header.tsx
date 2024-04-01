@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { Button, makeStyles, AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme, List, ListItem, ListItemText, Drawer, Divider, IconButton} from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu";
@@ -81,6 +81,14 @@ export const Header = () => {
   ) => {
     setSelectedIndex(index);
   };
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/") setSelectedIndex(0);
+    if (location.pathname === "/mint") setSelectedIndex(1);
+    if (location.pathname === "/gallery") setSelectedIndex(2);
+    if (location.pathname === "/myNFT") setSelectedIndex(3);
+  }, [location]);
 
   return (
    

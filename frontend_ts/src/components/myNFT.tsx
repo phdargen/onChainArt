@@ -13,10 +13,10 @@ const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
   box:{
-        width: '100%',
-        marginTop: 100,
-        marginBottom: 100,
-        padddingTop: 0
+      width: '100%',
+      marginTop: 100,
+      marginBottom: 100,
+      paddingTop: 50
   },
   Card: {
     backgroundColor: "#28282a" ,
@@ -99,17 +99,15 @@ export const MyNFT = () => {
         {isConnectedAndCorrectChain ?
 
             (
-            <Box className={classes.box} textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
-            <Container>    
-        
-            <Grid className={classes.grid} container spacing={2}>
+              <Box className={classes.box} textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 } } color="white">
+              <Container maxWidth="lg">
+              <Grid className={classes.grid} container spacing={2}>
 
-                {getCards()}
+                  {getCards()}
 
-            </Grid>
-
-            </Container>
-             </Box>
+              </Grid>
+              </Container>
+              </Box>
 
             ): (
                 <Box textAlign="center" color='white' className={classes.notConnected}>

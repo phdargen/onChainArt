@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react"
-
 import { useEthers, useEtherBalance } from "@usedapp/core"
 import { utils, constants } from "ethers"
-
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
-
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
-
 import contractAdresses from "../contracts/contracts.json"
 
 import img1 from "../assets/token1.svg"
-
 const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
@@ -18,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginTop: 100,
         marginBottom: 100,
-        padddingTop: 0
-    },
+        paddingTop: 50
+      },
     Card: {
       backgroundColor: "#28282a" ,
       color: "white",
@@ -59,6 +54,7 @@ export const Gallery = () => {
   const totalSupplyFormatted: number = totalSupply ? parseInt(totalSupply) : 0
   var tokenIds: Array<number> = []
   for (let index = 0; index < totalSupplyFormatted; index++) tokenIds.push(index)
+  //for (let index = 0; index < 21; index++) tokenIds.push(index)
 
   // Get SVG of NFTs
   var svgList = useGetAllSVGs(tokenIds)

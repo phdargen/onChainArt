@@ -13,11 +13,11 @@ const config: Config = {
     [Mainnet.chainId]: 'https://mainnet.infura.io/v3/847c45b102374b7f917b1e360bf4eccb',
     [Goerli.chainId]: 'https://goerli.infura.io/v3/847c45b102374b7f917b1e360bf4eccb',
     [Sepolia.chainId]: 'https://sepolia.infura.io/v3/847c45b102374b7f917b1e360bf4eccb',
-    [Sepolia.chainId]: 'https://eth-sepolia.g.alchemy.com/v2/20ILLtX95D8HGmgZBVcmRVz0iBm11PbO',
+    // [Sepolia.chainId]: 'https://eth-sepolia.g.alchemy.com/v2/20ILLtX95D8HGmgZBVcmRVz0iBm11PbO',
   },
   autoConnect: false,
   //multicallVersion: 2 as const,
-  //networks: [Rinkeby]
+  networks: [Sepolia]
 }
 
 export const App = () => {

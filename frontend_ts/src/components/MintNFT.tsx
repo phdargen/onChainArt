@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useEtherBalance, useContractFunction, useNotifications,  Mainnet, Rinkeby, Sepolia } from "@usedapp/core"
+import { useEthers, useNotifications, useConfig, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core"
 import { useCoingeckoPrice } from '@usedapp/coingecko'
 import { formatUnits } from "@ethersproject/units"
 import { utils, constants } from "ethers"
 
-import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar, useTheme, useMediaQuery } from "@material-ui/core"
+import { Container, Grid, Card, CardContent, CardMedia, CardActions, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar, useTheme, useMediaQuery } from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
 
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
 
-import contractAdresses from "../contracts/contracts.json"
 import img1 from '../assets/examples.gif';
-import { faLessThanEqual } from "@fortawesome/free-solid-svg-icons"
 const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
@@ -52,11 +50,15 @@ export const MintNFT = () => {
   const { notifications } = useNotifications()
   const { account, chainId } = useEthers()
 
+  // Get network id
+  const { readOnlyChainId } = useConfig()
+  const readOnlyChainName = DEFAULT_SUPPORTED_CHAINS.find((network) => network.chainId === readOnlyChainId)?.chainName
+
   // Check if account is connected to correct chain
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-    if( chainId === 11155111 && isConnected)  {
+    if( chainId === readOnlyChainId && isConnected)  {
         setIsConnectedAndCorrectChain(true)
     } else {
         setIsConnectedAndCorrectChain(false)
@@ -64,9 +66,6 @@ export const MintNFT = () => {
   }, [chainId, isConnected] )
 
   console.log(chainId)
-
-  // Get contract address
-  const contractAdress = chainId ? contractAdresses["11155111"]["myNFT"] : constants.AddressZero
 
   // Get account balance
   //const balance = useEtherBalance(account)
@@ -95,6 +94,10 @@ export const MintNFT = () => {
   const handleMint = () => {
     setShowMintSuccess(false)
     setShowMintFail(false)
+    if(chainId != readOnlyChainId ) {
+      console.error("handleMint::wrong chain Id")
+      return undefined
+    }
     return mintSend({ value: utils.parseEther(price.toString()) })
   }
 

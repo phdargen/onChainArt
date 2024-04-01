@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import { ChainId, useEthers } from "@usedapp/core"
+import { useConfig, useEthers, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core"
 
 import { Snackbar} from "@material-ui/core"
 import Alert from "@material-ui/lab/Alert"
@@ -10,9 +10,13 @@ import { MintNFT } from "./MintNFT"
 import { MyNFT } from "./myNFT"
 import { Gallery } from "./Gallery"
 
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 export const Main = () => {
+
+  // Get network id
+  const { readOnlyChainId } = useConfig()
+  const readOnlyChainName = DEFAULT_SUPPORTED_CHAINS.find((network) => network.chainId === readOnlyChainId)?.chainName
 
   // Check connnection
   const { chainId, active, error, account } = useEthers()
@@ -33,7 +37,7 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== 11155111 && isConnected) ) {
+    if ( (error && error.name === "UnsupportedChainIdError" ) || (chainId !== readOnlyChainId && isConnected) ) {
       !showNetworkError && setShowNetworkError(true)
     } else {
       showNetworkError && setShowNetworkError(false)
@@ -57,7 +61,7 @@ export const Main = () => {
         onClose={handleCloseNetworkError}
       >
         <Alert onClose={handleCloseNetworkError} severity="warning">
-          Please connect to the Rinkeby network!
+          Please connect to the {readOnlyChainName} network!
         </Alert>
       </Snackbar>
     </>

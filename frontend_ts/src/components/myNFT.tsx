@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react"
 
-import { useEthers, useEtherBalance, useContractFunction, useNotifications } from "@usedapp/core"
-import { utils, constants } from "ethers"
+import { useEthers, useConfig, DEFAULT_SUPPORTED_CHAINS } from "@usedapp/core"
+import { constants } from "ethers"
 
 import { Container, Grid, Card, CardMedia, Typography, makeStyles, Box  } from "@material-ui/core"
 
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwner} from "../hooks"
 
 import img1 from "../assets/token1.svg"
-
 const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
@@ -52,11 +51,15 @@ export const MyNFT = () => {
   const classes = useStyles()
   const { account, chainId } = useEthers()
 
+  // Get network id
+  const { readOnlyChainId } = useConfig()
+  const readOnlyChainName = DEFAULT_SUPPORTED_CHAINS.find((network) => network.chainId === readOnlyChainId)?.chainName
+
   // Check if account is connected to correct chain
   const isConnected = account !== undefined
   const [isConnectedAndCorrectChain, setIsConnectedAndCorrectChain] = useState(false)
   useEffect( () => {
-      if( chainId === 11155111 && isConnected)  {
+      if( chainId === readOnlyChainId && isConnected)  {
           setIsConnectedAndCorrectChain(true)
       } else {
           setIsConnectedAndCorrectChain(false)

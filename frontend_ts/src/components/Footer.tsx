@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faTwitterSquare, faGithubSquare, faInstagramSquare } from '@fortawesome/free-brands-svg-icons'
 
-const openSeaLink = "https://testnets.opensea.io/collection/onchain-art-gbuzv487bi"
+const openSeaLink = "https://testnets.opensea.io/collection/xonin-shapes-8"
 
 const useStyles = makeStyles((theme) => ({
   

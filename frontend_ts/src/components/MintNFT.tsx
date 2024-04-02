@@ -10,7 +10,8 @@ import Alert from "@material-ui/lab/Alert"
 
 import { useGetSVG, useMintNFT, usePrice, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
 
-import img1 from '../assets/examples.gif';
+import img1 from '../assets/outShapes.gif';
+import img2 from '../assets/outPaths.gif';
 
 // Get contract
 import network from "../contracts/network.json"
@@ -244,9 +245,9 @@ export const MintNFT = () => {
 
         <Card className={classes.Card}>
                 {userMinted2 === 1  ?  
-                    (<CardMedia className={classes.Media} component="img" src={svg2 ? `data:image/svg+xml;utf8,${encodeURIComponent(svg2)}` : img1} alt={img1} /> )
+                    (<CardMedia className={classes.Media} component="img" src={svg2 ? `data:image/svg+xml;utf8,${encodeURIComponent(svg2)}` : img2} alt={img2} /> )
                     : 
-                    (<CardMedia className={classes.Media} component="img" src={img1} /> )
+                    (<CardMedia className={classes.Media} component="img" src={img2} /> )
                 }
                 <CardContent>
                     

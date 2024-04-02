@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { useEthers, useEtherBalance } from "@usedapp/core"
 import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
-import img1 from "../assets/token1.svg"
 
 // Get contract
 import network from "../contracts/network.json"
@@ -25,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     box:{
         width: '100%',
         marginTop: 100,
-        marginBottom: 100,
+        marginBottom: '10%',
         paddingTop: 50
       },
     Card: {

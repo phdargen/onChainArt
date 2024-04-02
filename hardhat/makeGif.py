@@ -3,12 +3,17 @@ import sys
 
 n_frame = int(sys.argv[1])
 revert = False
-outName = "out.gif"
+
+inDir = "examples/shapes/PNG/"
+outName = "outShapes.gif"
+
+inDir = "examples/paths/PNG/"
+outName = "outPaths.gif"
 
 images = []
 for i in range(n_frame):
 
-    filename = "token" + str(i+1) 
+    filename = inDir + "token" + str(i) 
 
     print ("Including frame " + filename+".png")
     img = Image.open(filename+".png")
@@ -20,4 +25,4 @@ if revert == True:
     revImg = revImg[1:]
     images = images+revImg
 print ("Producing gif file " + outName)
-images[0].save(outName, save_all=True, append_images=images[1:], optimize=True, duration=600, loop=0)
+images[0].save(outName, save_all=True, append_images=images[1:], optimize=True, duration=1200, loop=0)

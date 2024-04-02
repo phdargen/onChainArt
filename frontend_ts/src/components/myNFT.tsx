@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { useEthers} from "@usedapp/core"
 import { utils, constants } from "ethers"
-import { Container, Grid, Card, CardMedia, Typography, makeStyles, Box  } from "@material-ui/core"
+import { Container, Grid, Card, CardMedia, CardContent, Typography, makeStyles, Box, Button  } from "@material-ui/core"
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwner} from "../hooks"
-import img1 from "../assets/token1.svg"
+import { Link } from 'react-router-dom';
 
 // Get contract
 import network from "../contracts/network.json"
@@ -18,7 +18,6 @@ const contract = new Contract(contractAdress, contractInterface) as any
 const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT 
 const contract2 = new Contract(contractAdress2, contractInterface) as any
 
-const openSeaLink = "https://testnets.opensea.io/"
 const maxDisplayed = 12
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
   Card: {
     backgroundColor: "#28282a" ,
     color: "white",
+    paddingBottom: 50,
+    marginBottom: '20%',
   },
   Media: {
     alignItems: "center",
@@ -119,11 +120,26 @@ export const MyNFT = () => {
       if (i < svgList.length) combinedSvgList.push(svgList[i]);
       if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
     }
+
+    if(maxLength==0)
+        return (
+            <Card className={classes.Card}>
+            <CardContent>      
+            <Typography gutterBottom variant={"h5"} component="div">
+                No Xonin NFTs found
+            </Typography> 
+            <Button component={Link} to="/mint" variant="contained" color="primary">
+              Mint NFT
+            </Button>
+            </CardContent>
+            </Card>
+        )
+
     return combinedSvgList.map( (svg: string | any, i) => {
         return (
             <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
             <Card className={classes.Card}>
-                    <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
+                    <CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}` }  /> 
             </Card>
             </Grid>
         )

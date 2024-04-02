@@ -1,12 +1,12 @@
-import { Box, Container, Button, makeStyles, Typography} from "@material-ui/core"
-
-import logo from "../assets/xonin.png"
+import { Box, Container, Button, makeStyles, Typography, useMediaQuery, useTheme} from "@material-ui/core"
 import bkg from "../assets/xoninExamples.png"
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   
     title: {
       color: theme.palette.common.white,
+      marginBottom: '1%',
       textAlign: "center",
       opacity: 1,
       zIndex: 1000,
@@ -23,8 +23,17 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     container: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(20),
+        marginTop: '10%',
+        marginBottom: '10%',
+        width: '50%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    containerMobile: {
+        marginTop: '10%',
+        marginBottom: '10%',
+        width: '80%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -33,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundImage: `url(${bkg})`,
         backgroundColor: '#7fc7d9', // Average color of the background image.
         backgroundPosition: 'center',
-        //height: "100vh",
         position: 'absolute',
         left: 0,
         right: 0,
@@ -42,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         opacity: 0.5,
-        // zIndex: 0,
     },
     logo: {
         marginTop:    200,
@@ -55,25 +62,35 @@ const useStyles = makeStyles((theme) => ({
 export const Home = () => {
 
     const classes = useStyles()
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     return (
 
              <section className={classes.root}>
-             <Container className={classes.container}>
+             <Container className={isMobile ? classes.containerMobile : classes.container}>
 
                 <div className={classes.background} />
 
                 {/* <img className={classes.logo} src={logo} width="50%" height='auto' /> */}
                     
+                <Typography variant="h2" className={classes.title}>
+                    Xonin 
+                </Typography>
+
                 <Typography variant="h3" className={classes.title}>
-                        Xonin.NFT
+                   Onchain Generative Art
                 </Typography>
 
                 <Typography variant="h6" className={classes.title}>
-                        Based generative art fully onchain
+                    Dive into the world of generative art on the Base blockchain!  
+                    Transaction hashes are used as the unique seed by our algorithms, resulting in the creation of unique patterns for every NFT minted.
+                    The artwork lives directly on the blockchain, independent of external data providers.
                 </Typography>
 
-
+                <Button component={Link} to="/mint" variant="contained" color="primary">
+                Mint NFT
+                </Button>
 
             </Container>
 

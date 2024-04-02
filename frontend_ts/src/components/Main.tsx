@@ -49,7 +49,7 @@ export const Main = () => {
     <>
 
       <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="" element={<Home />} />
           <Route path="mint" element={<MintNFT />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="myNFT" element={<MyNFT />} />

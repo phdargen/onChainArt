@@ -76,7 +76,7 @@ export const Header = () => {
 
   const { account, activateBrowserWallet, deactivate, chainId, switchNetwork } = useEthers()
   const isConnected = account !== undefined
-  const isCorrectChain = chainId == networkId
+  const isCorrectChain = chainId === networkId
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -177,7 +177,7 @@ export const Header = () => {
 
             <Button color="primary" variant={selectedIndex === 0 ? "contained" : "text"} onClick={ () => handleListItemClick(0)}>
               <Link to="/" className={classes.link}>
-              Home 
+              Home
               </Link>
             </Button>
 

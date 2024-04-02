@@ -5,7 +5,7 @@ const fs = require('fs');
 const sharp = require('sharp');
 const xmldom = require('xmldom');
 
-const numberOfMints = 2
+const numberOfMints = 100
 const outDir = "examples/"
 
 async function main() {
@@ -74,10 +74,10 @@ async function main() {
 
     // Get metadata
     let uriShapeNFT = await contractShapeNFT.tokenURI(i)
-    fs.writeFileSync(outDir+'shapes/JSON/token${i}.json', uriShapeNFT);
+    fs.writeFileSync(outDir+`shapes/JSON/token${i}.json`, uriShapeNFT);
 
     let uriPathNFT = await contractPathNFT.tokenURI(i)
-    fs.writeFileSync(outDir+'paths/JSON/token${i}.json', uriPathNFT);
+    fs.writeFileSync(outDir+`paths/JSON/token${i}.json`, uriPathNFT);
 
   }
 

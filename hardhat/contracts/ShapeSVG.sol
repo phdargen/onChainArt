@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 import "./Helper.sol";
 
-contract SVG {
+contract ShapeSVG {
 
-  function getSVG(uint256 rnd, string[] memory colorPalette ) public pure returns (string memory) {
+  function getSVG(uint256 rnd, bytes3[5] memory colorPalette ) public pure returns (string memory) {
 
     uint256 layers = Helper.expandRandom(rnd,0,15,25,1)[0];
     uint256[] memory figures = Helper.expandRandom(rnd,1,0,2,layers*3);
@@ -50,7 +50,7 @@ contract SVG {
 
       if(figures[index]==1)render = string(abi.encodePacked(render, 
         "<g class='g1'><use xlink:href='#b' width='100' height='100' ",
-          " fill='", colorPalette[colors[index]],
+          " fill='#", Helper.bytes3ToHexString(colorPalette[colors[index]]),
           "' fill-opacity='0.", Helper.uint2str(opacity[index]),
           "' transform='translate(", Helper.uint2str(x[index]), " ", Helper.uint2str(y[index]) , ") ",
           " scale(", Helper.uint2str(scale[index]),".", Helper.uint2str(scale2[index]) , ") ",
@@ -60,7 +60,7 @@ contract SVG {
       index += layers;
       if(figures[index]==1)render = string(abi.encodePacked(render, 
         "<g class='g2'><use xlink:href='#t' width='100' height='100' ",
-          " fill='", colorPalette[colors[index]],
+          " fill='#", Helper.bytes3ToHexString(colorPalette[colors[index]]),
           "' fill-opacity='0.", Helper.uint2str(opacity[index]),
           "' transform='translate(", Helper.uint2str(x[index]), " ", Helper.uint2str(y[index]) , ") ",
           " scale(", Helper.uint2str(scale[index]),".", Helper.uint2str(scale2[index]) , ") ",
@@ -70,7 +70,7 @@ contract SVG {
       index += layers;
       if(figures[index]==1)render = string(abi.encodePacked(render, 
         "<g class='g3'><use xlink:href='#c' width='100' height='100' ",
-          " fill='", colorPalette[colors[index]],
+          " fill='#", Helper.bytes3ToHexString(colorPalette[colors[index]]),
           "' fill-opacity='0.", Helper.uint2str(opacity[index]),
           "' transform='translate(", Helper.uint2str(x[index]), " ", Helper.uint2str(y[index]) , ") ",
           " scale(", Helper.uint2str(scale[index]),".", Helper.uint2str(scale2[index]) , ")' > ",
@@ -79,7 +79,7 @@ contract SVG {
 
     render = string(abi.encodePacked(render,
       "</symbol>",
-  		"<g fill='",colorPalette[0], "'>",
+  		"<g fill='#",Helper.bytes3ToHexString(colorPalette[0]), "'>",
 			  "<rect width='500' height='500' />",
 			  "<use href='#s'",
         filter[3] > 3 ? " filter='url(#f1)'" : "",

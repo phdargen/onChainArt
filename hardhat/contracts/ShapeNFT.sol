@@ -7,10 +7,11 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
-import "./SVG.sol";
+import "./ShapeSVG.sol";
 import "./Helper.sol";
+import "hardhat/console.sol";
 
-contract myNFT is ERC721Enumerable, IERC2981, Ownable {
+contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
 
   using Strings for uint256;
   uint256 private _nextTokenId = 0;
@@ -21,15 +22,15 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
   uint16 public royalty = 1000; // 10%
   address public royaltyAddress = address(this);
 
+  mapping (uint256 => uint256) private rnd;
+
   ColorPalette colorPaletteSet; 
-  SVG svgMaker;
+  ShapeSVG svgMaker;
 
-  constructor(address color, address svg, address initialOwner) ERC721("Onchain Art", "OCA") Ownable(initialOwner) {
+  constructor(address color, address svg, address initialOwner) ERC721("Xonin Shapes", "XON") Ownable(initialOwner) {
     colorPaletteSet = ColorPalette(color);
-    svgMaker = SVG(svg);    
+    svgMaker = ShapeSVG(svg);    
   }
-
-  mapping (uint256 => uint256) public rnd;
 
   function mintNFT() public payable returns (uint256){
       require(msg.value == price, "Wrong price");
@@ -46,7 +47,7 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
   function tokenURI(uint256 id) public view override returns (string memory) {
       _requireOwned(id);
       
-      string memory name = string(abi.encodePacked('RandomArt #',id.toString()));
+      string memory name = string(abi.encodePacked('Xonin Shapes #',id.toString()));
       string memory description = string(abi.encodePacked('Onchain generative art'));
       
       string memory image = getSVG(id) ; 
@@ -110,9 +111,15 @@ contract myNFT is ERC721Enumerable, IERC2981, Ownable {
   }
 
   function getSVG(uint256 id) public view returns (string memory) {
+    _requireOwned(id);
 
     uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
-    string[] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
+    bytes3[5] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
+
+      console.log(colorPaletteIndex);
+      console.logBytes3(colorPalette[1]);
+      console.log(Helper.bytes3ToHexString(colorPalette[1]));
+
 
     return svgMaker.getSVG(rnd[id], colorPalette);
   }

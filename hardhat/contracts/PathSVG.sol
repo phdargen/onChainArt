@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 import "./Helper.sol";
 
-contract pathSVG {
+contract PathSVG {
 
-  function getSVG(uint256 rnd, string[] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public pure returns (string memory) {
+  function getSVG(uint256 rnd, bytes3[5] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public pure returns (string memory) {
 
     string memory render =  string(abi.encodePacked(
       // "<filter id='f1' width='200%' height='200%'>",
@@ -29,8 +29,8 @@ contract pathSVG {
 
         grad =  string(abi.encodePacked(grad,
           "<radialGradient id='g", Helper.uint2str(i) ,"' r='1' spreadMethod='reflect'>",
-            "<stop offset='0%' style='stop-color:", colorPalette[colors[0]]  ,";stop-opacity:0." , Helper.uint2str(opacity[0]) , "'/>",
-            "<stop offset='100%' style='stop-color:", colorPalette[colors[1]]  ,";stop-opacity:1'/>",
+            "<stop offset='0%' style='stop-color:#", Helper.bytes3ToHexString(colorPalette[colors[0]])  ,";stop-opacity:0." , Helper.uint2str(opacity[0]) , "'/>",
+            "<stop offset='100%' style='stop-color:#", Helper.bytes3ToHexString(colorPalette[colors[1]])  ,";stop-opacity:1'/>",
           "</radialGradient>"
         ));
 
@@ -52,7 +52,7 @@ contract pathSVG {
 
     render = string(abi.encodePacked(grad, render,
       "</symbol>",
-  		"<g fill='",colorPalette[0], "'>",
+  		"<g fill='#",Helper.bytes3ToHexString(colorPalette[0]), "'>",
 			  "<rect width='500' height='500' />",
 			  "<use href='#p'",
          //filter[3] > 3 ? " filter='url(#f1)'" : "",

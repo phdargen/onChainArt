@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("myNFT", function () {
+describe("ShapeNFT", function () {
 
   provider = ethers.provider;
 
@@ -24,10 +24,10 @@ describe("myNFT", function () {
     const contractFactoryColor = await ethers.getContractFactory("ColorPalette");
     contractColor = await contractFactoryColor.deploy(owner.address);
 
-    const contractFactorySVG = await hre.ethers.getContractFactory("SVG");
+    const contractFactorySVG = await hre.ethers.getContractFactory("ShapeSVG");
     contractSVG = await contractFactorySVG.deploy();
   
-    const contractFactory = await hre.ethers.getContractFactory("myNFT");
+    const contractFactory = await hre.ethers.getContractFactory("ShapeNFT");
     contract = await contractFactory.deploy(contractColor.address,contractSVG.address,owner.address);
 
     price = await contract.price();
@@ -126,7 +126,7 @@ describe("myNFT", function () {
 
 });
 
-describe("pathNFT", function () {
+describe("PathNFT", function () {
 
   provider = ethers.provider;
 
@@ -149,10 +149,10 @@ describe("pathNFT", function () {
     const contractFactoryColor = await ethers.getContractFactory("ColorPalette");
     contractColor = await contractFactoryColor.deploy(owner.address);
 
-    const contractFactorySVG = await hre.ethers.getContractFactory("SVG");
+    const contractFactorySVG = await hre.ethers.getContractFactory("PathSVG");
     contractSVG = await contractFactorySVG.deploy();
   
-    const contractFactory = await hre.ethers.getContractFactory("pathNFT");
+    const contractFactory = await hre.ethers.getContractFactory("PathNFT");
     contract = await contractFactory.deploy(contractColor.address,contractSVG.address,owner.address);
 
     price = await contract.price();

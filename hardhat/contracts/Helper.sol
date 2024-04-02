@@ -24,6 +24,16 @@ library Helper {
       return string(bstr);
   }
 
+   function bytes3ToHexString(bytes3 _bytes) internal pure returns (string memory) {
+        bytes memory hexChars = "0123456789abcdef";
+        bytes memory hexString = new bytes(6);
+        for (uint i = 0; i < 3; i++) {
+            hexString[i * 2] = hexChars[uint8(_bytes[i] >> 4)];
+            hexString[1 + i * 2] = hexChars[uint8(_bytes[i] & 0x0f)];
+        }
+        return string(hexString);
+    }
+
   function expandRandom(uint256 randomValue, uint256 seed, uint256 min, uint256 max, uint256 n) internal pure returns (uint256[] memory expandedValues) {
     expandedValues = new uint256[](n);
     for (uint256 i = 0; i < n; i++) {

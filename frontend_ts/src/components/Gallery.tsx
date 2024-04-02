@@ -67,11 +67,11 @@ const useTokenIdsToDisplay = (contract: any, maxDisplayed = Infinity): number[] 
 
   useEffect(() => {
     const newTokenIds: number[] = [];
-    for (let index = Math.min(totalSupplyFormatted, maxDisplayed); index > 0; index--) {
+    for (let index = Math.min(totalSupplyFormatted, maxDisplayed) - 1; index >= 0; index--) {
       newTokenIds.push(index);
     }
     setTokenIds(newTokenIds);
-  }, [totalSupplyFormatted, maxDisplayed]);
+  }, [contract, totalSupplyFormatted, maxDisplayed]);
 
   return tokenIds;
 };
@@ -83,6 +83,8 @@ export const Gallery = () => {
   // Get recent mints
   var tokenIds = useTokenIdsToDisplay(contract,maxDisplayed);
   var tokenIds2 = useTokenIdsToDisplay(contract2,maxDisplayed);
+  console.log('tokenIds ', tokenIds);
+  console.log('tokenIds2 ', tokenIds2);
 
   // Get SVG of NFTs
   var svgList = useGetAllSVGs(contract,tokenIds)
@@ -97,11 +99,15 @@ export const Gallery = () => {
       if (i < svgList.length) combinedSvgList.push(svgList[i]);
       if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
     }
+    console.log('combinedSvgList.length ', combinedSvgList.length)
+    console.log('svgList.length ', svgList.length)
+    console.log('svgList2.length ', svgList2.length)
+
     return combinedSvgList.map( (svg: string | any, i) => {
         return (
             <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
             <Card className={classes.Card}>
-                    <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
+                    <CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}` }  /> 
             </Card>
             </Grid>
         )

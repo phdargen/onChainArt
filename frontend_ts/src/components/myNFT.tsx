@@ -77,11 +77,11 @@ const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = In
 
     useEffect(() => {
       const newTokenIds: number[] = [];
-      for (let index = Math.min(nftBalanceFormatted, maxDisplayed); index > 0; index--) {
+      for (let index = Math.min(nftBalanceFormatted, maxDisplayed) - 1 ; index >= 0; index--) {
         newTokenIds.push(tokenIds[index]);
       }
       setTokenIdsFormatted(newTokenIds);
-    }, [nftBalanceFormatted, maxDisplayed, tokenIds]);
+    }, [contract, account, maxDisplayed, nftBalanceFormatted]);
     
     return tokenIdsFormatted;
   };

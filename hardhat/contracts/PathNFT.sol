@@ -7,11 +7,11 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
-import "./pathSVG.sol";
+import "./PathSVG.sol";
 import "./Helper.sol";
 import "hardhat/console.sol";
 
-contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
+contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
 
   using Strings for uint256;
   uint256 private _nextTokenId;
@@ -19,18 +19,18 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
   uint public price = 0.001 ether;
   uint16 public maxSupply = 1000;
 
-  uint16 public royalty = 1000; // 10%
+  uint16 public royalty = 1500; // 10%
   address public royaltyAddress = address(this);
 
+  mapping (uint256 => uint256) private rnd;
+
   ColorPalette colorPaletteSet; 
-  pathSVG svgMaker;
+  PathSVG svgMaker;
 
-  constructor(address color, address svg, address initialOwner) ERC721("Onchain Art", "OCA") Ownable(initialOwner) {
+  constructor(address color, address svg, address initialOwner) ERC721("Xonin Paths", "XON") Ownable(initialOwner) {
     colorPaletteSet = ColorPalette(color);
-    svgMaker = pathSVG(svg);    
+    svgMaker = PathSVG(svg);    
   }
-
-  mapping (uint256 => uint256) public rnd;
 
   function mintNFT() public payable returns (uint256){
       require(msg.value == price, "Wrong price");
@@ -47,7 +47,7 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
   function tokenURI(uint256 id) public view override returns (string memory) {
       _requireOwned(id);
       
-      string memory name = string(abi.encodePacked('RandomArt #',id.toString()));
+      string memory name = string(abi.encodePacked('Xonin Paths #',id.toString()));
       string memory description = string(abi.encodePacked('Onchain generative art'));
       
       string memory image = getSVG(id) ; 
@@ -89,9 +89,10 @@ contract pathNFT is ERC721Enumerable, IERC2981, Ownable {
   }
 
   function getSVG(uint256 id) public view returns (string memory) {
+      _requireOwned(id);
 
     uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
-    string[] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
+    bytes3[5] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
 
     uint256 layers = Helper.expandRandom(rnd[id],0,3,7,1)[0];
     uint256[] memory points = Helper.expandRandom(rnd[id],1,50,150,layers);

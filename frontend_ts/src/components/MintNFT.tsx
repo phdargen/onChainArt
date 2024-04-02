@@ -100,7 +100,7 @@ const useNftData = (contract: any, account: any) => {
       setSvg(svgData);
       setTotalSupplyFormatted(totalSupply ? String(totalSupply) : "?");
       setMaxSupplyFormatted(maxSupply ? String(maxSupply) : String(defaultMaxSupply));
-  }, [contract, accountAddress,maxSupply, priceMint, svgData, totalSupply]); 
+  }, [contract, accountAddress, maxSupply, priceMint, svgData, totalSupply]); 
 
   return { svg, totalSupplyFormatted, maxSupplyFormatted, nftBalance, tokenId, price };
 };
@@ -143,12 +143,12 @@ export const MintNFT = () => {
   const { send: mintSend, state: mintState } = useMintNFT(contract)
   const { send: mintSend2, state: mintState2 } = useMintNFT(contract2)
 
+  const [userMinted, setUserMinted] = useState(0)
   const [userMinted2, setUserMinted2] = useState(0)
   const [userMintedStyle, setUserMintedStyle] = useState(0)
 
   const [showMintSuccess, setShowMintSuccess] = useState(false)
   const [showMintFail, setShowMintFail] = useState(false)
-  const [userMinted, setUserMinted] = useState(0)
   const isMining = mintState.status === "Mining" || mintState2.status === "Mining"
   const txId = mintState.receipt ? mintState.receipt.transactionHash : (mintState2.receipt ? mintState2.receipt.transactionHash :"")
 

@@ -22,12 +22,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const { apiKey, apiKeyBaseSepolia, etherscanApiKey, mnemonic } = require('./secrets.json');
 
 module.exports = {
-  solidity: "0.8.20",
+  solidity: {
+    version: "0.8.20",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 100,
+      },
+      viaIR: true,
+    },
+  },
+  
   networks: {
           sepolia: {
               url: `https://sepolia.infura.io/v3/${apiKey}`,
               accounts: { mnemonic: mnemonic },
-              //timeout: 10000000
+              timeout: 10000000
           },
           goerli: {
               url: `https://goerli.infura.io/v3/${apiKey}`,
@@ -60,13 +70,6 @@ module.exports = {
     apiKey: {
       sepolia: etherscanApiKey,
     },
-  },
-
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 200,
-    }
   },
 
 };

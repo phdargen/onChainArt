@@ -199,7 +199,7 @@ export const MintNFT = () => {
             !showMintFail && setShowMintFail(true)
         }  
 
-  }, [notifications, showMintSuccess, showMintFail, userMinted, userMinted2])
+  }, [notifications, showMintSuccess, showMintFail, userMinted, userMinted2, userMintedStyle])
 
   const handleCloseSnack = () => {
     showMintSuccess && setShowMintSuccess(false)
@@ -234,7 +234,7 @@ export const MintNFT = () => {
                     </Typography>
 
                     {!isConnected ? ( <Typography variant="body2" > Please connect your wallet </Typography> ) : ( [] ) }
-                    {userMinted === 1 && isConnected && (!isMining || userMintedStyle == 2) ? 
+                    {userMinted === 1 && isConnected && (!isMining || userMintedStyle === 2) ? 
                         ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + account} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
                 </CardContent>
@@ -264,7 +264,7 @@ export const MintNFT = () => {
                     </Typography>
 
                     {!isConnected ? ( <Typography variant="body2" > Please connect your wallet </Typography> ) : ( [] ) }
-                    {userMinted2 === 1 && isConnected && (!isMining || userMintedStyle == 1) ? 
+                    {userMinted2 === 1 && isConnected && (!isMining || userMintedStyle === 1) ? 
                         ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + account} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
                 </CardContent>

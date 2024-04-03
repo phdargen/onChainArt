@@ -6,7 +6,8 @@ import { serveStatic } from "frog/serve-static";
 import { abi } from "./abi.js";
 import { baseSepolia, sepolia } from "viem/chains";
 
-const url = "http://onchainart.s3-website.us-east-2.amazonaws.com"
+const frame_url = 'https://xonin-farcasterframe.vercel.app'
+const website_url = 'https:/xonin.vercel.app'
 
 const app = new Frog({
   assetsPath: "/",
@@ -16,10 +17,10 @@ const app = new Frog({
 
 app.frame("/", (c) => {
   return c.res({
-    image: "https://on-chain-art-theta.vercel.app/outPaths.gif",
+    image: frame_url + "/outPaths.gif",
     imageAspectRatio: "1:1",
     intents: [
-      <Button.Link href={url}>
+      <Button.Link href={website_url}>
         Visit website
       </Button.Link>,
       <Button.Transaction target="/mint">Mint NFT</Button.Transaction>

@@ -71,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = Infinity): number[] => {
-  const [tokenIdsFormatted, setTokenIdsFormatted] = useState<number[]>([]);
 
   const accountAddress = account || constants.AddressZero;
 
@@ -82,19 +81,13 @@ const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = In
   // Determine the owned token ids up to the maximum displayed or the total owned
   const ownedTokens = useMemo(() => {
     const tokens: number[] = [];
-    for (let i = 0; i < Math.min(nftBalanceFormatted, maxDisplayed); i++) {
-      tokens.push(i); 
+    for (let index = Math.min(nftBalanceFormatted, maxDisplayed) - 1; index >= 0; index--) {
+      tokens.push(index); 
     }
     return tokens;
-  }, [nftBalanceFormatted, maxDisplayed]);
+  }, [contract, account, maxDisplayed, nftBalanceFormatted]);
 
-  const tokenIds = useTokenOfOwner(contract, accountAddress, ownedTokens);
-
-  useEffect(() => {
-    setTokenIdsFormatted(ownedTokens);
-  }, [ownedTokens]);
-
-  return tokenIdsFormatted;
+  return ownedTokens;
 };
 
 export const MyNFT = () => {
@@ -114,8 +107,11 @@ export const MyNFT = () => {
    }, [chainId, isConnected] )
 
   // Get recent mints
-  var tokenIds = useOwnedTokenIds(contract,account,maxDisplayed);
-  var tokenIds2 = useOwnedTokenIds(contract2,account,maxDisplayed);
+  var ownedTokens = useOwnedTokenIds(contract,account,maxDisplayed);
+  var ownedTokens2 = useOwnedTokenIds(contract2,account,maxDisplayed);
+
+  const tokenIds = useTokenOfOwner(contract, account || constants.AddressZero, ownedTokens);
+  const tokenIds2 = useTokenOfOwner(contract2, account || constants.AddressZero, ownedTokens2);
 
   // Get SVG of NFTs
   var svgList = useGetAllSVGs(contract,tokenIds)

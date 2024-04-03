@@ -81,8 +81,6 @@ export const Gallery = () => {
   // Get recent mints
   var tokenIds = useTokenIdsToDisplay(contract,maxDisplayed);
   var tokenIds2 = useTokenIdsToDisplay(contract2,maxDisplayed);
-  console.log('tokenIds ', tokenIds);
-  console.log('tokenIds2 ', tokenIds2);
 
   // Get SVG of NFTs
   var svgList = useGetAllSVGs(contract,tokenIds)
@@ -97,9 +95,6 @@ export const Gallery = () => {
       if (i < svgList.length) combinedSvgList.push(svgList[i]);
       if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
     }
-    console.log('combinedSvgList.length ', combinedSvgList.length)
-    console.log('svgList.length ', svgList.length)
-    console.log('svgList2.length ', svgList2.length)
 
     return combinedSvgList.map( (svg: string | any, i) => {
         return (

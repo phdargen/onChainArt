@@ -1,6 +1,9 @@
 import { Box, Container, Button, makeStyles, Typography, useMediaQuery, useTheme} from "@material-ui/core"
-import bkg from "../assets/xoninExamples.png"
+import bkg from "../assets/xonin.001.png"
 import { Link } from 'react-router-dom';
+
+import network from "../contracts/network.json"
+const networkName = network.Name 
 
 const useStyles = makeStyles((theme) => ({
   
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
         top: 50,
         bottom: 0,
         backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
+        backgroundRepeat: 'repeat',
         opacity: 0.5,
     },
     logo: {
@@ -83,10 +86,11 @@ export const Home = () => {
                 </Typography>
 
                 <Typography variant="h6" className={classes.title}>
-                    Dive into the world of generative art on the Base blockchain!  
-                    Transaction hashes are used as the unique seed by our algorithms, resulting in the creation of unique patterns for every NFT minted.
-                    The artwork lives directly on the blockchain, independent of external data providers.
+                Create generative art on the {networkName} blockchain! 
+                Transaction hashes are used as seeds for the algorithms, creating unique patterns for every NFT minted. 
+                The artwork exists fully on-chain, independent of external data providers.
                 </Typography>
+                
 
                 <Button component={Link} to="/mint" variant="contained" color="primary">
                 Mint NFT

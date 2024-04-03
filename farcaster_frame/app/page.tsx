@@ -3,11 +3,14 @@ import React from 'react';
 import { getFrameMetadata } from 'frog/next';
 import type { Metadata } from 'next';
 
-const backgroundImageUrl = 'https://on-chain-art-theta.vercel.app/outPaths.gif';
+const frame_url = 'https://xonin-farcasterframe.vercel.app'
+const website_url = 'https:/xonin.vercel.app'
+
+const backgroundImageUrl = frame_url + '/xonin.002.png';
 
 export async function generateMetadata(): Promise<Metadata> {
   const frameTags = await getFrameMetadata(
-    `https://on-chain-art-theta.vercel.app/api`,
+    frame_url + `/api`,
   )
   return {
     other: frameTags,
@@ -39,7 +42,7 @@ export default function Home() {
 
   return (
     <main style={mainStyle}>
-      <a href="http://onchainart.s3-website.us-east-2.amazonaws.com/" style={{ textDecoration: 'none' }}>
+      <a href={website_url} style={{ textDecoration: 'none' }}>
         <button style={buttonStyle}>Mint</button>
       </a>
     </main>

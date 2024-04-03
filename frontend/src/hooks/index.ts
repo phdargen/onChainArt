@@ -116,6 +116,7 @@ export function useTokenOfOwnerByIndex(contract: any, address:string, tokenId:nu
 }
 
 export function useTokenOfOwner(contract: any, address:string, ownedTokens:number[]) {
+
   const calls = ownedTokens?.map(index => ({
     contract: contract,
     method: 'tokenOfOwnerByIndex',

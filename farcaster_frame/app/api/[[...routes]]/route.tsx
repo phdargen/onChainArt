@@ -7,7 +7,7 @@ import { abi } from "./abi.js";
 import { baseSepolia, sepolia } from "viem/chains";
 
 const frame_url = 'https://xonin-farcasterframe.vercel.app'
-const website_url = 'https:/xonin.vercel.app'
+const website_url = 'https://xonin.vercel.app'
 
 const app = new Frog({
   assetsPath: "/",

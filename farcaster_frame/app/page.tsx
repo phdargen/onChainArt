@@ -4,7 +4,7 @@ import { getFrameMetadata } from 'frog/next';
 import type { Metadata } from 'next';
 
 const frame_url = 'https://xonin-farcasterframe.vercel.app'
-const website_url = 'https:/xonin.vercel.app'
+const website_url = 'https://xonin.vercel.app'
 
 const backgroundImageUrl = frame_url + '/xonin.002.png';
 

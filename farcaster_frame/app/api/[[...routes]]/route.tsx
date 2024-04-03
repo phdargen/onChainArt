@@ -16,7 +16,7 @@ const app = new Frog({
 
 app.frame("/", (c) => {
   return c.res({
-    image: url+"/outPaths.gif",
+    image: "https://on-chain-art-theta.vercel.app/outPaths.gif",
     imageAspectRatio: "1:1",
     intents: [
       <Button.Link href={url}>

@@ -5,7 +5,7 @@ const fs = require('fs');
 const sharp = require('sharp');
 const xmldom = require('xmldom');
 
-const numberOfMints = 100
+const numberOfMints = 1
 const outDir = "examples/"
 
 async function main() {

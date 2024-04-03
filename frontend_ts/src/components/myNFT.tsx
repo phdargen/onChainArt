@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useEthers} from "@usedapp/core"
 import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardMedia, CardContent, Typography, makeStyles, Box, Button  } from "@material-ui/core"
 import { useGetAllSVGs, useBalanceOf, useTokenOfOwner} from "../hooks"
 import { Link } from 'react-router-dom';
+import img1 from "../assets/token1.svg"
 
 // Get contract
 import network from "../contracts/network.json"
@@ -31,8 +32,15 @@ const useStyles = makeStyles((theme) => ({
   Card: {
     backgroundColor: "#28282a" ,
     color: "white",
-    paddingBottom: 50,
-    marginBottom: '20%',
+    //paddingBottom: 50,
+    marginBottom: '5%',
+  },
+  CardNoNFT: {
+    backgroundColor: "#28282a" ,
+    color: "white",
+    //paddingBottom: '10%',
+    marginTop: '5%',
+    marginBottom: '5%',
   },
   Media: {
     alignItems: "center",
@@ -63,29 +71,31 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = Infinity): number[] => {
-    const [tokenIdsFormatted, setTokenIdsFormatted] = useState<number[]>([]);
+  const [tokenIdsFormatted, setTokenIdsFormatted] = useState<number[]>([]);
 
-    const accountAddress = account || constants.AddressZero;
-  
-    // Fetch the balance of NFTs owned by the account
-    const nftBalance = useBalanceOf(contract, accountAddress);
-    const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0;
+  const accountAddress = account || constants.AddressZero;
 
-    // Token ids of the owend tokens
-    var ownedTokens: Array<number> = []
-    for (let i = 0; i < nftBalanceFormatted; i++) ownedTokens.push(i)
-    const tokenIds = useTokenOfOwner(contract, accountAddress, ownedTokens);
+  // Fetch the balance of NFTs owned by the account
+  const nftBalance = useBalanceOf(contract, accountAddress);
+  const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0;
 
-    useEffect(() => {
-      const newTokenIds: number[] = [];
-      for (let index = Math.min(nftBalanceFormatted, maxDisplayed) - 1 ; index >= 0; index--) {
-        newTokenIds.push(tokenIds[index]);
-      }
-      setTokenIdsFormatted(newTokenIds);
-    }, [contract, account, maxDisplayed, nftBalanceFormatted]);
-    
-    return tokenIdsFormatted;
-  };
+  // Determine the owned token ids up to the maximum displayed or the total owned
+  const ownedTokens = useMemo(() => {
+    const tokens: number[] = [];
+    for (let i = 0; i < Math.min(nftBalanceFormatted, maxDisplayed); i++) {
+      tokens.push(i); 
+    }
+    return tokens;
+  }, [nftBalanceFormatted, maxDisplayed]);
+
+  const tokenIds = useTokenOfOwner(contract, accountAddress, ownedTokens);
+
+  useEffect(() => {
+    setTokenIdsFormatted(ownedTokens);
+  }, [ownedTokens]);
+
+  return tokenIdsFormatted;
+};
 
 export const MyNFT = () => {
 
@@ -121,9 +131,9 @@ export const MyNFT = () => {
       if (i < svgList2.length) combinedSvgList.push(svgList2[i]);
     }
 
-    if(maxLength==0)
+    if(maxLength===0)
         return (
-            <Card className={classes.Card}>
+            <Card className={classes.CardNoNFT}>
             <CardContent>      
             <Typography gutterBottom variant={"h5"} component="div">
                 No Xonin NFTs found
@@ -139,7 +149,7 @@ export const MyNFT = () => {
         return (
             <Grid className={classes.gridItem} key={i} item xs={12} sm={4}>
             <Card className={classes.Card}>
-                    <CardMedia className={classes.Media} component="img" src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}` }  /> 
+                    <CardMedia className={classes.Media} component="img" src={svg ? `data:image/svg+xml;utf8,${encodeURIComponent(svg)}` : img1} alt={img1} /> 
             </Card>
             </Grid>
         )

@@ -87,8 +87,8 @@ export const Home = () => {
 
                 <Typography variant="h6" className={classes.title}>
                 Create generative art on the {networkName} blockchain! 
-                Transaction hashes are used as seeds for the algorithms, creating unique patterns for every NFT minted. 
-                The artwork exists fully on-chain, independent of external data providers.
+                Transaction hashes are used as seeds for the algorithm, creating unique patterns for every NFT minted. 
+                The artwork exists fully onchain, independent of external data providers.
                 </Typography>
                 
 

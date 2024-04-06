@@ -42,7 +42,7 @@ export default function Home() {
 
   return (
     <main style={mainStyle}>
-      <a href={website_url} style={{ textDecoration: 'none' }}>
+      <a href={website_url+'/mint'} style={{ textDecoration: 'none' }}>
         <button style={buttonStyle}>Mint</button>
       </a>
     </main>

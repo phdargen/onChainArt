@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
 import "./ShapeSVG.sol";
 import "./Helper.sol";
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
 
 contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
 
@@ -17,7 +17,7 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
   uint256 private _nextTokenId = 0;
 
   uint public price = 0.001 ether;
-  uint16 public maxSupply = 1000;
+  uint16 public maxSupply = 10000;
 
   uint16 public royalty = 1000; // 10%
   address public royaltyAddress = address(this);
@@ -48,12 +48,13 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
       _requireOwned(id);
       
       string memory name = string(abi.encodePacked('Xonin Shapes #',id.toString()));
-      string memory description = string(abi.encodePacked('Onchain generative art'));
+      string memory description = string(abi.encodePacked('Xonin - Onchain generative art collection'));
       
       string memory image = getSVG(id) ; 
 
       uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
       uint layers = Helper.expandRandom(rnd[id],0,15,25,1)[0];
+      uint256[] memory filter = Helper.expandRandom(rnd[id],9,0,6,4);
 
       uint[] memory figures = Helper.expandRandom(rnd[id],1,0,2,layers*3);
       uint boxes = 0;
@@ -84,6 +85,8 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
                 Helper.uint2str(triangles),
                 '"},{"trait_type": "Circles","value":"',
                 Helper.uint2str(circles),
+                '"},{"trait_type": "Filter","value":"',
+                filter[3] > 3 ? "1" : "0",
                 '"}',
                 "]}"
             )
@@ -116,16 +119,14 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
     uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
     bytes3[5] memory colorPalette = colorPaletteSet.getColorpalette(colorPaletteIndex);
 
-      console.log(colorPaletteIndex);
-      console.logBytes3(colorPalette[1]);
-      console.log(Helper.bytes3ToHexString(colorPalette[1]));
-
-
+    // console.log(colorPaletteIndex);
+    // console.logBytes3(colorPalette[1]);
+    // console.log(Helper.bytes3ToHexString(colorPalette[1]));
     return svgMaker.getSVG(rnd[id], colorPalette);
   }
 
   function contractURI() public pure returns (string memory) {
-        string memory json = '{"name": "Xonin Shapes","description":"Generative art on the Base blockchain!  Transaction hashes are used as the unique seed by our algorithms, resulting in the creation of unique patterns for every NFT minted. The artwork lives directly on the blockchain, independent of external data providers."}';
+        string memory json = '{"name": "Xonin Shapes","description":"Xonin - Onchain generative art collection. Create your own generative artwork on the Base blockchain. The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG. "}';
         return string.concat("data:application/json;utf8,", json);
   }
 

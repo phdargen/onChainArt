@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ColorPalette.sol";
 import "./PathSVG.sol";
 import "./Helper.sol";
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
 
 contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
 
@@ -17,9 +17,9 @@ contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
   uint256 private _nextTokenId;
 
   uint public price = 0.001 ether;
-  uint16 public maxSupply = 1000;
+  uint16 public maxSupply = 10000;
 
-  uint16 public royalty = 1500; // 10%
+  uint16 public royalty = 1000; // 10%
   address public royaltyAddress = address(this);
 
   mapping (uint256 => uint256) private rnd;
@@ -48,12 +48,13 @@ contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
       _requireOwned(id);
       
       string memory name = string(abi.encodePacked('Xonin Paths #',id.toString()));
-      string memory description = string(abi.encodePacked('Onchain generative art'));
+      string memory description = string(abi.encodePacked('Xonin - Onchain generative art collection'));
       
       string memory image = getSVG(id) ; 
 
       uint colorPaletteIndex = rnd[id] %  (colorPaletteSet.getPaletteSize());
-      uint layers = Helper.expandRandom(rnd[id],0,15,25,1)[0];
+      uint256 layers = Helper.expandRandom(rnd[id],0,3,7,1)[0];
+      uint256[] memory filter = Helper.expandRandom(rnd[id],9,0,6,4);
 
       string memory attributes = string(
             abi.encodePacked(
@@ -62,6 +63,8 @@ contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
                 Helper.uint2str(colorPaletteIndex),
                  '"},{"trait_type": "Layers","value":"',
                 Helper.uint2str(layers),
+                '"},{"trait_type": "Filter","value":"',
+                filter[3] > 3 ? "1" : "0",
                 '"}',
                 "]}"
             )
@@ -97,17 +100,15 @@ contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
     uint256 layers = Helper.expandRandom(rnd[id],0,3,7,1)[0];
     uint256[] memory points = Helper.expandRandom(rnd[id],1,50,150,layers);
     uint256[] memory curveType = Helper.expandRandom(rnd[id],2,1,4,layers);
-    //uint256[] memory filter = Helper.expandRandom(rnd[id],9,0,6,4);
+    uint256[] memory filter = Helper.expandRandom(rnd[id],9,0,6,4);
 
-    console.log("layers %d",layers);
-    // console.log(points);
-    // console.log(curveType);
-
-    return svgMaker.getSVG(rnd[id], colorPalette, layers, points, curveType );
+    //console.log("layers %d",layers);
+    //console.log("filter ", filter[3]);
+    return svgMaker.getSVG(rnd[id], colorPalette, layers, points, curveType, filter );
   }
 
   function contractURI() public pure returns (string memory) {
-        string memory json = '{"name": "Xonin Paths","description":"Generative art on the Base blockchain!  Transaction hashes are used as the unique seed by our algorithms, resulting in the creation of unique patterns for every NFT minted. The artwork lives directly on the blockchain, independent of external data providers."}';
+        string memory json = '{"name": "Xonin Paths","description":"Xonin - Onchain generative art collection. Create your own generative artwork on the Base blockchain. The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG. "}';
         return string.concat("data:application/json;utf8,", json);
   }
 
@@ -126,7 +127,7 @@ contract PathNFT is ERC721Enumerable, IERC2981, Ownable {
 
   function setRoyalty(uint16 _royalty) external onlyOwner {
         require(_royalty >= 0, "Royalty must be >= 0%");
-        require(_royalty <= 2000, "Royalty must be <= 15%" );
+        require(_royalty <= 1000, "Royalty must be <= 10%" );
         royalty = _royalty;
   }
     

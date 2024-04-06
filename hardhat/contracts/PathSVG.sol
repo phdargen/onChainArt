@@ -5,17 +5,17 @@ import "./Helper.sol";
 
 contract PathSVG {
 
-  function getSVG(uint256 rnd, bytes3[5] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType ) public pure returns (string memory) {
+  function getSVG(uint256 rnd, bytes3[5] memory colorPalette, uint256 layers, uint256[] memory points, uint256[] memory curveType, uint256[] memory filter  ) public pure returns (string memory) {
 
     string memory render =  string(abi.encodePacked(
-      // "<filter id='f1' width='200%' height='200%'>",
-		  //   	"<feOffset in='SourceGraphic' result='r' dx='", Helper.uint2str(filter[0]*10) , "' dy='" , Helper.uint2str(filter[1]*10) , "' />",
-			//   	"<feGaussianBlur in='r' result='rb' stdDeviation='" , Helper.uint2str(filter[2]) ,"'/>",
-			//   	"<feMerge>",
-			// 		"<feMergeNode in='rb' />",
-			// 		"<feMergeNode in='SourceGraphic' />" ,
-      //     "</feMerge>",
-			// "</filter>"	,
+      "<filter id='f1' width='200%' height='200%'>",
+		    	"<feOffset in='SourceGraphic' result='r' dx='", Helper.uint2str(filter[0]*10) , "' dy='" , Helper.uint2str(filter[1]*10) , "' />",
+			  	"<feGaussianBlur in='r' result='rb' stdDeviation='" , Helper.uint2str(filter[2]) ,"'/>",
+			  	"<feMerge>",
+					"<feMergeNode in='rb' />",
+					"<feMergeNode in='SourceGraphic' />" ,
+          "</feMerge>",
+			"</filter>"	,
       "<symbol id='p' viewBox='0 0 500 500'>"
     ));
 
@@ -24,7 +24,7 @@ contract PathSVG {
     for(uint i = 0; i < layers; i++){
 
         uint256[] memory colors = Helper.expandRandom(rnd, i*10+3, 1, colorPalette.length, 2);
-        uint256[] memory opacity = Helper.expandRandom(rnd, i*10+4, 25, 99, 2);
+        uint256[] memory opacity = Helper.expandRandom(rnd, i*10+4, 33, 99, 2);
         uint256[] memory sign_prob = Helper.expandRandom(rnd, i*10+5, 3, 7, 2);
 
         grad =  string(abi.encodePacked(grad,
@@ -55,7 +55,7 @@ contract PathSVG {
   		"<g fill='#",Helper.bytes3ToHexString(colorPalette[0]), "'>",
 			  "<rect width='500' height='500' />",
 			  "<use href='#p'",
-         //filter[3] > 3 ? " filter='url(#f1)'" : "",
+        filter[3] > 3 ? " filter='url(#f1)'" : "",
         "/>",
 		  "</g>" 
     ));

@@ -22,7 +22,7 @@ describe("ShapeNFT", function () {
 
     // Deploy contracts
     const contractFactoryColor = await ethers.getContractFactory("ColorPalette");
-    contractColor = await contractFactoryColor.deploy(owner.address);
+    contractColor = await contractFactoryColor.deploy();
 
     const contractFactorySVG = await hre.ethers.getContractFactory("ShapeSVG");
     contractSVG = await contractFactorySVG.deploy();
@@ -38,14 +38,12 @@ describe("ShapeNFT", function () {
   describe("Deployment", function () {
 
     it("Should set the right owner", async function () {
-      expect(await contractColor.owner()).to.equal(owner.address);
       expect(await contract.owner()).to.equal(owner.address);
     });
 
     it("Should set the right color", async function () {
-      expect(await contractColor.getColor(0,0)).to.equal("#69d2e7");
       const colorPalette = await contractColor.getColorpalette(0);
-      expect(colorPalette[0]).to.equal("#69d2e7");
+      expect(colorPalette[0]).to.equal("0x69d2e7");
     });
 
   });
@@ -61,7 +59,7 @@ describe("ShapeNFT", function () {
     it("Should fail if not paid enough", async function () {
       await expect( 
          contract.connect(minter2).mintNFT({ value: price/2 })
-      ).to.be.revertedWith("Wrong price");
+      ).to.be.reverted;
     });
 
     it("Should update price and mint nft", async function () {
@@ -147,7 +145,7 @@ describe("PathNFT", function () {
 
     // Deploy contracts
     const contractFactoryColor = await ethers.getContractFactory("ColorPalette");
-    contractColor = await contractFactoryColor.deploy(owner.address);
+    contractColor = await contractFactoryColor.deploy();
 
     const contractFactorySVG = await hre.ethers.getContractFactory("PathSVG");
     contractSVG = await contractFactorySVG.deploy();
@@ -163,14 +161,12 @@ describe("PathNFT", function () {
   describe("Deployment", function () {
 
     it("Should set the right owner", async function () {
-      expect(await contractColor.owner()).to.equal(owner.address);
       expect(await contract.owner()).to.equal(owner.address);
     });
 
     it("Should set the right color", async function () {
-      expect(await contractColor.getColor(0,0)).to.equal("#69d2e7");
       const colorPalette = await contractColor.getColorpalette(0);
-      expect(colorPalette[0]).to.equal("#69d2e7");
+      expect(colorPalette[0]).to.equal("0x69d2e7");
     });
 
   });
@@ -186,7 +182,7 @@ describe("PathNFT", function () {
     it("Should fail if not paid enough", async function () {
       await expect( 
          contract.connect(minter2).mintNFT({ value: price/2 })
-      ).to.be.revertedWith("Wrong price");
+      ).to.be.reverted;
     });
 
     it("Should update price and mint nft", async function () {

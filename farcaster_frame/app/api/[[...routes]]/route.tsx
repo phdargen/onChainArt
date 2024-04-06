@@ -82,10 +82,10 @@ app.frame("/", async (c) => {
       image: frame_url + "/xonin.gif",
       imageAspectRatio: "1:1",
       intents: [
-        <Button.Transaction target="/mint/1" > Mint (Style: Shapes) </Button.Transaction>,
-        <Button.Transaction target="/mint/2" > Mint (Style: Paths) </Button.Transaction>,
-        <Button.Link href={website_url}> Visit website </Button.Link>,
-        <Button.Link href={opensea_url+contractShapes}> Collection on OpenSea </Button.Link>,
+        <Button.Transaction target="/mint/1" > Mint (Style: 🟥) </Button.Transaction>,
+        <Button.Transaction target="/mint/2" > Mint (Style: 🌈) </Button.Transaction>,
+        <Button.Link href={website_url}> Xonin </Button.Link>,
+        // <Button.Link href={opensea_url+contractShapes}> OpenSea </Button.Link>,
       ],
     });
 });

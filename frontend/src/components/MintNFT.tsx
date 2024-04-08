@@ -27,8 +27,8 @@ const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT
 const contract2 = new Contract(contractAdress2, contractInterface) as any
 
 const openSeaLink = "https://testnets.opensea.io/"
-const defaultMaxSupply = 1000
-const defaultMintPrice = 0.001
+const defaultMaxSupply = 10000
+const defaultMintPrice = 0.0001
 
 const useStyles = makeStyles((theme) => ({
   Card: {
@@ -79,12 +79,13 @@ const useNftData = (contract: any, account: any) => {
   const [maxSupplyFormatted, setMaxSupplyFormatted] = useState<string>(String(defaultMaxSupply));
   const [price, setPrice] = useState<number>(defaultMintPrice);
 
-  const accountAddress = account || constants.AddressZero;
-  const nftBalance = useBalanceOf(contract, accountAddress);
-  const tokenId = useTokenOfOwnerByIndex(contract, accountAddress, nftBalance ? nftBalance - 1 : 0);
+  //const accountAddress = account || constants.AddressZero;
+  const nftBalance = useBalanceOf(contract, account);
+  const tokenId = useTokenOfOwnerByIndex(contract, account, nftBalance ? nftBalance - 1 : 0);
 
   // Get price
   const priceMint = usePrice(contract);
+  console.log('priceMint ', priceMint && parseFloat(formatUnits(priceMint, 18) ));
 
   // Get Supply
   const totalSupply = useTotalSupply(contract); 
@@ -101,7 +102,7 @@ const useNftData = (contract: any, account: any) => {
       setSvg(svgData);
       setTotalSupplyFormatted(totalSupply ? String(totalSupply) : "?");
       setMaxSupplyFormatted(maxSupply ? String(maxSupply) : String(defaultMaxSupply));
-  }, [contract, accountAddress, maxSupply, priceMint, svgData, totalSupply]); 
+  }, [contract, account, maxSupply, priceMint, svgData, totalSupply]); 
 
   return { svg, totalSupplyFormatted, maxSupplyFormatted, nftBalance, tokenId, price };
 };

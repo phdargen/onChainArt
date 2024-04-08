@@ -72,10 +72,8 @@ const useStyles = makeStyles((theme) => ({
 
 const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = Infinity): number[] => {
 
-  const accountAddress = account || constants.AddressZero;
-
   // Fetch the balance of NFTs owned by the account
-  const nftBalance = useBalanceOf(contract, accountAddress);
+  const nftBalance = useBalanceOf(contract, account);
   const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0;
 
   // Determine the owned token ids up to the maximum displayed or the total owned

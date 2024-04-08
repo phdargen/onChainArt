@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { utils, constants } from "ethers"
 import { Container, Grid, Card, CardContent, CardMedia, CardActions, Tab, Typography, Button, makeStyles, Box, Link, CircularProgress, Snackbar } from "@material-ui/core"
-import { useGetAllSVGs, useBalanceOf, useTokenOfOwnerByIndex, useTotalSupply, useMaxSupply} from "../hooks"
+import { useGetAllSVGs, useTotalSupply} from "../hooks"
 
 // Get contract
 import network from "../contracts/network.json"

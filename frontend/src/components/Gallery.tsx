@@ -18,6 +18,7 @@ const contract2 = new Contract(contractAdress2, contractInterface) as any
 
 const openSeaLink = "https://testnets.opensea.io/"
 const maxDisplayed = 12
+const refresh = 10
 
 const useStyles = makeStyles((theme) => ({
     box:{
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 const useTokenIdsToDisplay = (contract: any, maxDisplayed = Infinity): number[] => {
   const [tokenIds, setTokenIds] = useState<number[]>([]);
-  const totalSupply = useTotalSupply(contract);
+  const totalSupply = useTotalSupply(contract,refresh);
   const totalSupplyFormatted: number = totalSupply ? parseInt(totalSupply) : 0;
 
   useEffect(() => {
@@ -83,8 +84,8 @@ export const Gallery = () => {
   var tokenIds2 = useTokenIdsToDisplay(contract2,maxDisplayed);
 
   // Get SVG of NFTs
-  var svgList = useGetAllSVGs(contract,tokenIds)
-  var svgList2 = useGetAllSVGs(contract2,tokenIds2)
+  var svgList = useGetAllSVGs(contract,tokenIds,refresh)
+  var svgList2 = useGetAllSVGs(contract2,tokenIds2,refresh)
 
   // Loop over all NFTs 
   const getCards = () => {

@@ -59,6 +59,7 @@ export const Main = () => {
         open={showNetworkError}
         autoHideDuration={5000}
         onClose={handleCloseNetworkError}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
       >
         <Alert onClose={handleCloseNetworkError} severity="warning">
           Please switch to {networkName} network!

@@ -20,6 +20,7 @@ const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT
 const contract2 = new Contract(contractAdress2, contractInterface) as any
 
 const maxDisplayed = 12
+const refresh = 2
 
 const useStyles = makeStyles((theme) => ({
   box:{
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 const useOwnedTokenIds = (contract: any, account: any, maxDisplayed: number = Infinity): number[] => {
 
   // Fetch the balance of NFTs owned by the account
-  const nftBalance = useBalanceOf(contract, account);
+  const nftBalance = useBalanceOf(contract, account,refresh);
   const nftBalanceFormatted: number = nftBalance ? parseInt(nftBalance) : 0;
 
   // Determine the owned token ids up to the maximum displayed or the total owned
@@ -108,12 +109,12 @@ export const MyNFT = () => {
   var ownedTokens = useOwnedTokenIds(contract,account,maxDisplayed);
   var ownedTokens2 = useOwnedTokenIds(contract2,account,maxDisplayed);
 
-  const tokenIds = useTokenOfOwner(contract, account || constants.AddressZero, ownedTokens);
-  const tokenIds2 = useTokenOfOwner(contract2, account || constants.AddressZero, ownedTokens2);
+  const tokenIds = useTokenOfOwner(contract,account,ownedTokens,refresh);
+  const tokenIds2 = useTokenOfOwner(contract2,account,ownedTokens2,refresh);
 
   // Get SVG of NFTs
-  var svgList = useGetAllSVGs(contract,tokenIds)
-  var svgList2 = useGetAllSVGs(contract2,tokenIds2)
+  var svgList = useGetAllSVGs(contract,tokenIds,refresh)
+  var svgList2 = useGetAllSVGs(contract2,tokenIds2,refresh)
 
   // Loop over all NFts 
   const getCards = () => {

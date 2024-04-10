@@ -215,7 +215,7 @@ export const Header = () => {
                </Button>
             )
           ) : (
-            <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => activateBrowserWallet()}>
+            <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => activateBrowserWallet({ type: 'metamask' })}>
               Connect
             </Button>
         )}

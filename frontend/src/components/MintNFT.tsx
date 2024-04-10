@@ -28,7 +28,11 @@ const contract2 = new Contract(contractAdress2, contractInterface) as any
 
 const openSeaLink = "https://testnets.opensea.io/"
 const defaultMaxSupply = 10000
-const defaultMintPrice = 0.0001
+const defaultMintPrice = 0.001
+
+const refresh = 2
+const refreshPrice = 10
+const refreshMaxSupply = 'never'
 
 const useStyles = makeStyles((theme) => ({
   Card: {
@@ -79,19 +83,18 @@ const useNftData = (contract: any, account: any) => {
   const [maxSupplyFormatted, setMaxSupplyFormatted] = useState<string>(String(defaultMaxSupply));
   const [price, setPrice] = useState<number>(defaultMintPrice);
 
-  //const accountAddress = account || constants.AddressZero;
-  const nftBalance = useBalanceOf(contract, account);
-  const tokenId = useTokenOfOwnerByIndex(contract, account, nftBalance ? nftBalance - 1 : 0);
+  const nftBalance = useBalanceOf(contract, account,refresh);
+  const tokenId = useTokenOfOwnerByIndex(contract, account, nftBalance ? nftBalance - 1 : 0,refresh);
 
   // Get price
-  const priceMint = usePrice(contract);
+  const priceMint = usePrice(contract,refreshPrice);
   console.log('priceMint ', priceMint && parseFloat(formatUnits(priceMint, 18) ));
 
   // Get Supply
-  const totalSupply = useTotalSupply(contract); 
+  const totalSupply = useTotalSupply(contract,refresh); 
   console.log('totalSupplyFormatted ', totalSupplyFormatted)
 
-  const maxSupply = useMaxSupply(contract);
+  const maxSupply = useMaxSupply(contract,refreshMaxSupply);
   console.log('maxSupplyFormatted ', maxSupplyFormatted)
 
   // Get SVG of latest user NFT

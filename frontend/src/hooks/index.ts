@@ -1,4 +1,4 @@
-import { useContractFunction, useCall, useCalls, Falsy } from "@usedapp/core";
+import { useContractFunction, useCall, useCalls, Falsy, QueryParams } from "@usedapp/core";
 import { BigNumber } from 'ethers'
 import { Contract } from 'ethers'
 
@@ -9,14 +9,14 @@ export const useMintNFT = (contract: any) => {
   return useContractFunction(contract, "mintNFT", { transactionName: "Mint NFT", }) 
 }
 
-export function usePrice(contract: Contract | Falsy): BigNumber | undefined  {
+export function usePrice(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): BigNumber | undefined  {
   const { value, error } =
   useCall(
     contract && {
         contract: contract, 
         method: "price", 
         args: [], 
-      }, { chainId: networkId}
+      }, { chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('usePrice::Error::', error.message)
@@ -25,14 +25,14 @@ export function usePrice(contract: Contract | Falsy): BigNumber | undefined  {
   return value?.[0]
 }
 
-export function useTotalSupply(contract: Contract | Falsy): string | undefined  {
+export function useTotalSupply(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): string | undefined  {
   const { value, error } =
   useCall(
     contract && {
         contract: contract, 
         method: "totalSupply", 
         args: [], 
-      }, { chainId: networkId}
+      }, { chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('useTotalSupply::Error::', error.message)
@@ -41,14 +41,14 @@ export function useTotalSupply(contract: Contract | Falsy): string | undefined  
   return value?.[0]
 }
 
-export function useMaxSupply(contract: Contract | Falsy): string | undefined  {
+export function useMaxSupply(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): string | undefined  {
   const { value, error } =
   useCall(
     contract && {
         contract: contract, 
         method: "maxSupply", 
         args: [], 
-      }, {chainId: networkId, refresh: 'never'}
+      }, {chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('useMaxSupply::Error::', error.message)
@@ -57,14 +57,14 @@ export function useMaxSupply(contract: Contract | Falsy): string | undefined  {
   return value?.[0]
 }
   
-export function useGetSVG(contract: Contract | Falsy, tokenId:number | Falsy) {
+export function useGetSVG(contract: Contract | Falsy, tokenId:number | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock') {
   const { value, error } =
   useCall(
     contract && tokenId && {
         contract: contract, 
         method: "getSVG", 
         args: [tokenId], 
-      }, { chainId: networkId}
+      }, { chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('useGetSVG::Error::', error.message)
@@ -73,13 +73,13 @@ export function useGetSVG(contract: Contract | Falsy, tokenId:number | Falsy) {
   return value?.[0]
 }
 
-export function useGetAllSVGs(contract: Contract| Falsy, tokenIds:number[]) {
+export function useGetAllSVGs(contract: Contract| Falsy, tokenIds:number[], refresh: number | 'everyBlock' | 'never' = 'everyBlock') {
   const calls = contract && tokenIds.length > 0 && tokenIds[0] !== undefined ? (tokenIds?.map(index => ({
     contract: contract,
     method: 'getSVG',
     args: [index]
   })) ?? []) : [];
-  const results = useCalls(calls, { chainId: networkId}) ?? []
+  const results = useCalls(calls, { chainId: networkId, refresh: refresh}) ?? []
   results.forEach((result, idx) => {
     if(result && result.error) {
        console.error(`useGetAllSVGs::Error encountered calling 'getSVG' on ${calls[idx]?.contract.address}: ${result.error.message}`)
@@ -89,14 +89,14 @@ export function useGetAllSVGs(contract: Contract| Falsy, tokenIds:number[]) {
   return results.map(result => result?.value?.[0])
 }
 
-export function useBalanceOf(contract: Contract | Falsy, address:string | Falsy) {
+export function useBalanceOf(contract: Contract | Falsy, address:string | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock') {
   const { value, error } =
   useCall(
        contract && address && {
         contract: contract, 
         method: "balanceOf", 
         args: [address], 
-      }, { chainId: networkId}
+      }, { chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('useBalanceOf::Error::', error.message)
@@ -106,14 +106,14 @@ export function useBalanceOf(contract: Contract | Falsy, address:string | Falsy)
   return value?.[0]
 }
 
-export function useTokenOfOwnerByIndex(contract: Contract | Falsy, address:string | Falsy, tokenId:number | Falsy) {
+export function useTokenOfOwnerByIndex(contract: Contract | Falsy, address:string | Falsy, tokenId:number | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock') {
   const { value, error } =
   useCall(
        contract && address && tokenId && {
         contract: contract, 
         method: "tokenOfOwnerByIndex", 
         args: [address, tokenId], 
-      }, { chainId: networkId}
+      }, { chainId: networkId, refresh: refresh}
   ) ?? {};
   if(error) {
     console.error('useTokenOfOwnerByIndex::Error::', error.message)
@@ -122,13 +122,13 @@ export function useTokenOfOwnerByIndex(contract: Contract | Falsy, address:strin
   return value?.[0]
 }
 
-export function useTokenOfOwner(contract: Contract| Falsy, address:string | Falsy, ownedTokens:number[]) {
+export function useTokenOfOwner(contract: Contract| Falsy, address:string | Falsy, ownedTokens:number[], refresh: number | 'everyBlock' | 'never' = 'everyBlock') {
 
   const calls = contract && address && ownedTokens.length>0 && ownedTokens[0] !== undefined ? (ownedTokens?.map(index => ({
     contract: contract,
     method: 'tokenOfOwnerByIndex',
     args: [address, index]
-  }), { chainId: networkId}) ?? []) : [];
+  }), { chainId: networkId, refresh: refresh}) ?? []) : [];
   const results = useCalls(calls) ?? []
   results.forEach((result, idx) => {
     if(result && result.error) {

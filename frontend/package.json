@@ -21,6 +21,7 @@
     "@usedapp/coingecko": "^0.4.2",
     "@usedapp/core": "^1.2.13",
     "@usedapp/wallet-connect-v2-connector": "^1.0.4",
+    "@vercel/analytics": "^1.2.2",
     "ethers": "^5.6.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

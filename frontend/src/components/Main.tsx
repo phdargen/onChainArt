@@ -11,6 +11,7 @@ import { MyNFT } from "./myNFT"
 import { Gallery } from "./Gallery"
 
 import {Routes, Route} from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react"
 
 import network from "../contracts/network.json"
 const networkId = network.ChainId 
@@ -47,7 +48,7 @@ export const Main = () => {
   // Render UI
   return (
     <>
-
+      <Analytics/>
       <Routes>
           <Route path="" element={<Home />} />
           <Route path="mint" element={<MintNFT />} />

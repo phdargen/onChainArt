@@ -16,9 +16,10 @@ const contract = new Contract(contractAdress, contractInterface) as any
 const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT 
 const contract2 = new Contract(contractAdress2, contractInterface) as any
 
-const openSeaLink = "https://testnets.opensea.io/"
 const maxDisplayed = 12
 const refresh = 10
+
+const openSeaLink = "https://testnets.opensea.io/"
 
 const useStyles = makeStyles((theme) => ({
     box:{

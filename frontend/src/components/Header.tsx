@@ -3,8 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 
 import { Button, makeStyles, AppBar, Toolbar, Box, Typography, useMediaQuery, useTheme, List, ListItem, ListItemText, Drawer, Divider, IconButton} from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu";
-
+import { Dialog, DialogTitle, DialogContent } from "@material-ui/core";
 import { useEthers} from "@usedapp/core"
+
+import MetaMaskIcon from '../assets/metamaskIcon.png';
+import WalletConnectIcon from '../assets/walletConnectIcon.png';
+import CoinbaseIcon from '../assets/coinbaseIcon.png';
 
 import network from "../contracts/network.json"
 const networkId = network.ChainId 
@@ -94,6 +98,17 @@ export const Header = () => {
     if (location.pathname === "/gallery") setSelectedIndex(2);
     if (location.pathname === "/myNFT") setSelectedIndex(3);
   }, [location]);
+
+  const [openConnectDialog, setOpenConnectDialog] = useState(false);
+
+  const handleOpenConnectDialog = () => {
+    setOpenConnectDialog(true);
+  };
+  
+  const handleCloseConnectDialog = () => {
+    setOpenConnectDialog(false);
+  };
+  
 
   return (
    
@@ -215,16 +230,41 @@ export const Header = () => {
                </Button>
             )
           ) : (
-            <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={() => activateBrowserWallet({ type: 'metamask' })}>
-              Connect
-            </Button>
+                <Button color="primary" variant="contained" size={isMobile ? "small" : "large"} onClick={handleOpenConnectDialog}>
+                  Connect
+                </Button>
         )}
 
       
 
       </Toolbar>
       </AppBar>
+
+      <Dialog open={openConnectDialog} onClose={handleCloseConnectDialog} >
+      <DialogTitle>Select a Wallet</DialogTitle>
+      <DialogContent style={{ width: 250, height: 150}}>
+
+        <Button style={{ marginRight: 0 }} onClick={() => { activateBrowserWallet({ type: 'metamask' }); handleCloseConnectDialog(); }}> 
+         <img src={MetaMaskIcon}  style={{ width: 30, height: 30, marginRight: 10}} />
+          Browser Wallet
+        </Button>
+
+        <Button style={{ marginRight: 0 }}  onClick={() => { activateBrowserWallet({ type: 'coinbase' }); handleCloseConnectDialog(); }}>
+          <img src={CoinbaseIcon} style={{ width: 30, height: 30, marginRight: 10 }} />
+           Coinbase Wallet
+        </Button>
+
+       <Button style={{ marginRight: 0 }}  onClick={() => { activateBrowserWallet({ type: 'walletConnectV2' }); handleCloseConnectDialog(); }}>
+           <img src={WalletConnectIcon}  style={{ width: 30, height: 30, marginRight: 10 }} />
+            WalletConnect 
+        </Button>
+
+      </DialogContent>
+      </Dialog>
+
     </div>
+
+    
       
   )
 

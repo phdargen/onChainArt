@@ -5,8 +5,24 @@ import { Contract } from 'ethers'
 import network from "../contracts/network.json"
 const networkId = network.ChainId 
 
-export const useMintNFT = (contract: any) => {
+export const useMintNFT = (contract: Contract | Falsy) => {
   return useContractFunction(contract, "mintNFT", { transactionName: "Mint NFT", }) 
+}
+
+export const useSetPrice = (contract: Contract | Falsy) => {
+  return useContractFunction(contract, "setPrice", { transactionName: "Set Price", }) 
+}
+
+export const useWithdraw = (contract: Contract | Falsy) => {
+  return useContractFunction(contract, "withdraw", { transactionName: "Withdraw", }) 
+}
+
+export const useSetRoyaltyAddress = (contract: Contract | Falsy) => {
+  return useContractFunction(contract, "setRoyaltyAddress", { transactionName: "Set Royalty Address", }) 
+}
+
+export const useTransferOwnership = (contract: Contract | Falsy) => {
+  return useContractFunction(contract, "transferOwnership", { transactionName: "Transfer Ownership", }) 
 }
 
 export function usePrice(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): BigNumber | undefined  {
@@ -137,4 +153,36 @@ export function useTokenOfOwner(contract: Contract| Falsy, address:string | Fals
     }
   })
   return results.map(result => result?.value?.[0])
+}
+
+export function useOwner(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): String | undefined  {
+  const { value, error } =
+  useCall(
+    contract && {
+        contract: contract, 
+        method: "owner", 
+        args: [], 
+      }, { chainId: networkId, refresh: refresh}
+  ) ?? {};
+  if(error) {
+    console.error('useOwner::Error::', error.message)
+    return undefined
+  }
+  return value?.[0]
+}
+
+export function useRoyalyAddress(contract: Contract | Falsy, refresh: number | 'everyBlock' | 'never' = 'everyBlock'): String | undefined  {
+  const { value, error } =
+  useCall(
+    contract && {
+        contract: contract, 
+        method: "royalyAddress", 
+        args: [], 
+      }, { chainId: networkId, refresh: refresh}
+  ) ?? {};
+  if(error) {
+    console.error('useRoyalyAddress::Error::', error.message)
+    return undefined
+  }
+  return value?.[0]
 }

@@ -165,7 +165,7 @@ export const MintNFT = () => {
       console.error("handleMint::wrong chain Id")
       return undefined
     }
-    return mintSend({ value: utils.parseEther(price.toString()) })
+    return mintSend({ value: utils.parseEther(price.toString()), chainId: networkId })
   }
   const handleMint2 = () => {
     setUserMintedStyle(2)
@@ -175,7 +175,7 @@ export const MintNFT = () => {
       console.error("handleMint2::wrong chain Id")
       return undefined
     }
-    return mintSend2({ value: utils.parseEther(price2.toString()) })
+    return mintSend2({ value: utils.parseEther(price2.toString()), chainId: networkId })
   }
 
   // Search in notifactions for succesful/failed transactions

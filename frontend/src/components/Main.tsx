@@ -9,6 +9,7 @@ import { Home } from "./Home"
 import { MintNFT } from "./MintNFT"
 import { MyNFT } from "./myNFT"
 import { Gallery } from "./Gallery"
+import { Dev } from "./Dev"
 
 import {Routes, Route} from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react"
@@ -54,6 +55,7 @@ export const Main = () => {
           <Route path="mint" element={<MintNFT />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="myNFT" element={<MyNFT />} />
+          <Route path="Dev" element={<Dev />} />
       </Routes>
 
       <Snackbar

@@ -19,7 +19,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-const { apiKey, apiKeyBaseSepolia, etherscanApiKey, mnemonic } = require('./secrets.json');
+const { apiKey, apiKeyBase, apiKeyBaseSepolia, etherscanApiKey, mnemonic, mnemonicMain } = require('./secrets.json');
 
 module.exports = {
   solidity: {
@@ -49,8 +49,8 @@ module.exports = {
               blockGasLimit: 100_000_000
           },
           base: {
-            url: "https://mainnet.base.org",
-            accounts: { mnemonic: mnemonic },
+            url: apiKeyBase,
+            accounts: { mnemonic: mnemonicMain },
           },
           baseSepolia: {
             url: apiKeyBaseSepolia,
@@ -68,8 +68,10 @@ module.exports = {
 
   etherscan: {
     apiKey: {
+      base: etherscanApiKey,
       sepolia: etherscanApiKey,
     },
   },
 
 };
+

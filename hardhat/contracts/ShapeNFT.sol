@@ -48,7 +48,7 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
       _requireOwned(id);
       
       string memory name = string(abi.encodePacked('Xonin Shapes #',id.toString()));
-      string memory description = string(abi.encodePacked('Xonin - Onchain generative art collection'));
+      string memory description = string(abi.encodePacked('Xonin - A generative art collection featuring unique abstract designs of layered vivid curves and geometric shapes, crafted with 100 distinct color palettes. The artworks are created, rendered, and stored fully onchain to ensure immutability and permanence. Employed art style: Shapes. '));
       
       string memory image = getSVG(id) ; 
 
@@ -123,11 +123,6 @@ contract ShapeNFT is ERC721Enumerable, IERC2981, Ownable {
     // console.logBytes3(colorPalette[1]);
     // console.log(Helper.bytes3ToHexString(colorPalette[1]));
     return svgMaker.getSVG(rnd[id], colorPalette);
-  }
-
-  function contractURI() public pure returns (string memory) {
-        string memory json = '{"name": "Xonin Shapes","description":"Xonin - Onchain generative art collection. Create your own generative artwork on the Base blockchain. The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG. "}';
-        return string.concat("data:application/json;utf8,", json);
   }
 
   /// @dev Support for IERC-2981, royalties

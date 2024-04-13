@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     container: {
-        marginTop: '10%',
+        marginTop: '20%',
         marginBottom: '10%',
         width: '50%',
         display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     containerMobile: {
-        marginTop: '10%',
+        marginTop: '20%',
         marginBottom: '10%',
         width: '80%',
         display: 'flex',
@@ -59,6 +59,10 @@ const useStyles = makeStyles((theme) => ({
         opacity: '1',
         zIndex: 1100
     },
+    button: {
+        marginTop: '5%',
+        marginBottom: '10%',
+    },
 
 }))
 
@@ -77,22 +81,28 @@ export const Home = () => {
 
                 {/* <img className={classes.logo} src={logo} width="50%" height='auto' /> */}
                     
-                <Typography variant="h2" className={classes.title}>
+                <Typography variant="h1" className={classes.title}>
                     Xonin 
                 </Typography>
 
-                <Typography variant="h3" className={classes.title}>
+                <Typography variant="h4" className={classes.title}>
                    Onchain Generative Art
                 </Typography>
 
+                <Typography variant="h1" className={classes.title}>
+                </Typography>
+
                 <Typography variant="h6" className={classes.title}>
-                Create generative art on the {networkName} blockchain! 
+                {/* Create generative art on the {networkName} blockchain! 
                 Transaction hashes are used as seeds for the algorithm, creating unique patterns for every NFT minted. 
-                The artwork exists fully onchain, independent of external data providers.
+                The artwork exists fully onchain, independent of external data providers. */}
+                A generative art collection featuring unique abstract designs of layered vivid curves and geometric shapes, 
+                crafted with 100 distinct color palettes. 
+                The artworks are created, rendered, and stored fully onchain to ensure immutability and permanence.
                 </Typography>
                 
 
-                <Button component={Link} to="/mint" variant="contained" color="primary">
+                <Button component={Link} to="/mint" variant="contained" color="primary" className={classes.button}>
                 Mint NFT
                 </Button>
 

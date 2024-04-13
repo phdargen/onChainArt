@@ -19,8 +19,6 @@ const contract2 = new Contract(contractAdress2, contractInterface) as any
 const maxDisplayed = 12
 const refresh = 10
 
-const openSeaLink = "https://testnets.opensea.io/"
-
 const useStyles = makeStyles((theme) => ({
     box:{
         width: '100%',

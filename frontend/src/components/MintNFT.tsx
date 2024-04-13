@@ -26,7 +26,7 @@ const contract = new Contract(contractAdress, contractInterface) as any
 const contractAdress2 = (contractAdresses as any)[networkId.toString()]?.pathNFT 
 const contract2 = new Contract(contractAdress2, contractInterface) as any
 
-const openSeaLink = "https://testnets.opensea.io/"
+const openSeaLink = "https://opensea.io/collection/"
 const defaultMaxSupply = 10000
 const defaultMintPrice = 0.001
 
@@ -239,7 +239,7 @@ export const MintNFT = () => {
 
                     {!isConnected ? ( <Typography variant="body2" > Please connect your wallet </Typography> ) : ( [] ) }
                     {userMinted === 1 && isConnected && (!isMining || userMintedStyle === 2) ? 
-                        ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + account} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
+                        ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + "xonin-shapes"} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
                 </CardContent>
                 <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
@@ -269,7 +269,7 @@ export const MintNFT = () => {
 
                     {!isConnected ? ( <Typography variant="body2" > Please connect your wallet </Typography> ) : ( [] ) }
                     {userMinted2 === 1 && isConnected && (!isMining || userMintedStyle === 1) ? 
-                        ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + account} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
+                        ( <Typography variant="body2" style={{ color: 'green' }} > Mint successful: <Link color="inherit" href={openSeaLink + "xonin-paths"} underline="hover">{'View on Opensea'} </Link> </Typography>) : ( [] ) }
                 
                 </CardContent>
                 <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
@@ -284,14 +284,14 @@ export const MintNFT = () => {
         <Snackbar open={showMintSuccess} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="success">
               <p>Transaction successful!</p>
-              <p><a href={"https://sepolia.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
+              <p><a href={"https://basescan.org/tx" + txId }> View on blockexplorer </a> </p>
               </Alert>
         </Snackbar>
 
         <Snackbar open={showMintFail} autoHideDuration={10000} onClose={handleCloseSnack} >
               <Alert onClose={handleCloseSnack} severity="error">
               <p>Transaction failed!</p>
-              <p><a href={"https://sepolia.etherscan.io/tx/" + txId }> View on blockexplorer </a> </p>
+              <p><a href={"https://basescan.org/tx" + txId }> View on blockexplorer </a> </p>
               </Alert>
         </Snackbar>
 

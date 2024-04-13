@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Box, Container, Button, makeStyles, Typography, Grid , Link} from "@material-ui/core"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faTwitterSquare, faGithubSquare, faInstagramSquare } from '@fortawesome/free-brands-svg-icons'
 
-const openSeaLink = "https://testnets.opensea.io/collection/xonin-shapes-8"
+const openSeaLink = "https://opensea.io/XoninNFT"
 const twitterLink = "https://twitter.com/XoninNFT"
 const gitLink = ""
 

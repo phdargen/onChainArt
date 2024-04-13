@@ -12,6 +12,7 @@ npx hardhat test
 npx hardhat run --network localhost scripts/deploy.js
 npx hardhat run --network baseSepolia scripts/deploy.js
 npx hardhat run --network sepolia scripts/deploy.js
+npx hardhat run --network base scripts/deploy.js
 npx hardhat verify --network sepolia contract.address contractColor.address contractSVG.address owner.address
 npx hardhat help
 ```
@@ -37,6 +38,11 @@ PathSVG deployed to: 0x0f6398eA200f10004e01656DdD616dCf9668c56f
 PathNFT deployed to: 0x15077415012b6f5a6F2842928886B51e0E2CB2D6  
 
 ### Base Mainnet
-
+ColorPalette deployed to: 0xE4b5406863fF3f42Ba87adB9cAD3a4d4E1321857
+ShapeSVG deployed to: 0xD340e72e09E6De2C4e03b2fD20b4f3541354542B
+ShapeNFT deployed to: 0xc6a050398BB92CB077b119BEAd045f3b52eA9a17
+PathSVG deployed to: 0x15599fde0E4B5001E6CB6642D74DAEC0772ae19a
+PathNFT deployed to: 0x1F21BB5e880828D1016FE2965A172407414c373c
+Deployer: 0x531eE0dFf1cF637Aa9e9759c14dD2b95D775c26D
 
 

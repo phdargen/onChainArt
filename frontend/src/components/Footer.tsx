@@ -6,6 +6,8 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faTwitterSquare, faGithubSquare, faInstagramSquare } from '@fortawesome/free-brands-svg-icons'
 
 const openSeaLink = "https://testnets.opensea.io/collection/xonin-shapes-8"
+const twitterLink = "https://twitter.com/XoninNFT"
+const gitLink = ""
 
 const useStyles = makeStyles((theme) => ({
   
@@ -59,7 +61,7 @@ export const Footer = () => {
                     </Grid>
                     
                     <Grid item className={classes.gridItem} xs={1}  >
-                        <Link className={classes.icon} href="">
+                        <Link className={classes.icon} href={twitterLink}>
                             <FontAwesomeIcon icon={faTwitterSquare} size="3x" />
                         </Link>
                     </Grid>
@@ -73,7 +75,7 @@ export const Footer = () => {
                         </Link>
                     </Grid> 
                     <Grid item className={classes.gridItem} xs={1}  >
-                        <Link className={classes.icon} href="">
+                        <Link className={classes.icon} href={gitLink}>
                             <FontAwesomeIcon icon={faGithubSquare} size="3x" />
                         </Link>
                     </Grid>

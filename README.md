@@ -18,6 +18,10 @@ PathNFT deployed to: 0x9c416b1B10Da99A6EBe639cD153eb740B06713dE
 https://testnets.opensea.io/assets/sepolia/0x2d727e8375E85BFD5bDd5167FAb1F03973501C56
 https://testnets.opensea.io/assets/sepolia/0x9c416b1B10Da99A6EBe639cD153eb740B06713dE
 
+### Base Mainnet
+ShapeNFT deployed to: 0xc6a050398BB92CB077b119BEAd045f3b52eA9a17  
+PathNFT deployed to: 0x1F21BB5e880828D1016FE2965A172407414c373c  
+
 # Website
 
 https://xonin.vercel.app/

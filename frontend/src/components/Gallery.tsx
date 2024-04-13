@@ -88,6 +88,10 @@ export const Gallery = () => {
   var svgList = useGetAllSVGs(contract,tokenIds,refresh)
   var svgList2 = useGetAllSVGs(contract2,tokenIds2,refresh)
 
+  console.log('networkId ', networkId)
+  console.log('networkName ', network.Name)
+  console.log('contractAdress ', contractAdress)
+
   // Loop over all NFTs 
   const getCards = () => {
     // Alternate lists

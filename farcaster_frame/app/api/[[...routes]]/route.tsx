@@ -98,7 +98,7 @@ app.frame("/", async (c) => {
 app.transaction("/mint/:style", async (c) => {
 
   const style = c.req.param('style')
-  const contract = style === "0" ? contractShapes : contractPaths;
+  const contract = style === "1" ? contractShapes : contractPaths;
 
   const price = await getPrice(contract);
   console.log('price ', price);

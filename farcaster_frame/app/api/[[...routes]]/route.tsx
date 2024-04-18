@@ -9,11 +9,11 @@ import { createWalletClient, http, createPublicClient, parseEther, formatEther }
 
 const frame_url = 'https://xonin-farcasterframe.vercel.app';
 const website_url = 'https://xonin.vercel.app';
-const opensea_url = 'https://testnets.opensea.io/assets/sepolia/';
+const opensea_url = 'https://opensea.io/XoninNFT/created';
 
 // Testnet
-// const contractShapes = "0xd58b1248D893f6Dc0f93d7C1A12deed75Bee3785";
-// const contractPaths = "0x15077415012b6f5a6F2842928886B51e0E2CB2D6";
+//const contractShapes = "0xd58b1248D893f6Dc0f93d7C1A12deed75Bee3785";
+//const contractPaths = "0x15077415012b6f5a6F2842928886B51e0E2CB2D6";
 
 // Mainnet
 const contractShapes = "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17";
@@ -21,6 +21,7 @@ const contractPaths = "0x1F21BB5e880828D1016FE2965A172407414c373c";
 
 const publicClient = createPublicClient({
   chain: base,
+  //chain: baseSepolia,
   transport: http(),
 });
 
@@ -86,14 +87,29 @@ app.frame("/", async (c) => {
       title: 'Xonin Frame: Mint',
       image: frame_url + "/xonin.gif",
       imageAspectRatio: "1:1",
+      action: "/minted",
       intents: [
         <Button.Transaction target="/mint/1" > Mint (Style: 🟥) </Button.Transaction>,
         <Button.Transaction target="/mint/2" > Mint (Style: 🌈) </Button.Transaction>,
         <Button.Link href={website_url}> Xonin </Button.Link>,
-        // <Button.Link href={opensea_url+contractShapes}> OpenSea </Button.Link>,
       ],
     });
 });
+
+app.frame("/minted", async (c) => {
+
+  return c.res({
+      title: 'Xonin Frame: Mint Success',
+      image: frame_url + "/xonin.gif",
+      imageAspectRatio: "1:1",
+      intents: [
+        <Button.Link href={website_url+"/myNFT"}> View @Xonin </Button.Link>,
+        <Button.Link href={opensea_url}> OpenSea </Button.Link>,
+        <Button.Reset>Go back</Button.Reset>,
+      ],
+    });
+});
+
 
 app.transaction("/mint/:style", async (c) => {
 
@@ -108,6 +124,7 @@ app.transaction("/mint/:style", async (c) => {
   return c.contract({
     abi,
     chainId: "eip155:8453",
+    //chainId: "eip155:84532",
     functionName: "mintNFT",
     to: contract,
     value: mintPrice,

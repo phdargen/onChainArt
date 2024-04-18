@@ -92,7 +92,7 @@ app.frame("/", async (c) => {
         <Button.Transaction target="/mint/1" > Mint (Style: 🟥) </Button.Transaction>,
         <Button.Transaction target="/mint/2" > Mint (Style: 🌈) </Button.Transaction>,
         <Button.Link href={website_url}> Xonin </Button.Link>,
-        <Button.Link href={opensea_url}> OpenSea Collection </Button.Link>,
+        <Button.Link href={opensea_url}> OpenSea </Button.Link>,
       ],
     });
 });

@@ -92,6 +92,7 @@ app.frame("/", async (c) => {
         <Button.Transaction target="/mint/1" > Mint (Style: 🟥) </Button.Transaction>,
         <Button.Transaction target="/mint/2" > Mint (Style: 🌈) </Button.Transaction>,
         <Button.Link href={website_url}> Xonin </Button.Link>,
+        <Button.Link href={opensea_url}> OpenSea Collection </Button.Link>,
       ],
     });
 });
@@ -104,8 +105,8 @@ app.frame("/minted", async (c) => {
       imageAspectRatio: "1:1",
       intents: [
         <Button.Link href={website_url+"/myNFT"}> View @Xonin </Button.Link>,
-        <Button.Link href={opensea_url}> OpenSea </Button.Link>,
-        <Button.Reset>Go back</Button.Reset>,
+        <Button.Link href={opensea_url}> View @OpenSea </Button.Link>,
+        <Button.Reset>Go back, mint more</Button.Reset>,
       ],
     });
 });

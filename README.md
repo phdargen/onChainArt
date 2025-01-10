@@ -26,6 +26,8 @@ PathNFT deployed to: 0x1F21BB5e880828D1016FE2965A172407414c373c
 
 https://xonin.vercel.app/
 
+https://opensea.io/XoninNFT/created
+
 ```shell
 cd frontend
 npm install

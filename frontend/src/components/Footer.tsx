@@ -6,7 +6,7 @@ import { faTwitterSquare, faGithubSquare, faInstagramSquare } from '@fortawesome
 
 const openSeaLink = "https://opensea.io/XoninNFT"
 const twitterLink = "https://twitter.com/XoninNFT"
-const gitLink = ""
+const gitLink = "https://github.com/phdargen/onChainArt"
 
 const useStyles = makeStyles((theme) => ({
   

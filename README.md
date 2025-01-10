@@ -4,6 +4,8 @@ Generative art collection stored fully onchain as SVG.
 
 ![xonin 001](https://github.com/phdargen/onChainArt/assets/29732335/3e90a293-a8a0-49f6-bc34-b58c48bde36e)
 
+[Collection on OpenSea](https://opensea.io/XoninNFT/created)
+
 # NFT 
 ```shell
 cd hardhat
@@ -25,8 +27,6 @@ PathNFT deployed to: 0x1F21BB5e880828D1016FE2965A172407414c373c
 # Website
 
 https://xonin.vercel.app/
-
-https://opensea.io/XoninNFT/created
 
 ```shell
 cd frontend

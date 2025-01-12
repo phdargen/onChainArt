@@ -15,9 +15,12 @@ export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
         //   verified: false
         }
       },
-      chain: "base",
-      collection: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
-      contract: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
+      // chain: "base",
+      // collection: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
+      // contract: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
+      chain: "sepolia",
+      collection: "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56",
+      contract: "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56",
       isMinting: true,
       priceEth: "1000000000000000",
       priceUsd: 34,

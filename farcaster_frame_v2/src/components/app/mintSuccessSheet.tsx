@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/drawer";
 import WowowImage from "@/img/wowow.png";
 import { useViewer } from "@/providers/FrameContextProvider";
+import { NFTDisplay } from './NFTDisplay';
 
 interface MintSuccessSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  tokenId?: number;
   name: string;
   imageUrl: string;
 }
@@ -23,6 +25,7 @@ interface MintSuccessSheetProps {
 export function MintSuccessSheet({
   isOpen,
   onClose,
+  tokenId,
   name,
   imageUrl,
 }: MintSuccessSheetProps) {
@@ -52,9 +55,13 @@ export function MintSuccessSheet({
 
         <div className="max-w-[272px] mx-auto w-full">
           <div className="bg-mat rounded-xl p-2 shadow mb-4">
-            <div className="relative aspect-square w-full rounded-lg overflow-hidden">
-              <Image src={imageUrl} alt={name} fill className="object-cover" />
-            </div>
+            {tokenId ? (
+              <NFTDisplay tokenId={tokenId} />
+            ) : (
+              <div className="relative aspect-square w-full rounded-lg overflow-hidden">
+                <Image src={imageUrl} alt={name} fill className="object-cover" />
+              </div>
+            )}
           </div>
         </div>
 

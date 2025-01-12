@@ -643,7 +643,7 @@ type ApiProfile = {
   };
 };
 
-export type ApiChain = "base";
+export type ApiChain = "base" | "base-sepolia" | "sepolia";
 
 export type ApiHexString = `0x${string}`;
 

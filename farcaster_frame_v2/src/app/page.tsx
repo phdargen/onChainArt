@@ -18,6 +18,7 @@ export default function Home() {
   const { mint } = data.result;
 
   const [showSuccess, setShowSuccess] = React.useState(false);
+  const [mintedTokenId, setMintedTokenId] = React.useState<number>();
   const [error, setError] = React.useState<string>();
 
   useEffect(() => {
@@ -39,13 +40,20 @@ export default function Home() {
           timestamp={mint.endsAt}
           price={Number(mint.priceEth)}
           isMinting={mint.isMinting}
-          onCollect={() => setShowSuccess(true)}
+          onCollect={(tokenId) => {
+            setMintedTokenId(tokenId);
+            setShowSuccess(true);
+          }}
           onError={setError}
         />
       </Card>
       <MintSuccessSheet
         isOpen={showSuccess}
-        onClose={() => setShowSuccess(false)}
+        onClose={() => {
+          setShowSuccess(false);
+          setMintedTokenId(undefined);
+        }}
+        tokenId={mintedTokenId}
         name={mint.name}
         imageUrl={mint.imageUrl}
       />

@@ -6,7 +6,9 @@ import {
   useConnect,
   useSendTransaction,
   useWaitForTransactionReceipt,
+  useSwitchChain
 } from "wagmi";
+import { base,baseSepolia,sepolia } from "wagmi/chains";
 
 import { AnimatedBorder } from "@/components/ui/animatedBorder";
 import { Button } from "@/components/ui/button";
@@ -17,7 +19,7 @@ import { useViewer } from "@/providers/FrameContextProvider";
 interface CollectButtonProps {
   timestamp?: number;
   price: number;
-  onCollect: () => void;
+  onCollect: (tokenId?: number) => void;
   onError: (error: string | undefined) => void;
   isMinting: boolean;
 }
@@ -33,14 +35,15 @@ export function CollectButton({
   onError,
   isMinting,
 }: CollectButtonProps) {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chain } = useAccount();
   const { connect } = useConnect();
+  const { switchChainAsync } = useSwitchChain();
   const { sendTransactionAsync, isPending: isSending } = useSendTransaction();
   const [hash, setHash] = React.useState<`0x${string}`>();
   const [isLoadingTxData, setIsLoadingTxData] = React.useState(false);
   const { frameAdded } = useViewer();
 
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess, data: receipt } = useWaitForTransactionReceipt({
     hash,
   });
 
@@ -51,13 +54,14 @@ export function CollectButton({
   const { fetchTransaction } = useFeaturedMintTransaction();
 
   React.useEffect(() => {
-    if (isSuccess && !successHandled.current) {
+    if (isSuccess && !successHandled.current && receipt) {
       successHandled.current = true;
-      onCollect();
+      const tokenId = Number(receipt.logs[0].topics[3]);
+      onCollect(tokenId);
       setHash(undefined);
       successHandled.current = false;
     }
-  }, [isSuccess, onCollect]);
+  }, [isSuccess, onCollect, receipt]);
 
   const handleClick = async () => {
     try {
@@ -74,6 +78,10 @@ export function CollectButton({
         return;
       }
 
+      if (chain?.id !== sepolia.id) {
+        await switchChainAsync({ chainId: sepolia.id });
+      }
+
       setIsLoadingTxData(true);
       const {
         result: { tx },
@@ -83,7 +91,7 @@ export function CollectButton({
         to: tx.to,
         value: BigInt(tx.value),
         data: tx.data,
-        chainId: 8453
+        chainId: sepolia.id
       });
 
       setHash(hash);
@@ -137,7 +145,14 @@ export function CollectButton({
             className="flex-1"
             onClick={() => sdk.actions.openUrl("https://xonin.vercel.app/")}
           >
-            View Collection
+            Website 
+          </Button>
+          <Button 
+            variant="secondary"
+            className="flex-1"
+            onClick={() => sdk.actions.openUrl("https://opensea.io/XoninNFT")}
+          >
+            OpenSea {chain ? `(${chain.id})` : ""}
           </Button>
         </div>
       </div>

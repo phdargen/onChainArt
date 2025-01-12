@@ -7,6 +7,7 @@ It utilizes `shadcn` for some core components and all data requests are done wit
 First, run the development server:
 
 ```bash
+bun install
 bun dev
 ```
 

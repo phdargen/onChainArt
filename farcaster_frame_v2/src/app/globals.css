@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #24292E;
+    --card: #FFFFFF;
+    --mat: #ffffff;
+    --well: #F3F3F3;
+    --popover: #FFFFFF;
+    --popover-foreground: #24292E;
+    --primary: #7867F6;
+    --primary-foreground: #FFFFFF;
+    --active: #DBD4FF;
+    --active-foreground: #7867F6;
+    --secondary: #F3F3F3;
+    --secondary-foreground: #24292E;
+    --muted: #8B99A4;
+    --muted-foreground: #8B99A4;
+    --destructive: #E11D48;
+    --destructive-foreground: #FAFAFA;
+    --action: #F2E5FF;
+    --action-foreground: #7C65C1;
+    --border: #F3F3F3;
+    --input: #F3F3F3;
+    --ring: #A5A5A9;
+    --radius: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #242426;
+      --foreground: #FFFFFF;
+      --card: #242426;
+      --mat: rgba(52, 41, 66, 0.50);
+      --well: rgba(0, 0, 0, 0.10);
+      --popover: #242426;
+      --popover-foreground: #FFFFFF;
+      --primary: #342942;
+      --primary-foreground: #FFFFFF;
+      --active: #342942;
+      --active-foreground: #7C65C1;
+      --secondary: #242426;
+      --secondary-foreground: #FAFAFA;
+      --muted: #7C8293;
+      --muted-foreground: #7C8293;
+      --destructive: #7D1A2C;
+      --destructive-foreground: #FAFAFA;
+      --action: #2A1F33;
+      --action-foreground: #7C65C1;
+      --border: rgba(52, 41, 66, 0.50);
+      --input: #3f3042;
+      --ring: #09090B;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family:
+      'Inter',
+      ui-sans-serif,
+      system-ui,
+      sans-serif,
+      Apple Color Emoji,
+      Segoe UI Emoji,
+      Segoe UI Symbol,
+      Noto Color Emoji;
+  }
+
+  /* Firefox-only part */
+  @-moz-document url-prefix() {
+    .scrollbar-vert,
+    .scrollbar-horz {
+      scrollbar-color: #d1d5db99 #fff;
+      scrollbar-width: thin;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .scrollbar-vert,
+      .scrollbar-horz {
+        scrollbar-color: #423466 #17101f;
+      }
+    }
+  }
+  /* End Firefox-only part */
+
+  /* Webkit-only part */
+  .scrollbar-vert::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-horz::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-vert::-webkit-scrollbar-thumb,
+  .scrollbar-horz::-webkit-scrollbar-thumb {
+    @apply bg-secondary;
+    border-radius: 12px;
+  }
+  /* End Webkit-only part */
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@layer utilities {
+  @keyframes border-slide {
+    from {
+      stroke-dashoffset: 33;
+    }
+    to {
+      stroke-dashoffset: -66;
+    }
+  }
+
+  .animate-border-slide {
+    animation: border-slide 5s linear infinite;
+  }
+}

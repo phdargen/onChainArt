@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0",
+    "payload": "eyJkb21haW4iOiJtaW50LndhcnBjYXN0LmNvbSJ9",
+    "signature": "MHhjNzU3NDA0MWUyZDEwYWI3ZGI0MWExNWQ0ZTQ0MDFmOWRmMzkyMzhiMTVmMjFiODllNWI5NWJkNDY0N2IyZjMwMjkxNzJmNzJmOTgyNjJlNGUyZGNmMTMzMTVkYzZhMWQxYzM1ZDUxOGJiMTg2NWU2NzUxOGQyYTNlZDdkNTljMjFi"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Mints",
+    "imageUrl": "https://wc-featured-mint.vercel.app/api/og",
+    "buttonTitle": "Collect",
+    "iconUrl": "https://mint.warpcast.com/app.png",
+    "splashImageUrl": "https://mint.warpcast.com/splash.png",
+    "splashBackgroundColor": "#ffffff",
+    "homeUrl": "https://mint.warpcast.com/",
+    "webhookUrl": "https://client.warpcast.com/v1/featured-mint-frame-webhook"
+  }
+}

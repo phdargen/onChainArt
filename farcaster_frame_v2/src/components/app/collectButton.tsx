@@ -22,9 +22,9 @@ interface CollectButtonProps {
   isMinting: boolean;
 }
 
-const formatUsdPrice = (priceInCents: number) => {
-  const dollars = (priceInCents / 100).toFixed(2);
-  return `$${dollars}`;
+const formatEthPrice = (priceInWei: number) => {
+  const eth = (priceInWei / 1e18).toFixed(3);
+  return `${eth} ETH`;
 };
 
 export function CollectButton({
@@ -107,30 +107,39 @@ export function CollectButton({
           <div className="flex justify-between items-center mb-1 text-sm">
             <span className="text-muted text-sm">Cost</span>
             <span className="text-foreground font-medium">
-              {formatUsdPrice(price)}
+              {formatEthPrice(price)}
             </span>
           </div>
         )}
-        {isPending ? (
-          <AnimatedBorder>
+        <div className="flex gap-2">
+          {isPending ? (
+            <AnimatedBorder>
+              <Button
+                className="w-full relative bg-active text-active-foreground"
+                disabled
+              >
+                {isMinting ? "Collecting..." : "Adding..."}
+              </Button>
+            </AnimatedBorder>
+          ) : (
             <Button
-              className="w-full relative bg-active text-active-foreground"
-              disabled
+              className="flex-1"
+              onClick={handleClick}
+              disabled={!isMinting && frameAdded}
             >
-              {isMinting ? "Collecting..." : "Adding..."}
+              {!isConnected && isMinting ? "Connect" :
+                isMinting ? "Collect" :
+                frameAdded ? "Added" : "Add Frame"}
             </Button>
-          </AnimatedBorder>
-        ) : (
-          <Button
-            className="w-full"
-            onClick={handleClick}
-            disabled={!isMinting && frameAdded}
+          )}
+          <Button 
+            variant="secondary"
+            className="flex-1"
+            onClick={() => sdk.actions.openUrl("https://xonin.vercel.app/")}
           >
-            {!isConnected && isMinting ? "Connect" :
-              isMinting ? "Collect" :
-              frameAdded ? "Added" : "Add Frame"}
+            View Collection
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );

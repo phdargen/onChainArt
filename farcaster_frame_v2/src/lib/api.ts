@@ -1,3 +1,6 @@
+import { mockFeaturedMintResponse } from './mockFeaturedMint';
+import { mockFeaturedMintTransactionResponse } from './mockFeaturedMintTransaction';
+
 function mergeIntoDefaultOptions<T>({
   defaults,
   options,
@@ -724,7 +727,6 @@ export type ApiGetFeaturedMintTransaction200Response = {
   },
 }
 
-
 class WarpcastApiClient extends AbstractWarpcastApiClient {
   /**
    * Get featured mint information
@@ -733,15 +735,22 @@ class WarpcastApiClient extends AbstractWarpcastApiClient {
     params?: ApiGetFeaturedMintQueryParams,
     { headers, timeout }: { headers?: RequestHeaders; timeout?: number } = {}
   ) {
-    return this.get<ApiGetFeaturedMint200Response>(
-      "/v1/featured-mint",
-      {
-        headers,
-        timeout,
-        endpointName: "getFeaturedMint",
-        params,
-      }
-    );
+    // For development/testing, return mock data
+    return Promise.resolve({ 
+      data: mockFeaturedMintResponse, 
+      status: 200 
+    });
+    
+    // Original implementation:
+    // return this.get<ApiGetFeaturedMint200Response>(
+    //   "/v1/featured-mint",
+    //   {
+    //     headers,
+    //     timeout,
+    //     endpointName: "getFeaturedMint",
+    //     params,
+    //   }
+    // );
   }
 
   /**
@@ -751,15 +760,22 @@ class WarpcastApiClient extends AbstractWarpcastApiClient {
     params: ApiGetFeaturedMintTransactionQueryParams,
     { headers, timeout }: { headers?: RequestHeaders; timeout?: number } = {}
   ) {
-    return this.get<ApiGetFeaturedMintTransaction200Response>(
-      "/v1/featured-mint-transaction",
-      {
-        headers,
-        timeout,
-        endpointName: "getFeaturedMintTransaction",
-        params,
-      }
-    );
+    // For development/testing, return mock data
+    return Promise.resolve({ 
+      data: mockFeaturedMintTransactionResponse, 
+      status: 200 
+    });
+    
+    // Original implementation:
+    // return this.get<ApiGetFeaturedMintTransaction200Response>(
+    //   "/v1/featured-mint-transaction",
+    //   {
+    //     headers,
+    //     timeout,
+    //     endpointName: "getFeaturedMintTransaction",
+    //     params,
+    //   }
+    // );
   }
 }
 

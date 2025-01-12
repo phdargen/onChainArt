@@ -17,7 +17,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'wrpcd.net',
         pathname: '/cdn-cgi/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'xonin.vercel.app',
+        pathname: '/**',
+      },
     ],
   }
 };

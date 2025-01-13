@@ -673,7 +673,7 @@ export type ApiFeaturedMint = {
   imageUrl: ApiUri,
   description?: string,
   creator: ApiUserMinimal,
-  chain: ApiChain,
+  chainId: number,
   collection: ApiEthereumAddress,
   contract: ApiEthereumAddress,
   tokenId?: string,
@@ -698,7 +698,7 @@ export type ApiFeaturedMintData = {
 }
 
 export type ApiFeaturedMintTransaction = {
-  chain: ApiChain,
+  chainId: number,
   to: ApiEthereumAddress,
   data: ApiHexString,
   value: ApiHexString,

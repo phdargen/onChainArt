@@ -1,4 +1,10 @@
 import type { ApiGetFeaturedMint200Response } from './api';
+import { base, sepolia } from 'wagmi/chains';
+
+const chainId = sepolia.id;
+const contract = (Number(chainId) === Number(base.id) 
+  ? "0x1F21BB5e880828D1016FE2965A172407414c373c" 
+  : "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56") as `0x${string}`;
 
 export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
   result: {
@@ -12,15 +18,11 @@ export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
         displayName: "Dudecaster 🔵🌈🖼️",
         pfp: {
           url: "https://i.imgur.com/baRn42j.png",
-        //   verified: false
         }
       },
-      // chain: "base",
-      // collection: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
-      // contract: "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17",
-      chain: "sepolia",
-      collection: "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56",
-      contract: "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56",
+      chainId: chainId,
+      collection: contract,
+      contract,
       isMinting: true,
       priceEth: "1000000000000000",
       priceUsd: 34,
@@ -28,4 +30,6 @@ export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
       endsAt: 1735603238
     }
   }
-}; 
+};
+
+export { chainId, contract }; 

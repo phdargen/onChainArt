@@ -1,4 +1,5 @@
 import sdk from "@farcaster/frame-sdk";
+import { base, sepolia } from 'wagmi/chains';
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import type { ApiChain, ApiUserMinimal } from "@/lib/api";
@@ -6,12 +7,25 @@ import type { ApiChain, ApiUserMinimal } from "@/lib/api";
 interface ArtworkInfoProps {
   name: string;
   creator: ApiUserMinimal;
-  chain: ApiChain;
+  chainId: number;
   description?: string;
   isMinting: boolean;
 }
 
-export function ArtworkInfo({ name, creator, description, isMinting }: ArtworkInfoProps) {
+const getChainInfo = (chainId: number) => {
+  switch (chainId) {
+    case base.id:
+      return { name: 'Base', logo: 'https://mint.warpcast.com/base-logo.png' };
+    case sepolia.id:
+      return { name: 'Sepolia', logo: 'https://mint.warpcast.com/base-logo.png' };
+    default:
+      return { name: 'Unknown', logo: 'https://mint.warpcast.com/base-logo.png' };
+  }
+};
+
+export function ArtworkInfo({ name, creator, chainId, description, isMinting }: ArtworkInfoProps) {
+  const chain = getChainInfo(chainId);
+
   const handleUsernameClick = () => {
     sdk.actions.viewProfile({ fid: creator.fid });
   };
@@ -44,12 +58,12 @@ export function ArtworkInfo({ name, creator, description, isMinting }: ArtworkIn
               <span className="text-sm text-muted">on</span>
               <Avatar className="h-4 w-4 bg-secondary rounded-full">
                 <AvatarImage
-                  src="https://mint.warpcast.com/base-logo.png"
-                  alt="Base"
+                  src={chain.logo}
+                  alt={chain.name}
                   width={16}
                 />
               </Avatar>
-              <span className="text-sm">Base</span>
+              <span className="text-sm">{chain.name}</span>
             </div>
           </div>
         </div>

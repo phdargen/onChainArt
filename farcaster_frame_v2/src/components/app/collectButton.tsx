@@ -8,11 +8,11 @@ import {
   useWaitForTransactionReceipt,
   useSwitchChain
 } from "wagmi";
-import { base,baseSepolia,sepolia } from "wagmi/chains";
 
 import { AnimatedBorder } from "@/components/ui/animatedBorder";
 import { Button } from "@/components/ui/button";
 import { isUserRejectionError } from "@/lib/errors";
+import { chainId as targetChainId } from '@/lib/mockFeaturedMint';
 import { useFeaturedMintTransaction } from "@/lib/queries";
 import { useViewer } from "@/providers/FrameContextProvider";
 
@@ -35,7 +35,7 @@ export function CollectButton({
   onError,
   isMinting,
 }: CollectButtonProps) {
-  const { isConnected, address, chain } = useAccount();
+  const { isConnected, address, chain: currentChain } = useAccount();
   const { connect } = useConnect();
   const { switchChainAsync } = useSwitchChain();
   const { sendTransactionAsync, isPending: isSending } = useSendTransaction();
@@ -78,8 +78,8 @@ export function CollectButton({
         return;
       }
 
-      if (chain?.id !== sepolia.id) {
-        await switchChainAsync({ chainId: sepolia.id });
+      if (currentChain?.id !== targetChainId) {
+        await switchChainAsync({ chainId: targetChainId });
       }
 
       setIsLoadingTxData(true);
@@ -91,7 +91,7 @@ export function CollectButton({
         to: tx.to,
         value: BigInt(tx.value),
         data: tx.data,
-        chainId: sepolia.id
+        chainId: targetChainId
       });
 
       setHash(hash);
@@ -152,7 +152,7 @@ export function CollectButton({
             className="flex-1"
             onClick={() => sdk.actions.openUrl("https://opensea.io/XoninNFT")}
           >
-            OpenSea {chain ? `(${chain.id})` : ""}
+            OpenSea {targetChainId ? `(${targetChainId})` : ""}
           </Button>
         </div>
       </div>

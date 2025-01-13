@@ -1,6 +1,6 @@
+import { contract } from '@/lib/mockFeaturedMint';
 import { useReadContract } from 'wagmi';
 
-const CONTRACT_ADDRESS = "0x2d727e8375E85BFD5bDd5167FAb1F03973501C56";
 const ABI = [
   {
     "inputs": [{"internalType": "uint256", "name": "id", "type": "uint256"}],
@@ -13,7 +13,7 @@ const ABI = [
 
 export function useNFTSvg(tokenId: number | undefined) {
   const { data } = useReadContract({
-    address: CONTRACT_ADDRESS,
+    address: contract,
     abi: ABI,
     functionName: 'getSVG',
     args: tokenId ? [BigInt(tokenId)] : undefined,

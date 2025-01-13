@@ -32,7 +32,7 @@ export default function Home() {
         <ArtworkInfo
           name={mint.name}
           creator={mint.creator}
-          chain={mint.chain}
+          chainId={mint.chainId}
           description={mint.description}
           isMinting={mint.isMinting}
         />

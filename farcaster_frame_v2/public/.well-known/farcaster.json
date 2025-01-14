@@ -5,7 +5,7 @@
     "signature": "MHhjYWQzMjNmYmI0OTEyMThiNzBlOTU4ODQ5MzQ2MTk3MTE5MzU1YjUzOTQ4N2Y0NGE5OGNjMjc0OTdiNGIzOGRmNjJlNGRjMmYzNjQ5ZWFlYmJlMGVhOWQzNzBjNDVmZGZlZDgxM2U5OGVhNWNkYTU5YTdiZmFlNjY5YTY4OWI5YTFi"
   },
   "frame": {
-    "version": "1",
+    "version": "next",
     "name": "Xonin",
     "iconUrl": "https://xonin.vercel.app/xonin.gif",
     "homeUrl": "https://xonin-frame-v2.vercel.app/",

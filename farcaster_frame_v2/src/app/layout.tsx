@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 import { Providers } from "@/providers/Providers";
 
 const frame = {
-  version: "1",
-  imageUrl: `https://xonin-frame-v2.vercel.app/api/og`,
+  version: "next",
+  imageUrl: "https://xonin-frame-v2.vercel.app/api/og",
   button: {
     title: "Mint",
     action: {

@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
         hostname: 'xonin.vercel.app',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'xonin-frame-v2.vercel.app',
+        pathname: '/**',
+      },
     ],
   }
 };

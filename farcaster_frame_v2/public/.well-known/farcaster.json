@@ -8,7 +8,7 @@
     "version": "1",
     "name": "Xonin",
     "iconUrl": "https://xonin.vercel.app/xonin.gif",
-    "homeUrl": "https://xonin-frame-v2.vercel.app",
+    "homeUrl": "https://xonin-frame-v2.vercel.app/",
     "imageUrl": "https://xonin-frame-v2.vercel.app/api/og",
     "buttonTitle": "Mint",
     "splashImageUrl": "https://xonin.vercel.app/token34.png",

@@ -12,7 +12,7 @@ const frame = {
     action: {
       type: "launch_frame",
       name: "Xonin",
-      url: "https://xonin-frame-v2.vercel.app",
+      url: "https://xonin-frame-v2.vercel.app/",
       iconImageUrl: "https://xonin.vercel.app/xonin.gif",
       splashImageUrl: "https://xonin.vercel.app/token34.png",
       splashBackgroundColor: "#eeccff",
@@ -22,7 +22,7 @@ const frame = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    metadataBase: new URL("https://xonin-frame-v2.vercel.app"),
+    metadataBase: new URL("https://xonin-frame-v2.vercel.app/"),
     title: "Xonin Mints",
     openGraph: {
       title: "Xonin",

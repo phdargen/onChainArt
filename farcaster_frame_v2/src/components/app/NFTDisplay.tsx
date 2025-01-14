@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useNFTSvg } from '@/lib/hooks/useNFTContract';
 
 interface NFTDisplayProps {

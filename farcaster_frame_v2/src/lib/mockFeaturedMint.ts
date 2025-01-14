@@ -1,5 +1,9 @@
-import type { ApiGetFeaturedMint200Response, ApiGetFeaturedMintTransaction200Response } from './api';
 import { base, sepolia } from 'wagmi/chains';
+
+import type { 
+  ApiGetFeaturedMint200Response, 
+  ApiGetFeaturedMintTransaction200Response 
+} from './api';
 
 const chainId = sepolia.id;
 

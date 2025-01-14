@@ -5,17 +5,17 @@ import {
   useAccount,
   useConnect,
   useSendTransaction,
+  useSwitchChain,
   useWaitForTransactionReceipt,
-  useSwitchChain
 } from "wagmi";
 
 import { AnimatedBorder } from "@/components/ui/animatedBorder";
 import { Button } from "@/components/ui/button";
 import { isUserRejectionError } from "@/lib/errors";
+import { useEthPrice } from '@/lib/hooks/useEthPrice';
 import { chainId as targetChainId } from '@/lib/mockFeaturedMint';
 import { useFeaturedMintTransaction } from "@/lib/queries";
 import { useViewer } from "@/providers/FrameContextProvider";
-import { useEthPrice } from '@/lib/hooks/useEthPrice';
 
 interface CollectButtonProps {
   timestamp?: number;

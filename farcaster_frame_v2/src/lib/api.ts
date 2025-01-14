@@ -728,24 +728,12 @@ class WarpcastApiClient extends AbstractWarpcastApiClient {
    */
   getFeaturedMint(
     params?: ApiGetFeaturedMintQueryParams,
-    { headers, timeout }: { headers?: RequestHeaders; timeout?: number } = {}
+    _options: { headers?: RequestHeaders; timeout?: number } = {}
   ) {
-    // For development/testing, return mock data
     return Promise.resolve({ 
       data: mockFeaturedMintResponse, 
       status: 200 
     });
-    
-    // Original implementation:
-    // return this.get<ApiGetFeaturedMint200Response>(
-    //   "/v1/featured-mint",
-    //   {
-    //     headers,
-    //     timeout,
-    //     endpointName: "getFeaturedMint",
-    //     params,
-    //   }
-    // );
   }
 
   /**
@@ -753,24 +741,12 @@ class WarpcastApiClient extends AbstractWarpcastApiClient {
    */
   getFeaturedMintTransaction(
     params: ApiGetFeaturedMintTransactionQueryParams,
-    { headers, timeout }: { headers?: RequestHeaders; timeout?: number } = {}
+    _options: { headers?: RequestHeaders; timeout?: number } = {}
   ) {
-    // For development/testing, return mock data
     return Promise.resolve({ 
       data: mockFeaturedMintTransactionResponse(params.collection), 
       status: 200 
     });
-    
-    // Original implementation:
-    // return this.get<ApiGetFeaturedMintTransaction200Response>(
-    //   "/v1/featured-mint-transaction",
-    //   {
-    //     headers,
-    //     timeout,
-    //     endpointName: "getFeaturedMintTransaction",
-    //     params,
-    //   }
-    // );
   }
 }
 

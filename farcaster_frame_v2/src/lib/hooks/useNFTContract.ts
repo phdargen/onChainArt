@@ -1,5 +1,6 @@
-import { contracts } from '@/lib/mockFeaturedMint';
 import { useReadContract } from 'wagmi';
+
+import { contracts } from '@/lib/mockFeaturedMint';
 
 const ABI = [
   {

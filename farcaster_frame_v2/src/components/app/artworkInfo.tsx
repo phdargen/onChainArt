@@ -2,7 +2,7 @@ import sdk from "@farcaster/frame-sdk";
 import { base, sepolia } from 'wagmi/chains';
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import type { ApiChain, ApiUserMinimal } from "@/lib/api";
+import type { ApiUserMinimal } from "@/lib/api";
 
 interface ArtworkInfoProps {
   name: string;

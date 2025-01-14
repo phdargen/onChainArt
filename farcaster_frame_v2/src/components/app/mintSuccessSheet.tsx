@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
 
+import { NFTDisplay } from '@/components/app/NFTDisplay';
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -10,9 +11,7 @@ import {
   DrawerOverlay,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import WowowImage from "@/img/wowow.png";
 import { useViewer } from "@/providers/FrameContextProvider";
-import { NFTDisplay } from './NFTDisplay';
 
 interface MintSuccessSheetProps {
   isOpen: boolean;

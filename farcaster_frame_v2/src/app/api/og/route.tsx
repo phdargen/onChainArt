@@ -15,21 +15,21 @@ export async function GET() {
 
     const interRegular = await fetch(
       new URL(
-        "https://wc-featured-mint.vercel.app/fonts/Inter-Regular.ttf",
+        "https://xonin-frame-v2.vercel.app/fonts/Inter-Regular.ttf",
         import.meta.url
       )
     ).then((res) => res.arrayBuffer());
 
     const interMedium = await fetch(
       new URL(
-        "https://wc-featured-mint.vercel.app/fonts/Inter-Medium.ttf",
+        "https://xonin-frame-v2.vercel.app/fonts/Inter-Medium.ttf",
         import.meta.url
       )
     ).then((res) => res.arrayBuffer());
 
     const interSemiBold = await fetch(
       new URL(
-        "https://wc-featured-mint.vercel.app/fonts/Inter-SemiBold.ttf",
+        "https://xonin-frame-v2.vercel.app/fonts/Inter-SemiBold.ttf",
         import.meta.url
       )
     ).then((res) => res.arrayBuffer());
@@ -198,7 +198,7 @@ export async function GET() {
                 <span>on</span>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://wc-featured-mint.vercel.app/base-logo.png"
+                  src="https://xonin-frame-v2.vercel.app/base-logo.png"
                   alt="Base"
                   width="48"
                   height="48"

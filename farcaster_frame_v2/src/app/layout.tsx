@@ -6,15 +6,15 @@ import { Providers } from "@/providers/Providers";
 
 const frame = {
   version: "next",
-  imageUrl: `https://wc-featured-mint.vercel.app/api/og`,
+  imageUrl: `https://xonin-frame-v2.vercel.app/api/og`,
   button: {
-    title: "Collect",
+    title: "Mint",
     action: {
       type: "launch_frame",
       name: "Mints",
-      url: "https://mint.warpcast.com/",
-      iconImageUrl: "https://mint.warpcast.com/app.png",
-      splashImageUrl: "https://mint.warpcast.com/splash.png",
+      url: "https://xonin-frame-v2.vercel.app",
+      iconImageUrl: "https://xonin.vercel.app/xonin.gif",
+      splashImageUrl: "https://xonin.vercel.app/token34.png",
       splashBackgroundColor: "#ffffff",
     },
   },
@@ -22,12 +22,12 @@ const frame = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    metadataBase: new URL("https://mint.warpcast.com/"),
-    title: "Mints",
+    metadataBase: new URL("https://xonin-frame-v2.vercel.app"),
+    title: "Xonin Mints",
     openGraph: {
-      title: "Warpcast",
+      title: "Xonin",
       description: "Mints",
-      images: "https://wc-featured-mint.vercel.app/api/og",
+      images: "https://xonin-frame-v2.vercel.app/api/og",
     },
     other: {
       "fc:frame": JSON.stringify(frame),

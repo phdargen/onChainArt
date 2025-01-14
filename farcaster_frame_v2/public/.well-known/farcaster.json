@@ -1,18 +1,18 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0",
-    "payload": "eyJkb21haW4iOiJtaW50LndhcnBjYXN0LmNvbSJ9",
-    "signature": "MHhjNzU3NDA0MWUyZDEwYWI3ZGI0MWExNWQ0ZTQ0MDFmOWRmMzkyMzhiMTVmMjFiODllNWI5NWJkNDY0N2IyZjMwMjkxNzJmNzJmOTgyNjJlNGUyZGNmMTMzMTVkYzZhMWQxYzM1ZDUxOGJiMTg2NWU2NzUxOGQyYTNlZDdkNTljMjFi"
+    "header": "eyJmaWQiOjM3MjA4OCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDhmOWQwNTQ3YmY3ODkzMWNEOEJCMzQyODU5YTNmNzg3OTc5MDMzQkYifQ",
+    "payload": "eyJkb21haW4iOiJ4b25pbi1mcmFtZS12Mi52ZXJjZWwuYXBwIn0",
+    "signature": "MHhjYWQzMjNmYmI0OTEyMThiNzBlOTU4ODQ5MzQ2MTk3MTE5MzU1YjUzOTQ4N2Y0NGE5OGNjMjc0OTdiNGIzOGRmNjJlNGRjMmYzNjQ5ZWFlYmJlMGVhOWQzNzBjNDVmZGZlZDgxM2U5OGVhNWNkYTU5YTdiZmFlNjY5YTY4OWI5YTFi"
   },
   "frame": {
     "version": "1",
-    "name": "Mints",
-    "imageUrl": "https://wc-featured-mint.vercel.app/api/og",
-    "buttonTitle": "Collect",
-    "iconUrl": "https://mint.warpcast.com/app.png",
-    "splashImageUrl": "https://mint.warpcast.com/splash.png",
-    "splashBackgroundColor": "#ffffff",
-    "homeUrl": "https://mint.warpcast.com/",
-    "webhookUrl": "https://client.warpcast.com/v1/featured-mint-frame-webhook"
+    "name": "Xonin",
+    "iconUrl": "https://xonin.vercel.app/xonin.gif",
+    "homeUrl": "https://xonin-frame-v2.vercel.app",
+    "imageUrl": "https://xonin-frame-v2.vercel.app/api/og",
+    "buttonTitle": "Mint",
+    "splashImageUrl": "https://xonin.vercel.app/token34.png",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://xonin-frame-v2.vercel.app/api/webhook"
   }
 }

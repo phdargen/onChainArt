@@ -5,17 +5,17 @@ import type { Metadata } from "next";
 import { Providers } from "@/providers/Providers";
 
 const frame = {
-  version: "next",
+  version: "1",
   imageUrl: `https://xonin-frame-v2.vercel.app/api/og`,
   button: {
     title: "Mint",
     action: {
       type: "launch_frame",
-      name: "Mints",
+      name: "Xonin",
       url: "https://xonin-frame-v2.vercel.app",
       iconImageUrl: "https://xonin.vercel.app/xonin.gif",
       splashImageUrl: "https://xonin.vercel.app/token34.png",
-      splashBackgroundColor: "#ffffff",
+      splashBackgroundColor: "#eeccff",
     },
   },
 };

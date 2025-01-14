@@ -13,7 +13,7 @@ const frame = {
       type: "launch_frame",
       name: "Xonin",
       url: "https://xonin-frame-v2.vercel.app/",
-      iconImageUrl: "https://xonin.vercel.app/xonin.gif",
+      iconImageUrl: "https://xonin.vercel.app/token0.png",
       splashImageUrl: "https://xonin.vercel.app/token34.png",
       splashBackgroundColor: "#002d62",
     },

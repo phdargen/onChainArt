@@ -151,7 +151,7 @@ export async function GET() {
                   letterSpacing: "-0.27px",
                 }}
               >
-                {mint.name}
+                {mint.name} - Fully onchain generative art
               </div>
 
               <div

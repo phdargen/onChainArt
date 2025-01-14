@@ -20,6 +20,7 @@ export default function Home() {
   const [showSuccess, setShowSuccess] = React.useState(false);
   const [mintedTokenId, setMintedTokenId] = React.useState<number>();
   const [error, setError] = React.useState<string>();
+  const [mintedCollection, setMintedCollection] = React.useState<'paths' | 'shapes'>('paths');
 
   useEffect(() => {
     dismiss();
@@ -40,8 +41,9 @@ export default function Home() {
           timestamp={mint.endsAt}
           price={Number(mint.priceEth)}
           isMinting={mint.isMinting}
-          onCollect={(tokenId) => {
+          onCollect={(tokenId, collection) => {
             setMintedTokenId(tokenId);
+            if (collection) setMintedCollection(collection);
             setShowSuccess(true);
           }}
           onError={setError}
@@ -54,6 +56,7 @@ export default function Home() {
           setMintedTokenId(undefined);
         }}
         tokenId={mintedTokenId}
+        collection={mintedCollection}
         name={mint.name}
         imageUrl={mint.imageUrl}
       />

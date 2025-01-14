@@ -18,6 +18,7 @@ interface MintSuccessSheetProps {
   isOpen: boolean;
   onClose: () => void;
   tokenId?: number;
+  collection: 'paths' | 'shapes';
   name: string;
   imageUrl: string;
 }
@@ -26,6 +27,7 @@ export function MintSuccessSheet({
   isOpen,
   onClose,
   tokenId,
+  collection,
   name,
   imageUrl,
 }: MintSuccessSheetProps) {
@@ -38,8 +40,8 @@ export function MintSuccessSheet({
 
   const handleShare = () => {
     const text = tokenId 
-      ? `I just minted ${name} #${tokenId}!` 
-      : `I just collected ${name}!`;
+      ? `I just minted ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'} #${tokenId}!` 
+      : `I just collected ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'}!`;
     
     const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent('https://mint.warpcast.com/')}`;
     sdk.actions.openUrl(url);
@@ -49,7 +51,7 @@ export function MintSuccessSheet({
     <Drawer open={isOpen} onClose={onClose}>
       <DrawerOverlay className="!bg-black/30 backdrop-blur-[7.5px]" />
       <DrawerContent className="bg-card [&>svg]:hidden">
-        <DrawerTitle className="sr-only">Collection Successful</DrawerTitle>
+        <DrawerTitle className="sr-only">Mint Successful</DrawerTitle>
 
         <div className="flex flex-col items-center pt-4 pb-8">
           <div className="flex items-center gap-1">
@@ -58,14 +60,14 @@ export function MintSuccessSheet({
               strokeWidth={2}
               size={24}
             />
-            <span className="text-2xl font-semibold">Minted Xonin</span>
+            <span className="text-2xl font-semibold">Minted Xonin {collection === 'paths' ? 'Paths' : 'Shapes'} #{tokenId}</span>
           </div>
         </div>
 
         <div className="max-w-[272px] mx-auto w-full mb-8">
           <div className="bg-mat rounded-xl p-2 shadow mb-4">
             {tokenId ? (
-              <NFTDisplay tokenId={tokenId} />
+              <NFTDisplay tokenId={tokenId} collection={collection} />
             ) : (
               <div className="relative aspect-square w-full rounded-lg overflow-hidden">
                 <Image src={imageUrl} alt={name} fill className="object-cover" />

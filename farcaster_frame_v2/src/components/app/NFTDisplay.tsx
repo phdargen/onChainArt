@@ -3,10 +3,11 @@ import { useNFTSvg } from '@/lib/hooks/useNFTContract';
 
 interface NFTDisplayProps {
   tokenId: number;
+  collection: 'paths' | 'shapes';
 }
 
-export function NFTDisplay({ tokenId }: NFTDisplayProps) {
-  const { data: svg, isLoading } = useNFTSvg(tokenId);
+export function NFTDisplay({ tokenId, collection }: NFTDisplayProps) {
+  const { data: svg, isLoading } = useNFTSvg(tokenId, collection);
 
   if (isLoading) {
     return <div>Loading NFT...</div>;

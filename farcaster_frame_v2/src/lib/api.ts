@@ -1,5 +1,4 @@
-import { mockFeaturedMintResponse } from './mockFeaturedMint';
-import { mockFeaturedMintTransactionResponse } from './mockFeaturedMintTransaction';
+import { mockFeaturedMintResponse, mockFeaturedMintTransactionResponse } from './mockFeaturedMint';
 
 function mergeIntoDefaultOptions<T>({
   defaults,
@@ -674,12 +673,8 @@ export type ApiFeaturedMint = {
   description?: string,
   creator: ApiUserMinimal,
   chainId: number,
-  collection: ApiEthereumAddress,
-  contract: ApiEthereumAddress,
-  tokenId?: string,
   isMinting: boolean,
   priceEth: string,
-  priceUsd: number,
   startsAt?: ApiTimestampMillis,
   endsAt?: ApiTimestampMillis,
 }
@@ -717,7 +712,7 @@ export type ApiGetFeaturedMint200Response = {
 
 export type ApiGetFeaturedMintTransactionQueryParamsCamelCase = {
   address: ApiEthereumAddress,
-  collection?: ApiEthereumAddress,
+  collection: 'paths' | 'shapes'
 }
 export type ApiGetFeaturedMintTransactionQueryParams = ApiGetFeaturedMintTransactionQueryParamsCamelCase;
 
@@ -762,7 +757,7 @@ class WarpcastApiClient extends AbstractWarpcastApiClient {
   ) {
     // For development/testing, return mock data
     return Promise.resolve({ 
-      data: mockFeaturedMintTransactionResponse, 
+      data: mockFeaturedMintTransactionResponse(params.collection), 
       status: 200 
     });
     

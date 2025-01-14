@@ -31,9 +31,9 @@ const useFeaturedMintTransaction = () => {
   const queryClient = useQueryClient();
 
   return {
-    fetchTransaction: async (address: ApiEthereumAddress) => {
-      const response = await api.getFeaturedMintTransaction({ address });
-      queryClient.setQueryData(["featuredMintTx"], response.data);
+    fetchTransaction: async (address: ApiEthereumAddress, collection: 'paths' | 'shapes') => {
+      const response = await api.getFeaturedMintTransaction({ address, collection });
+      queryClient.setQueryData(["featuredMintTx", collection], response.data);
       return response.data;
     },
   };

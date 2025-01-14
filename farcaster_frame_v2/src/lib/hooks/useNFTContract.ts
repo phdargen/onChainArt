@@ -1,4 +1,4 @@
-import { contract } from '@/lib/mockFeaturedMint';
+import { contracts } from '@/lib/mockFeaturedMint';
 import { useReadContract } from 'wagmi';
 
 const ABI = [
@@ -11,9 +11,9 @@ const ABI = [
   }
 ];
 
-export function useNFTSvg(tokenId: number | undefined) {
+export function useNFTSvg(tokenId: number | undefined, collection: 'paths' | 'shapes' = 'paths') {
   const { data } = useReadContract({
-    address: contract,
+    address: contracts[collection],
     abi: ABI,
     functionName: 'getSVG',
     args: tokenId ? [BigInt(tokenId)] : undefined,

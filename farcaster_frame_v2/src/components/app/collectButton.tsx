@@ -15,11 +15,12 @@ import { isUserRejectionError } from "@/lib/errors";
 import { chainId as targetChainId } from '@/lib/mockFeaturedMint';
 import { useFeaturedMintTransaction } from "@/lib/queries";
 import { useViewer } from "@/providers/FrameContextProvider";
+import { useEthPrice } from '@/lib/hooks/useEthPrice';
 
 interface CollectButtonProps {
   timestamp?: number;
   price: number;
-  onCollect: (tokenId?: number) => void;
+  onCollect: (tokenId?: number, collection?: 'paths' | 'shapes') => void;
   onError: (error: string | undefined) => void;
   isMinting: boolean;
 }
@@ -27,6 +28,12 @@ interface CollectButtonProps {
 const formatEthPrice = (priceInWei: number) => {
   const eth = (priceInWei / 1e18).toFixed(3);
   return `${eth} ETH`;
+};
+
+const formatUsdPrice = (ethPrice: number, priceInWei: number) => {
+  const eth = priceInWei / 1e18;
+  const usd = eth * ethPrice;
+  return `$${usd.toPrecision(2)}`;
 };
 
 export function CollectButton({
@@ -42,6 +49,8 @@ export function CollectButton({
   const [hash, setHash] = React.useState<`0x${string}`>();
   const [isLoadingTxData, setIsLoadingTxData] = React.useState(false);
   const { frameAdded } = useViewer();
+  const { data: ethPrice } = useEthPrice();
+  const [currentCollection, setCurrentCollection] = React.useState<'paths' | 'shapes'>('paths');
 
   const { isLoading: isConfirming, isSuccess, data: receipt } = useWaitForTransactionReceipt({
     hash,
@@ -57,13 +66,14 @@ export function CollectButton({
     if (isSuccess && !successHandled.current && receipt) {
       successHandled.current = true;
       const tokenId = Number(receipt.logs[0].topics[3]);
-      onCollect(tokenId);
+      onCollect(tokenId, currentCollection);
       setHash(undefined);
       successHandled.current = false;
     }
-  }, [isSuccess, onCollect, receipt]);
+  }, [isSuccess, onCollect, receipt, currentCollection]);
 
-  const handleClick = async () => {
+  const handleClick = async (collection: 'paths' | 'shapes') => {
+    setCurrentCollection(collection);
     try {
       if (!isMinting) {
         sdk.actions.addFrame();
@@ -85,7 +95,7 @@ export function CollectButton({
       setIsLoadingTxData(true);
       const {
         result: { tx },
-      } = await fetchTransaction(address);
+      } = await fetchTransaction(address, collection);
 
       const hash = await sendTransactionAsync({
         to: tx.to,
@@ -113,10 +123,17 @@ export function CollectButton({
       <div className="pb-4 px-4 pt-2">
         {isMinting && (
           <div className="flex justify-between items-center mb-1 text-sm">
-            <span className="text-muted text-sm">Cost</span>
-            <span className="text-foreground font-medium">
-              {formatEthPrice(price)}
-            </span>
+            <span className="text-muted text-sm">Price</span>
+            <div className="flex gap-2">
+              <span className="text-foreground font-medium">
+                {formatEthPrice(price)}
+              </span>
+              {ethPrice && (
+                <span className="text-muted">
+                  ({formatUsdPrice(ethPrice, price)})
+                </span>
+              )}
+            </div>
           </div>
         )}
         <div className="flex gap-2">
@@ -126,20 +143,33 @@ export function CollectButton({
                 className="w-full relative bg-active text-active-foreground"
                 disabled
               >
-                {isMinting ? "Collecting..." : "Adding..."}
+                {isMinting ? "Minting..." : "Adding..."}
               </Button>
             </AnimatedBorder>
           ) : (
-            <Button
-              className="flex-1"
-              onClick={handleClick}
-              disabled={!isMinting && frameAdded}
-            >
-              {!isConnected && isMinting ? "Connect" :
-                isMinting ? "Collect" :
-                frameAdded ? "Added" : "Add Frame"}
-            </Button>
+            <>
+              <Button
+                className="flex-1"
+                onClick={() => handleClick('paths')}
+                disabled={!isMinting && frameAdded}
+              >
+                {!isConnected && isMinting ? "Connect" :
+                  isMinting ? "Mint (Style: Paths)" :
+                  frameAdded ? "Added" : "Add Frame"}
+              </Button>
+              <Button
+                className="flex-1"
+                onClick={() => handleClick('shapes')}
+                disabled={!isMinting && frameAdded}
+              >
+                {!isConnected && isMinting ? "Connect" :
+                  isMinting ? "Mint (Style: Shapes)" :
+                  frameAdded ? "Added" : "Add Frame"}
+              </Button>
+            </>
           )}
+        </div>
+        <div className="flex gap-2 mt-2">
           <Button 
             variant="secondary"
             className="flex-1"

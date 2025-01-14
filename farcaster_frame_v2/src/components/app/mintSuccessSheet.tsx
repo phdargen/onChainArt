@@ -42,7 +42,7 @@ export function MintSuccessSheet({
       ? `I just minted ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'} #${tokenId}!` 
       : `I just collected ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'}!`;
     
-    const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent('https://mint.warpcast.com/')}`;
+    const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent('https://xonin-frame-v2.vercel.app/')}`;
     sdk.actions.openUrl(url);
   };
 

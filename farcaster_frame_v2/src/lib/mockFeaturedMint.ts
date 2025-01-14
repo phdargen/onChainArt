@@ -20,9 +20,9 @@ const contracts = {
 export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
   result: {
     mint: {
-      name: "Xonin",
-      imageUrl: "https://xonin.vercel.app/xonin.gif?width=1000",
-      description: "Xonin - Onchain generative art collection. The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG.",
+      name: "Xonin - Fully onchain generative art",
+      imageUrl: "https://xonin.vercel.app/xonin.002.png?width=1000",
+      description: "Xonin - Onchain generative art collection. \n\n The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG.",
       creator: {
         fid: 372088,
         username: "dudecaster",

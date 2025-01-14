@@ -15,7 +15,7 @@ const frame = {
       url: "https://xonin-frame-v2.vercel.app/",
       iconImageUrl: "https://xonin.vercel.app/xonin.gif",
       splashImageUrl: "https://xonin.vercel.app/token34.png",
-      splashBackgroundColor: "#eeccff",
+      splashBackgroundColor: "#002d62",
     },
   },
 };

@@ -12,7 +12,6 @@
     "imageUrl": "https://xonin-frame-v2.vercel.app/api/og",
     "buttonTitle": "Mint",
     "splashImageUrl": "https://xonin.vercel.app/token34.png",
-    "splashBackgroundColor": "#eeccff",
-    "webhookUrl": "https://xonin-frame-v2.vercel.app/api/webhook"
+    "splashBackgroundColor": "#002d62"
   }
 }

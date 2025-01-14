@@ -182,7 +182,8 @@ export function CollectButton({
             className="flex-1"
             onClick={() => sdk.actions.openUrl("https://opensea.io/XoninNFT")}
           >
-            OpenSea {targetChainId ? `(${targetChainId})` : ""}
+            {/* OpenSea {targetChainId ? `(${targetChainId})` : ""} */}
+            OpenSea 
           </Button>
         </div>
       </div>

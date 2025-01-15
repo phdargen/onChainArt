@@ -34,7 +34,7 @@ export async function GET() {
       )
     ).then((res) => res.arrayBuffer());
 
-    const imageUrl = 'https://xonin.vercel.app/token0.png?width=1600' // mint.imageUrl.replace("?width=250", "?width=1600");
+    const imageUrl = mint.imageUrl.replace("?width=250", "?width=1600");
 
     const imageResponse = new ImageResponse(
       (
@@ -151,7 +151,7 @@ export async function GET() {
                   letterSpacing: "-0.27px",
                 }}
               >
-                {mint.name} - Fully onchain generative art
+                {mint.name} 
               </div>
 
               <div
@@ -254,8 +254,8 @@ export async function GET() {
 
     const headers = new Headers(imageResponse.headers);
     headers.set(
-      "Cache-Control",
-      "public, s-maxage=300, stale-while-revalidate=59"
+      "Cache-Control", "no-store",
+      // "public, s-maxage=300, stale-while-revalidate=59"
     );
 
     return new Response(imageResponse.body, {

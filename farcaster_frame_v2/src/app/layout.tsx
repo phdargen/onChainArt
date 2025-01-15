@@ -8,7 +8,7 @@ const frame = {
   version: "next",
   imageUrl: "https://xonin-frame-v2.vercel.app/api/og",
   button: {
-    title: "Mint",
+    title: "Mint onchain generative art",
     action: {
       type: "launch_frame",
       name: "Xonin",
@@ -23,10 +23,10 @@ const frame = {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://xonin-frame-v2.vercel.app/"),
-    title: "Xonin Mints",
+    title: "Xonin",
     openGraph: {
       title: "Xonin",
-      description: "Mints",
+      description: "Mint",
       images: "https://xonin-frame-v2.vercel.app/api/og",
     },
     other: {

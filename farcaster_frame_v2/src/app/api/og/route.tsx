@@ -34,7 +34,7 @@ export async function GET() {
       )
     ).then((res) => res.arrayBuffer());
 
-    const imageUrl = mint.imageUrl.replace("?width=250", "?width=1600");
+    const imageUrl = 'https://xonin.vercel.app/token0.png?width=1600' // mint.imageUrl.replace("?width=250", "?width=1600");
 
     const imageResponse = new ImageResponse(
       (

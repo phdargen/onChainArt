@@ -34,7 +34,8 @@ export async function GET() {
       )
     ).then((res) => res.arrayBuffer());
 
-    const imageUrl = mint.imageUrl.replace("?width=250", "?width=1600");
+    const imageUrl = 'https://xonin.vercel.app/token0.png' // mint.imageUrl.replace("?width=250", "?width=1600");
+    console.log(imageUrl);
 
     const imageResponse = new ImageResponse(
       (
@@ -254,8 +255,7 @@ export async function GET() {
 
     const headers = new Headers(imageResponse.headers);
     headers.set(
-      "Cache-Control", "no-store",
-      // "public, s-maxage=300, stale-while-revalidate=59"
+      "Cache-Control", "public, s-maxage=300, stale-while-revalidate=59"
     );
 
     return new Response(imageResponse.body, {

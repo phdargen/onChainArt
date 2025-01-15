@@ -3,6 +3,7 @@ import { base, sepolia } from 'wagmi/chains';
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import type { ApiUserMinimal } from "@/lib/api";
+import { CardDescription } from "@/components/ui/card";
 
 interface ArtworkInfoProps {
   name: string;
@@ -69,9 +70,13 @@ export function ArtworkInfo({ name, creator, chainId, description, isMinting }: 
         </div>
       </div>
 
-      <p className="text-sm mb-4">
-        {isMinting ? description : ("This mint is closed. Don't miss the next one! Add this frame to get featured mint notifications.")}
-      </p>
+      <CardDescription>
+        {description?.split('\n\n').map((paragraph, i) => (
+          <p key={i} className="mt-4 first:mt-0">
+            {paragraph}
+          </p>
+        ))}
+      </CardDescription>
     </div>
   );
 }

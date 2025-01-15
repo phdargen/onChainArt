@@ -5,7 +5,8 @@ import type {
   ApiGetFeaturedMintTransaction200Response 
 } from './api';
 
-const chainId = sepolia.id;
+// const chainId = sepolia.id;
+const chainId = base.id;
 
 // Define both contracts
 const contracts = {
@@ -22,7 +23,7 @@ export const mockFeaturedMintResponse: ApiGetFeaturedMint200Response = {
     mint: {
       name: "Xonin",
       imageUrl: "https://xonin.vercel.app/xonin.gif?width=1000",
-      description: "Xonin - Onchain generative art collection. \n\n The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint. The artwork is stored fully onchain as SVG.",
+      description: "Xonin - Onchain generative art collection.",
       creator: {
         fid: 372088,
         username: "dudecaster",

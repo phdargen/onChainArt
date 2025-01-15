@@ -26,7 +26,7 @@ interface CollectButtonProps {
 }
 
 const formatEthPrice = (priceInWei: number) => {
-  const eth = (priceInWei / 1e18).toFixed(3);
+  const eth = (priceInWei / 1e18).toFixed(4);
   return `${eth} ETH`;
 };
 

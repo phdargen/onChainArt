@@ -34,8 +34,7 @@ export default function Home() {
           name={mint.name}
           creator={mint.creator}
           chainId={mint.chainId}
-          description={`${mint.description ?? ''}\n
-            The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint with 100 distinct color patterns and 2 art styles. The artwork is stored fully onchain as SVG.`}
+          description={mint.description ?? ''}
           isMinting={mint.isMinting}
         />
         <CollectButton

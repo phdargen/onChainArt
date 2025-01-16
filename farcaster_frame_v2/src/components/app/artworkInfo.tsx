@@ -3,7 +3,6 @@ import { base, sepolia } from 'wagmi/chains';
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import type { ApiUserMinimal } from "@/lib/api";
-import { CardDescription } from "@/components/ui/card";
 
 interface ArtworkInfoProps {
   name: string;
@@ -70,13 +69,15 @@ export function ArtworkInfo({ name, creator, chainId, description, isMinting }: 
         </div>
       </div>
 
-      <CardDescription>
-        {description?.split('\n\n').map((paragraph, i) => (
-          <p key={i} className="mt-4 first:mt-0">
-            {paragraph}
-          </p>
-        ))}
-      </CardDescription>
+      <p className="text-sm mb-4">
+        {description}
+      </p>
+
+      <p className="text-sm mb-2">
+        The transaction hash is used as random seed for the algorithm creating unique patterns for each NFT mint with 100 distinct color patterns and 2 art styles. The artwork is stored fully onchain as SVG.
+        {isMinting ? '' : (" This mint is closed.")}
+      </p>
+
     </div>
   );
 }

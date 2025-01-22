@@ -69,7 +69,8 @@ module.exports = {
   etherscan: {
     apiKey: {
       base: baseScanApiKey,
-      sepolia: baseScanApiKey,
+      sepolia: etherscanApiKey,
+      baseSepolia: baseScanApiKey,
     },
   },
 

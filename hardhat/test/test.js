@@ -246,3 +246,99 @@ describe("PathNFT", function () {
   });
 
 });
+
+describe("RandomNFTMinter", function () {
+    let pathNFT;
+    let shapeNFT;
+    let randomMinter;
+    let owner;
+    let minter1;
+    let price;
+
+    beforeEach(async function () {
+        [owner, minter1] = await ethers.getSigners();
+
+        // Deploy dependencies
+        const ColorPalette = await ethers.getContractFactory("ColorPalette");
+        const colorPalette = await ColorPalette.deploy();
+
+        const PathSVG = await ethers.getContractFactory("PathSVG");
+        const pathSVG = await PathSVG.deploy();
+
+        const ShapeSVG = await ethers.getContractFactory("ShapeSVG");
+        const shapeSVG = await ShapeSVG.deploy();
+
+        // Deploy NFT contracts
+        const PathNFT = await ethers.getContractFactory("PathNFT");
+        pathNFT = await PathNFT.deploy(colorPalette.address, pathSVG.address, owner.address);
+
+        const ShapeNFT = await ethers.getContractFactory("ShapeNFT");
+        shapeNFT = await ShapeNFT.deploy(colorPalette.address, shapeSVG.address, owner.address);
+
+        // Deploy RandomNFTMinter
+        const RandomMinter = await ethers.getContractFactory("RandomNFTMinter");
+        randomMinter = await RandomMinter.deploy(pathNFT.address, shapeNFT.address);
+
+        price = await pathNFT.price();
+    });
+
+    describe("Minting", function () {
+        it("Should mint either PathNFT or ShapeNFT", async function () {
+            await randomMinter.connect(minter1).mintAndTransfer(minter1.address, { value: price });
+            
+            const pathBalance = await pathNFT.balanceOf(minter1.address);
+            const shapeBalance = await shapeNFT.balanceOf(minter1.address);
+            
+            // Either PathNFT or ShapeNFT should be minted, but not both
+            expect(pathBalance.add(shapeBalance)).to.equal(1);
+            expect(pathBalance.mul(shapeBalance)).to.equal(0);
+        });
+
+        it("Should fail with correct error message if wrong price sent", async function () {
+            const wrongPrice = price.div(2);
+            const pathPrice = await pathNFT.price();
+            const shapePrice = await shapeNFT.price();
+            
+            await expect(
+                randomMinter.connect(minter1).mintAndTransfer(minter1.address, { value: wrongPrice })
+            ).to.be.revertedWith(
+                wrongPrice < pathPrice 
+                    ? `Wrong price for PathNFT, should be ${pathPrice.toString()}`
+                    : `Wrong price for ShapeNFT, should be ${shapePrice.toString()}`
+            );
+        });
+
+        it("Should fail if not enough ETH sent", async function () {
+            await expect(
+                randomMinter.connect(minter1).mintAndTransfer(minter1.address, { value: price.div(2) })
+            ).to.be.reverted;
+        });
+    });
+
+    describe("Withdrawal", function () {
+        it("Should allow owner to withdraw", async function () {
+            // First approve RandomMinter to spend tokens
+            await pathNFT.setApprovalForAll(randomMinter.address, true);
+            await shapeNFT.setApprovalForAll(randomMinter.address, true);
+            
+            // Send some ETH to the contract directly
+            await owner.sendTransaction({
+                to: randomMinter.address,
+                value: price
+            });
+            
+            const balance = await ethers.provider.getBalance(randomMinter.address);
+            expect(balance).to.equal(price);
+            
+            await expect(
+                await randomMinter.withdraw()
+            ).to.changeEtherBalances([randomMinter, owner], [-balance, balance]);
+        });
+
+        it("Should not allow non-owner to withdraw", async function () {
+            await expect(
+                randomMinter.connect(minter1).withdraw()
+            ).to.be.reverted;
+        });
+    });
+});

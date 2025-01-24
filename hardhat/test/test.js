@@ -283,13 +283,18 @@ describe("RandomNFTMinter", function () {
     });
 
     describe("Minting", function () {
-        it("Should mint either PathNFT or ShapeNFT", async function () {
-            await randomMinter.connect(minter1).mintAndTransfer(minter1.address, { value: price });
+        it("Should mint either PathNFT or ShapeNFT and return correct values", async function () {
+            const tx = await randomMinter.connect(minter1).mintAndTransfer(minter1.address, { value: price });
+            const receipt = await tx.wait();
+            
+            const [tokenId, nftContract] = await randomMinter.connect(minter1).callStatic.mintAndTransfer(minter1.address, { value: price });
+            
+            expect(nftContract).to.be.oneOf([pathNFT.address, shapeNFT.address]);
+            expect(tokenId).to.be.gt(0);
             
             const pathBalance = await pathNFT.balanceOf(minter1.address);
             const shapeBalance = await shapeNFT.balanceOf(minter1.address);
             
-            // Either PathNFT or ShapeNFT should be minted, but not both
             expect(pathBalance.add(shapeBalance)).to.equal(1);
             expect(pathBalance.mul(shapeBalance)).to.equal(0);
         });

@@ -16,24 +16,24 @@ contract RandomNFTMinter is Ownable, IERC721Receiver {
         shapeNFT = ShapeNFT(payable(shape));
     }
     
-    function mintAndTransfer(address recipient) external payable {
-
+    function mintAndTransfer(address recipient) external payable returns (uint256 tokenId, address nftContract) {
         // Generate pseudo-random number using block data
         uint256 random = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 2;
         
-        uint256 tokenId;
         if (random == 0) {
             // Mint PathNFT
             uint256 price = pathNFT.price();        
             require(msg.value == price, string.concat("Wrong price for PathNFT, should be ", Strings.toString(price)));
             tokenId = pathNFT.mintNFT{value: msg.value}();
             pathNFT.safeTransferFrom(address(this), recipient, tokenId);
+            nftContract = address(pathNFT);
         } else {
             // Mint ShapeNFT
             uint256 price = shapeNFT.price();        
             require(msg.value == price, string.concat("Wrong price for ShapeNFT, should be ", Strings.toString(price)));
             tokenId = shapeNFT.mintNFT{value: msg.value}();
             shapeNFT.safeTransferFrom(address(this), recipient, tokenId);
+            nftContract = address(shapeNFT);
         }
     }
 

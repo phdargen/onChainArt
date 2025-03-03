@@ -38,6 +38,7 @@ ShapeSVG deployed to: 0xd185aBc2b37FD9B67E715Abc1322ec8D4452bA51
 ShapeNFT deployed to: 0xd58b1248D893f6Dc0f93d7C1A12deed75Bee3785  
 PathSVG deployed to: 0x0f6398eA200f10004e01656DdD616dCf9668c56f  
 PathNFT deployed to: 0x15077415012b6f5a6F2842928886B51e0E2CB2D6  
+RandomNFTMinter deployed to: 0x32f75546e56aEC829ce13A9b73d4ebb42bF56b9c
 
 ### Base Mainnet
 ColorPalette deployed to: 0xE4b5406863fF3f42Ba87adB9cAD3a4d4E1321857 

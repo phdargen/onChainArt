@@ -10,6 +10,8 @@ import { MintSuccessSheet } from "@/components/app/mintSuccessSheet";
 import { Card } from "@/components/ui/card";
 import { useFeaturedMint } from "@/lib/queries";
 import { useFrameSplash } from "@/providers/FrameSplashProvider";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
+
 
 // eslint-disable-next-line import/no-default-export
 export default function Home() {
@@ -21,6 +23,14 @@ export default function Home() {
   const [mintedTokenId, setMintedTokenId] = React.useState<number>();
   const [error, setError] = React.useState<string>();
   const [mintedCollection, setMintedCollection] = React.useState<'paths' | 'shapes'>('paths');
+
+  const { setFrameReady, isFrameReady, context } = useMiniKit();
+
+  useEffect(() => {
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [setFrameReady, isFrameReady]);
 
   useEffect(() => {
     dismiss();

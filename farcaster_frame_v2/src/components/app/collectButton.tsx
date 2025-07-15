@@ -5,7 +5,6 @@ import {
   useAccount,
   useConnect,
   useSendTransaction,
-  useSwitchChain,
   useWaitForTransactionReceipt,
 } from "wagmi";
 
@@ -42,9 +41,8 @@ export function CollectButton({
   onError,
   isMinting,
 }: CollectButtonProps) {
-  const { isConnected, address, chain: currentChain } = useAccount();
+  const { isConnected, address} = useAccount();
   const { connect } = useConnect();
-  const { switchChainAsync } = useSwitchChain();
   const { sendTransactionAsync, isPending: isSending } = useSendTransaction();
   const [hash, setHash] = React.useState<`0x${string}`>();
   const [isLoadingTxData, setIsLoadingTxData] = React.useState(false);
@@ -88,9 +86,9 @@ export function CollectButton({
         return;
       }
 
-      if (currentChain?.id !== targetChainId) {
-        await switchChainAsync({ chainId: targetChainId });
-      }
+      // if (currentChain?.id !== targetChainId) {
+      //   await switchChainAsync({ chainId: targetChainId });
+      // }
 
       setIsLoadingTxData(true);
       const {

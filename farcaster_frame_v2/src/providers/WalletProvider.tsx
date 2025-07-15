@@ -1,16 +1,15 @@
-import { farcasterFrame } from "@farcaster/miniapp-wagmi-connector";
+import { farcasterMiniApp as miniAppConnector } from '@farcaster/miniapp-wagmi-connector'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { base, baseSepolia, sepolia } from "wagmi/chains";
+import { base} from "wagmi/chains";
 
 export const config = createConfig({
-  chains: [base, baseSepolia,sepolia ],
+  chains: [base],
   transports: {
     [base.id]: http(),
-    [baseSepolia.id]: http(),
-    [sepolia.id]: http(),
   },
-  connectors: [farcasterFrame()],
+  connectors: [miniAppConnector()
+  ],
 });
 
 const queryClient = new QueryClient();

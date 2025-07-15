@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@farcaster/frame-sdk": "^0.0.26",
-    "@farcaster/frame-wagmi-connector": "^0.0.6",
+    "@farcaster/miniapp-sdk": "^0.1.7",
+    "@farcaster/miniapp-wagmi-connector": "^1.0.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",

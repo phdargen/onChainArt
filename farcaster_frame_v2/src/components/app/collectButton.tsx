@@ -1,5 +1,5 @@
-import { sdk } from '@farcaster/frame-sdk';
-import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
+import { sdk } from '@farcaster/miniapp-sdk';
+import { farcasterFrame } from "@farcaster/miniapp-wagmi-connector";
 import React from "react";
 import {
   useAccount,

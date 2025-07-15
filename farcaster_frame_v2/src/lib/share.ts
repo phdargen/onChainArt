@@ -1,14 +1,18 @@
-export function getShareUrl({
-  name,
+// This function now returns the data needed for composeCast
+// The actual composeCast call should be made in the component using useComposeCast hook
+export function getShareData({
+  _name,
   username,
 }: {
-  name: string;
+  _name: string;
   username?: string;
 }) {
-  name;
   const text = username
     ? `I just collected "Name of Work" by handle`
     : `I just collected "Name of Work"`;
 
-  return `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent("https://mint.warpcast.com/")}`;
+  return {
+    text,
+    embeds: ["https://mint.warpcast.com/"]
+  };
 }

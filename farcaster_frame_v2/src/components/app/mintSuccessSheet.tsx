@@ -1,4 +1,5 @@
-import sdk from "@farcaster/frame-sdk";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
+import { sdk } from "@farcaster/miniapp-sdk";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
@@ -11,7 +12,6 @@ import {
   DrawerOverlay,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { useViewer } from "@/providers/FrameContextProvider";
 
 interface MintSuccessSheetProps {
   isOpen: boolean;
@@ -35,15 +35,17 @@ export function MintSuccessSheet({
     sdk.actions.addFrame();
   }, [onClose]);
 
-  const { frameAdded } = useViewer();
+  const { composeCast } = useComposeCast();
 
   const handleShare = () => {
     const text = tokenId 
       ? `I just minted ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'} #${tokenId}!` 
       : `I just collected ${name} ${collection === 'paths' ? 'Paths' : 'Shapes'}!`;
     
-    const url = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent('https://xonin-frame-v2.vercel.app/')}`;
-    sdk.actions.openUrl(url);
+    composeCast({
+      text,
+      embeds: ['https://xonin-frame-v2.vercel.app/']
+    });
   };
 
   return (
@@ -75,15 +77,13 @@ export function MintSuccessSheet({
           </div>
 
           <div className="flex gap-2">
-            {!frameAdded && (
-              <Button
-                onClick={handleAdd}
-                variant="secondary"
-                className="flex-1 h-[48px]"
-              >
-                Add Frame
-              </Button>
-            )}
+            <Button
+              onClick={handleAdd}
+              variant="secondary"
+              className="flex-1 h-[48px]"
+            >
+              Add Frame
+            </Button>
             <Button 
               variant="secondary"
               className="flex-1 h-[48px]"

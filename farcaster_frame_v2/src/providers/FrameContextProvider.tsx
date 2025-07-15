@@ -1,9 +1,9 @@
-import sdk, { Context } from "@farcaster/frame-sdk";
+import { Context, sdk } from "@farcaster/miniapp-sdk";
 import React from "react";
 
 import { Loading } from "@/components/ui/loading";
 
-const FAKE_FRAME_CONTEXT: Context.FrameContext | undefined =
+const FAKE_FRAME_CONTEXT: Context.MiniAppContext | undefined =
   process.env.NODE_ENV === "development"
     ? {
         user: {
@@ -41,10 +41,10 @@ function FrameContextProvider({ children }: React.PropsWithChildren) {
     React.useState<boolean>(false);
 
 
-  const [frameContext, setFrameContext] = React.useState<Context.FrameContext | undefined>(FAKE_FRAME_CONTEXT);
+  const [frameContext, setFrameContext] = React.useState<Context.MiniAppContext | undefined>(FAKE_FRAME_CONTEXT);
 
   const checkFrameContext = React.useCallback(async () => {
-    const ctx: Context.FrameContext = await sdk.context;
+    const ctx: Context.MiniAppContext = await sdk.context;
 
     if (
       typeof ctx !== "undefined" &&

@@ -1,5 +1,4 @@
-import { sdk } from '@farcaster/frame-sdk';
-import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
+import { sdk } from '@farcaster/miniapp-sdk';
 import React from "react";
 import {
   useAccount,
@@ -43,7 +42,7 @@ export function CollectButton({
   isMinting,
 }: CollectButtonProps) {
   const { isConnected, address, chain: currentChain } = useAccount();
-  const { connect } = useConnect();
+  const { connect, connectors } = useConnect();
   const { switchChainAsync } = useSwitchChain();
   const { sendTransactionAsync, isPending: isSending } = useSendTransaction();
   const [hash, setHash] = React.useState<`0x${string}`>();
@@ -84,7 +83,7 @@ export function CollectButton({
       successHandled.current = false;
 
       if (!isConnected || !address) {
-        connect({ connector: farcasterFrame() });
+        connect({ connector: connectors[0] });
         return;
       }
 

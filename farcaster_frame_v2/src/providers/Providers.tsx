@@ -1,36 +1,24 @@
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
+import { type ReactNode } from "react";
+import { base } from "wagmi/chains";
 
-import { AuthedPrefetchesProvider } from './AuthedPrefetchesProvider';
-import { FrameContextProvider } from './FrameContextProvider';
-import { FrameSplashProvider } from './FrameSplashProvider';
-import { WalletProvider } from './WalletProvider';
-
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1e3 * 60 * 60,
-    },
-  },
-});
-
-function Providers({ children }: React.PropsWithChildren) {
+export function Providers(props: { children: ReactNode }) {
   return (
-    <FrameSplashProvider>
-      <FrameContextProvider>
-        <QueryClientProvider client={client}>
-          <AuthedPrefetchesProvider>
-            <WalletProvider>
-            {/* */}
-            {children}
-            {/* */}
-            </WalletProvider>
-          </AuthedPrefetchesProvider>
-        </QueryClientProvider>
-      </FrameContextProvider>
-    </FrameSplashProvider>
+    <MiniKitProvider
+      apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+      chain={base}
+      config={{
+        appearance: {
+          mode: "auto",
+          theme: "mini-app-theme",
+          name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+          logo: process.env.NEXT_PUBLIC_ICON_URL,
+        },
+      }}
+    >
+      {props.children}
+    </MiniKitProvider>
   );
 }
-
-export { Providers };

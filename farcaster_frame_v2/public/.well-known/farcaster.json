@@ -12,6 +12,22 @@
     "imageUrl": "https://xonin-frame-v2.vercel.app/api/og",
     "buttonTitle": "Mint onchain generative art",
     "splashImageUrl": "https://xonin.vercel.app/token34.png",
-    "splashBackgroundColor": "#002d62"
+    "splashBackgroundColor": "#002d62",
+
+    "tagline": "Based generative art",
+    "subtitle": "Based generative art",
+    "description": "Xonin - Based generative art",
+    "heroImageUrl": "https://xonin-frame-v2.vercel.app/xoninHero.png",
+    "primaryCategory": "art-creativity",
+    "tags": [
+        "generative",
+        "art",
+        "nft",
+        "svg",
+        "onchain"
+      ],
+    "ogTitle": "Xonin - Based generative art",
+    "ogDescription": "Xonin - Based generative art",
+    "ogImageUrl": "https://xonin.vercel.app/token34.png"
   }
 }

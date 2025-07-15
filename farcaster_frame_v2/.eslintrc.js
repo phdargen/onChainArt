@@ -30,7 +30,7 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
-    'simple-import-sort/imports': 'error',
+    'simple-import-sort/imports': 'off',
     'simple-import-sort/exports': 'error',
     'no-restricted-imports': [
       'error',

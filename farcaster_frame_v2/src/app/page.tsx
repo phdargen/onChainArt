@@ -24,7 +24,7 @@ export default function Home() {
   const [error, setError] = React.useState<string>();
   const [mintedCollection, setMintedCollection] = React.useState<'paths' | 'shapes'>('paths');
 
-  const { setFrameReady, isFrameReady, context } = useMiniKit();
+  const { setFrameReady, isFrameReady } = useMiniKit();
 
   useEffect(() => {
     if (!isFrameReady) {

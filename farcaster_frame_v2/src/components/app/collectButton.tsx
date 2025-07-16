@@ -1,6 +1,7 @@
 import { sdk } from '@farcaster/miniapp-sdk';
 import { farcasterFrame } from "@farcaster/miniapp-wagmi-connector";
 import React from "react";
+import { parseEventLogs } from 'viem';
 import {
   useAccount,
   useConnect,
@@ -63,8 +64,56 @@ export function CollectButton({
   React.useEffect(() => {
     if (isSuccess && !successHandled.current && receipt) {
       successHandled.current = true;
-      const tokenId = Number(receipt.logs[0].topics[3]);
-      onCollect(tokenId, currentCollection);
+      
+      let tokenId: number | undefined;
+      
+      // First try the existing approach (for EOA wallets)
+      try {
+        const directTokenId = Number(receipt.logs[0].topics[3]);
+        if (directTokenId && !isNaN(directTokenId) && directTokenId > 0) {
+          onCollect(directTokenId, currentCollection);
+          setHash(undefined);
+          successHandled.current = false;
+          return;
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn("Failed to extract tokenId using direct approach, trying fallback", e);
+      }
+      
+      // Fallback approach using parseEventLogs (for smart accounts)
+      try {
+        const transferEventAbi = {
+          type: 'event',
+          name: 'Transfer',
+          inputs: [
+            { indexed: true, name: 'from', type: 'address' },
+            { indexed: true, name: 'to', type: 'address' },
+            { indexed: true, name: 'tokenId', type: 'uint256' },
+          ],
+        } as const;
+
+        const logs = parseEventLogs({
+          abi: [transferEventAbi],
+          logs: receipt.logs,
+        });
+
+        const transferLog = logs.find(log => 'eventName' in log && log.eventName === 'Transfer');
+
+        if (transferLog && 'args' in transferLog && transferLog.args?.tokenId) {
+          tokenId = Number(transferLog.args.tokenId);
+          onCollect(tokenId, currentCollection);
+        } else {
+          // eslint-disable-next-line no-console
+          console.warn("No Transfer event found");
+          onCollect(undefined, currentCollection);
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to parse logs", e);
+        onCollect(undefined, currentCollection);
+      }
+
       setHash(undefined);
       successHandled.current = false;
     }

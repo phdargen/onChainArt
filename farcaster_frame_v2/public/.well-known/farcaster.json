@@ -29,5 +29,8 @@
     "ogTitle": "Xonin - Based generative art",
     "ogDescription": "Xonin - Based generative art",
     "ogImageUrl": "https://xonin.vercel.app/token34.png"
+  },
+  "baseBuilder": {
+    "allowedAddresses": ["0x5d6b055F4d7D2a60B0534abf9E8D8e61aBf7ea27"]
   }
 }

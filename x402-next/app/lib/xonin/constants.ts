@@ -1,4 +1,5 @@
 export const XONIN_SHAPES = "0xc6a050398BB92CB077b119BEAd045f3b52eA9a17";
+export const XONIN_PATHS = "0x1F21BB5e880828D1016FE2965A172407414c373c";
 export const abi = [
   {
     inputs: [

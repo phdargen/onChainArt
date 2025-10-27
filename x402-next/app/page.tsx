@@ -16,11 +16,14 @@ import {
 import { Avatar, Name } from "@coinbase/onchainkit/identity";
 import xoninGif from "./assets/xonin.gif";
 
+type CollectionType = "shapes" | "paths";
+
 export default function Home() {
   const { address, isConnected, connector, chainId } = useAccount();
   const [response, setResponse] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mintingCollection, setMintingCollection] = useState<CollectionType | null>(null);
 
   const config = createConfig({
     chains: [base],
@@ -30,12 +33,13 @@ export default function Home() {
   });
 
   const handleMint = useCallback(
-    async () => {
+    async (collection: CollectionType) => {
       if (!isConnected) {
         setError("Please connect your wallet first");
         return;
       }
 
+      setMintingCollection(collection);
       setIsLoading(true);
       setError("");
       setResponse(null);
@@ -50,6 +54,7 @@ export default function Home() {
         if (!walletClient) {
           setError("Wallet client not available");
           setIsLoading(false);
+          setMintingCollection(null);
           return;
         }
 
@@ -64,7 +69,8 @@ export default function Home() {
 
         console.log("Calling mint API with payment...");
 
-        const apiResponse = await fetchWithPayment("/api/mint", {
+        const endpoint = collection === "shapes" ? "/api/mint-shapes" : "/api/mint-paths";
+        const apiResponse = await fetchWithPayment(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -94,6 +100,7 @@ export default function Home() {
         );
       } finally {
         setIsLoading(false);
+        setMintingCollection(null);
       }
     },
     [isConnected, address, chainId, connector, config]
@@ -125,8 +132,9 @@ export default function Home() {
         {/* Mint Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900 font-mono">Mint NFT</h2>
+          
           <p className="text-sm text-gray-600 mb-6 font-mono">
-            Click below to mint a Xonin Shapes NFT. Payment of ${process.env.MINT_PRICE || "0.001"} USDC will be processed via x402 protocol.
+            Choose a collection to mint. Payment of ${process.env.MINT_PRICE || "0.001"} USDC will be processed via x402 protocol.
           </p>
           
           {/* Xonin GIF Display */}
@@ -138,20 +146,35 @@ export default function Home() {
             />
           </div>
           
-          <button
-            onClick={handleMint}
-            disabled={!isConnected || isLoading}
-            className={`w-full py-3 px-4 rounded-lg font-mono font-medium transition-colors ${
-              !isConnected || isLoading
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-green-600 text-white hover:bg-green-700"
-            }`}
-          >
-            {isLoading ? "Minting..." : `Mint NFT ($${process.env.MINT_PRICE || "0.001"} USDC)`}
-          </button>
+          {/* Two Mint Buttons */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <button
+              onClick={() => handleMint("shapes")}
+              disabled={!isConnected || isLoading}
+              className={`py-3 px-4 rounded-lg font-mono font-medium transition-colors ${
+                !isConnected || isLoading
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              {isLoading && mintingCollection === "shapes" ? "Minting..." : "Mint Shapes"}
+            </button>
+            
+            <button
+              onClick={() => handleMint("paths")}
+              disabled={!isConnected || isLoading}
+              className={`py-3 px-4 rounded-lg font-mono font-medium transition-colors ${
+                !isConnected || isLoading
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              {isLoading && mintingCollection === "paths" ? "Minting..." : "Mint Paths"}
+            </button>
+          </div>
           
           {!isConnected && (
-            <p className="mt-4 text-sm text-yellow-600 font-mono text-center">
+            <p className="mt-2 text-sm text-yellow-600 font-mono text-center">
               Please connect your wallet first
             </p>
           )}

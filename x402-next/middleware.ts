@@ -14,12 +14,20 @@ if (!payTo || !process.env.CDP_API_KEY_ID || !process.env.CDP_API_KEY_SECRET) {
 export const middleware = paymentMiddleware(
   payTo,
   {
-    "/api/mint": {
+    "/api/mint-shapes": {
       price: "$0.001",
       network: "base",
       config: {
         discoverable: false,
-        description: "Mint NFT - returns buyer address",
+        description: "Mint Xonin Shapes NFT",
+      },
+    },
+    "/api/mint-paths": {
+      price: "$0.001",
+      network: "base",
+      config: {
+        discoverable: false,
+        description: "Mint Xonin Paths NFT",
       },
     },
   },
@@ -28,6 +36,6 @@ export const middleware = paymentMiddleware(
 
 // Configure which paths the middleware should run on
 export const config = {
-  matcher: ["/api/mint2/:path*"],
+  matcher: ["/api/mint-shapes/:path*", "/api/mint-paths/:path*"],
   runtime: "nodejs",
 };

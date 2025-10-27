@@ -7,14 +7,18 @@ import {
   http,
   encodeFunctionData,
   parseEther,
+  formatEther,
   decodeEventLog,
   type Address,
   type Hex,
 } from "viem";
 import { base } from "viem/chains";
 import { XONIN_SHAPES, abi } from "../../lib/xonin/constants";
+import { withTransactionRetry, withUserOperationRetry } from "../../lib/retry";
 
 /**
+ *
+ *
  * Protected API route that mints an Xonin Shapes NFT and transfers it to the buyer
  * This route is protected by the x402 payment middleware configured in middleware.ts
  */
@@ -68,6 +72,101 @@ export async function GET(request: NextRequest) {
       transport: process.env.RPC_URL ? http(process.env.RPC_URL) : http(),
     });
 
+    // Check smart account balance and fund if necessary
+    const mintPrice = parseEther((process.env.MINT_PRICE as string) || "0.001");
+
+    console.log("Checking smart account balance...");
+    const smartAccountBalance = await publicClient.getBalance({
+      address: smartAccount.address as Address,
+    });
+    console.log("Smart account balance:", formatEther(smartAccountBalance), "ETH");
+    console.log("Required mint price:", formatEther(mintPrice), "ETH");
+
+    if (smartAccountBalance < mintPrice) {
+      console.log("Smart account balance insufficient. Checking XONIN_SHAPES contract balance...");
+
+      const contractBalance = await publicClient.getBalance({
+        address: XONIN_SHAPES as Address,
+      });
+      console.log("XONIN_SHAPES contract balance:", formatEther(contractBalance), "ETH");
+
+      if (contractBalance >= mintPrice) {
+        console.log("Contract has sufficient balance. Withdrawing ETH...");
+
+        // Encode the withdraw call
+        const withdrawData = encodeFunctionData({
+          abi,
+          functionName: "withdraw",
+        }) as Hex;
+
+        // Use owner wallet to withdraw from contract
+        const withdrawResult = await withTransactionRetry(async () => {
+          return await owner.sendTransaction({
+            network: "base",
+            transaction: {
+              to: XONIN_SHAPES as Address,
+              data: withdrawData,
+            },
+          });
+        });
+
+        console.log("Waiting for withdraw transaction to be confirmed...");
+        const withdrawReceipt = await publicClient.waitForTransactionReceipt({
+          hash: withdrawResult.transactionHash as Hex,
+        });
+
+        if (withdrawReceipt.status !== "success") {
+          console.error("Withdraw transaction failed");
+          return NextResponse.json(
+            { success: false, error: "Failed to withdraw ETH from contract" },
+            { status: 500 },
+          );
+        }
+
+        console.log("Withdraw confirmed. Transferring ETH to smart account...");
+
+        // Transfer ETH from owner to smart account
+        const transferEthResult = await withTransactionRetry(async () => {
+          return await owner.sendTransaction({
+            network: "base",
+            transaction: {
+              to: smartAccount.address as Address,
+              value: contractBalance,
+            },
+          });
+        });
+
+        console.log("Waiting for ETH transfer to be confirmed...");
+        const transferEthReceipt = await publicClient.waitForTransactionReceipt({
+          hash: transferEthResult.transactionHash as Hex,
+        });
+
+        if (transferEthReceipt.status !== "success") {
+          console.error("ETH transfer to smart account failed");
+          return NextResponse.json(
+            { success: false, error: "Failed to transfer ETH to smart account" },
+            { status: 500 },
+          );
+        }
+
+        console.log("Smart account funded successfully");
+      } else {
+        console.error("Insufficient funds in both smart account and contract");
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Insufficient funds to mint NFT",
+            smartAccountBalance: smartAccountBalance.toString(),
+            contractBalance: contractBalance.toString(),
+            required: mintPrice.toString(),
+          },
+          { status: 500 },
+        );
+      }
+    } else {
+      console.log("Smart account has sufficient balance");
+    }
+
     // Encode the mintNFT() call
     const mintData = encodeFunctionData({
       abi: abi,
@@ -76,16 +175,19 @@ export async function GET(request: NextRequest) {
 
     console.log("Sending mint transaction...");
     // Send user operation to mint the NFT
-    const result = await (smartAccount.sendUserOperation as any)({
-      network: "base",
-      calls: [
-        {
-          to: XONIN_SHAPES as Address,
-          value: parseEther("0.001") as bigint,
-          data: mintData as Hex,
-        },
-      ],
-      paymasterUrl: process.env.PAYMASTER_URL,
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await withUserOperationRetry(async () => {
+      return await (smartAccount.sendUserOperation as any)({
+        network: "base",
+        calls: [
+          {
+            to: XONIN_SHAPES as Address,
+            value: parseEther((process.env.MINT_PRICE as string) || "0.001") as bigint,
+            data: mintData as Hex,
+          },
+        ],
+        paymasterUrl: process.env.PAYMASTER_URL,
+      });
     });
 
     console.log("User operation status:", result.status);
@@ -113,8 +215,6 @@ export async function GET(request: NextRequest) {
     const receipt = await publicClient.waitForTransactionReceipt({
       hash: transactionHash,
     });
-    console.log("Transaction receipt:", receipt);
-    console.log("Transaction receipt logs:", receipt.logs);
 
     // Parse Transfer event logs to find the minted tokenId
     // Transfer event: Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
@@ -161,14 +261,13 @@ export async function GET(request: NextRequest) {
     console.log("Minted tokenId:", tokenId.toString());
 
     // Get tokenURI from the contract
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tokenURI = (await (publicClient.readContract as any)({
       address: XONIN_SHAPES as Address,
       abi,
       functionName: "tokenURI",
       args: [tokenId],
     })) as string;
-
-    console.log("TokenURI retrieved");
 
     // Encode the transferFrom call to transfer NFT to buyer
     const transferData = encodeFunctionData({
@@ -179,17 +278,20 @@ export async function GET(request: NextRequest) {
 
     console.log("Sending transfer transaction to buyer...");
     // Send user operation to transfer the NFT to the buyer
-    const transferResult = await (cdp.evm.sendUserOperation as any)({
-      smartAccount,
-      network: "base",
-      calls: [
-        {
-          to: XONIN_SHAPES as Address,
-          value: parseEther("0") as bigint,
-          data: transferData,
-        },
-      ],
-      paymasterUrl: process.env.PAYMASTER_URL,
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transferResult = await withUserOperationRetry(async () => {
+      return await (cdp.evm.sendUserOperation as any)({
+        smartAccount,
+        network: "base",
+        calls: [
+          {
+            to: XONIN_SHAPES as Address,
+            value: parseEther("0") as bigint,
+            data: transferData,
+          },
+        ],
+        paymasterUrl: process.env.PAYMASTER_URL,
+      });
     });
 
     console.log("Transfer user operation status:", transferResult.status);
@@ -225,6 +327,7 @@ export async function GET(request: NextRequest) {
       buyerAddress,
       mintTransactionHash: transactionHash,
       transferTransactionHash: transferTxHash,
+      openSeaUrl: `https://opensea.io/item/base/${XONIN_SHAPES}/${tokenId.toString()}`,
     });
   } catch (error) {
     console.error("Error in mint route:", error);

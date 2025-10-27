@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: 'Xonin NFT Mint',
   description: 'Mint Xonin Shapes NFT with x402 Payment',
   icons: {
-    icon: '/xonin.gif',
+    icon: '/token0.png',
   },
 };
 

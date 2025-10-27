@@ -14,7 +14,7 @@ import {
   WalletDropdownDisconnect,
 } from "@coinbase/onchainkit/wallet";
 import { Avatar, Name } from "@coinbase/onchainkit/identity";
-import WordmarkCondensed from './assets/x402_wordmark_light.svg';
+import xoninGif from "./assets/xonin.gif";
 
 export default function Home() {
   const { address, isConnected, connector, chainId } = useAccount();
@@ -53,8 +53,9 @@ export default function Home() {
           return;
         }
 
-        // Set maxValue to support payments up to $0.001 USDC (0.001 * 10^6 base units)
-        const maxValueInBaseUnits = BigInt(1 * 10 ** 3); // 0.001 USDC
+        // Set maxValue to support payments in USDC base units (USDC has 6 decimals)
+        const mintPriceInUsdc = parseFloat(process.env.MINT_PRICE || "0.001");
+        const maxValueInBaseUnits = BigInt(Math.ceil(mintPriceInUsdc * 10 ** 6)*2); // Convert USDC to base units
         const fetchWithPayment = wrapFetchWithPayment(
           fetch,
           walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
@@ -103,9 +104,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="w-64 mb-6 mx-auto">
-            <WordmarkCondensed className="mx-auto" />
-          </div>
+
           <h1 className="text-4xl font-bold mb-2 text-gray-900 font-mono">Xonin NFT Mint</h1>
           <p className="text-lg text-gray-600 font-mono">Mint an NFT using x402 payment protocol</p>
         </div>
@@ -127,8 +126,17 @@ export default function Home() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900 font-mono">Mint NFT</h2>
           <p className="text-sm text-gray-600 mb-6 font-mono">
-            Click below to mint a Xonin Shapes NFT. Payment of $0.001 USDC will be processed via x402 protocol.
+            Click below to mint a Xonin Shapes NFT. Payment of ${process.env.MINT_PRICE || "0.001"} USDC will be processed via x402 protocol.
           </p>
+          
+          {/* Xonin GIF Display */}
+          <div className="flex justify-center mb-6">
+            <img 
+              src={xoninGif.src} 
+              alt="Xonin NFT Animation" 
+              className="rounded-lg shadow-md max-w-xs w-full"
+            />
+          </div>
           
           <button
             onClick={handleMint}
@@ -139,7 +147,7 @@ export default function Home() {
                 : "bg-green-600 text-white hover:bg-green-700"
             }`}
           >
-            {isLoading ? "Minting..." : "Mint NFT ($0.001)"}
+            {isLoading ? "Minting..." : `Mint NFT ($${process.env.MINT_PRICE || "0.001"} USDC)`}
           </button>
           
           {!isConnected && (
@@ -166,6 +174,47 @@ export default function Home() {
             
             {response.success ? (
               <div className="space-y-4">
+                {/* Display NFT Image */}
+                {response.tokenURI && (() => {
+                  try {
+                    // Parse the data URI to extract the JSON metadata
+                    const dataPrefix = "data:application/json;utf8,";
+                    if (response.tokenURI.startsWith(dataPrefix)) {
+                      const jsonString = response.tokenURI.substring(dataPrefix.length);
+                      const metadata = JSON.parse(jsonString);
+                      
+                      if (metadata.image) {
+                        // Extract SVG markup from data URI
+                        const svgPrefix = "data:image/svg+xml;utf8,";
+                        let svgMarkup = metadata.image;
+                        
+                        if (metadata.image.startsWith(svgPrefix)) {
+                          svgMarkup = metadata.image.substring(svgPrefix.length);
+                        }
+                        
+                        return (
+                          <div className="flex justify-center mb-6">
+                            <div className="bg-white border-4 border-gray-200 rounded-lg p-4 shadow-lg max-w-md w-full">
+                              <div 
+                                className="w-full overflow-hidden rounded-lg [&>svg]:w-full [&>svg]:h-auto [&>svg]:max-w-full"
+                                dangerouslySetInnerHTML={{ __html: svgMarkup }}
+                              />
+                              {metadata.name && (
+                                <p className="text-center mt-3 font-mono text-sm text-gray-700">
+                                  {metadata.name}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      }
+                    }
+                  } catch (e) {
+                    console.error("Error parsing tokenURI:", e);
+                  }
+                  return null;
+                })()}
+
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <p className="text-sm text-gray-700 font-mono mb-2">
                     <strong>Token ID:</strong> {response.tokenId}
@@ -200,18 +249,22 @@ export default function Home() {
                       </a>
                     </p>
                   )}
+                  {response.openSeaUrl && (
+                    <p className="text-sm text-gray-700 font-mono mb-2">
+                      <strong>OpenSea URL:</strong>
+                      <a 
+                        href={response.openSeaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-xs mt-1 text-blue-600 hover:text-blue-800 break-all"
+                      >
+                        {response.openSeaUrl}
+                      </a>
+                    </p>
+                  )}
                 </div>
 
-                {response.tokenURI && (
-                  <div className="mt-4">
-                    <h3 className="text-lg font-semibold mb-2 text-gray-900 font-mono">Token Metadata</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-                      <pre className="text-xs font-mono text-gray-800">
-                        {response.tokenURI}
-                      </pre>
-                    </div>
-                  </div>
-                )}
+
               </div>
             ) : (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -238,28 +291,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Footer */}
-        <footer className="mt-12 py-8 text-center text-sm text-gray-500 font-mono">
-          By using this site, you agree to be bound by the{' '}
-          <a
-            href="https://www.coinbase.com/legal/developer-platform/terms-of-service"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-700"
-          >
-            CDP Terms of Service
-          </a>{' '}
-          and{' '}
-          <a
-            href="https://www.coinbase.com/legal/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-700"
-          >
-            Global Privacy Policy
-          </a>
-          .
-        </footer>
       </div>
     </div>
   );

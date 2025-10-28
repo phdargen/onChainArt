@@ -112,8 +112,8 @@ export default function Home() {
         {/* Header */}
         <div className="mb-8 text-center">
 
-          <h1 className="text-4xl font-bold mb-2 text-gray-900 font-mono">Xonin NFT Mint</h1>
-          <p className="text-lg text-gray-600 font-mono">Mint an NFT using x402 payment protocol</p>
+          <h1 className="text-4xl font-bold mb-2 text-gray-900 font-mono">Xonin</h1>
+          <p className="text-lg text-gray-600 font-mono">Fully onchain generative art NFT minted through x402</p>
         </div>
 
         {/* Wallet Connection */}
@@ -134,7 +134,7 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4 text-gray-900 font-mono">Mint NFT</h2>
           
           <p className="text-sm text-gray-600 mb-6 font-mono">
-            Choose a collection to mint. Payment of ${process.env.MINT_PRICE_USDC || "0.001"} USDC will be processed via x402 protocol.
+            Choose an art style to mint. Payment of ${process.env.MINT_PRICE_USDC || "0.001"} USDC will be processed via x402 protocol.
           </p>
           
           {/* Xonin GIF Display */}
@@ -175,7 +175,7 @@ export default function Home() {
           
           {!isConnected && (
             <p className="mt-2 text-sm text-yellow-600 font-mono text-center">
-              Please connect your wallet first
+              Please connect your wallet
             </p>
           )}
         </div>

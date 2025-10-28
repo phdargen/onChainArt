@@ -124,5 +124,5 @@ export const middleware = paymentMiddleware(
 // Configure which paths the middleware should run on
 export const config = {
   matcher: ["/api/mint-shapes/:path*", "/api/mint-paths/:path*"],
-  //runtime: "nodejs",
+  runtime: "nodejs",
 };

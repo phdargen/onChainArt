@@ -47,14 +47,14 @@ export async function mintNFT(
     // Get or create the owner account for the smart account (generic name for both collections)
     console.log("Getting or creating owner account...");
     const owner = await cdp.evm.getOrCreateAccount({
-      name: "xonin-owner",
+      name: "xonin-shapes-owner",
     });
     console.log("Owner account address:", owner.address);
 
     // Get or create the smart account with the owner (generic name for both collections)
     console.log("Getting or creating smart account...");
     const smartAccount = (await cdp.evm.getOrCreateSmartAccount({
-      name: "xonin-smart",
+      name: "xonin-shapes-smart",
       owner,
     })) as EvmSmartAccount;
     console.log("Smart account address:", smartAccount.address);
@@ -81,7 +81,7 @@ export async function mintNFT(
       const contractBalance = await publicClient.getBalance({
         address: contractAddress,
       });
-      console.log("Contract balance:", formatEther(contractBalance), "ETH");
+      console.log(`Contract '${contractAddress}' balance:`, formatEther(contractBalance), "ETH");
 
       if (contractBalance >= mintPrice) {
         console.log("Contract has sufficient balance. Withdrawing ETH...");

@@ -15,7 +15,6 @@ import type { ExactEvmPayload } from "x402/types";
 export async function GET(request: NextRequest) {
   // Get the X-PAYMENT header
   const paymentHeader = request.headers.get("x-payment");
-  console.log("paymentHeader", paymentHeader);
 
   if (!paymentHeader) {
     return NextResponse.json({ error: "X-PAYMENT header is required" }, { status: 402 });

@@ -96,6 +96,10 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
 /**
  * Helper function specifically for transaction operations
  * Includes sensible defaults for blockchain transactions
+ *
+ * @param fn - The async function to retry
+ * @param options - Retry configuration options
+ * @returns Promise that resolves with the function result or rejects after all retries
  */
 export async function withTransactionRetry<T>(
   fn: () => Promise<T>,
@@ -117,6 +121,10 @@ export async function withTransactionRetry<T>(
 /**
  * Helper function specifically for user operations
  * Includes sensible defaults for user operations
+ *
+ * @param fn - The async function to retry
+ * @param options - Retry configuration options
+ * @returns Promise that resolves with the function result or rejects after all retries
  */
 export async function withUserOperationRetry<T>(
   fn: () => Promise<T>,

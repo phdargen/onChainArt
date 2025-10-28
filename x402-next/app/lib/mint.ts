@@ -1,6 +1,3 @@
-import { NextRequest, NextResponse } from "next/server";
-import { exact } from "x402/schemes";
-import type { ExactEvmPayload } from "x402/types";
 import { CdpClient, EvmSmartAccount } from "@coinbase/cdp-sdk";
 import {
   createPublicClient,
@@ -13,37 +10,33 @@ import {
   type Hex,
 } from "viem";
 import { base } from "viem/chains";
-import { XONIN_SHAPES, abi } from "../../lib/xonin/constants";
-import { withTransactionRetry, withUserOperationRetry } from "../../lib/retry";
+import { abi } from "./xonin/constants";
+import { withTransactionRetry, withUserOperationRetry } from "./retry";
+
+interface MintResult {
+  success: boolean;
+  tokenId?: string;
+  tokenURI?: string;
+  buyerAddress?: string;
+  mintTransactionHash?: string;
+  transferTransactionHash?: string;
+  openSeaUrl?: string;
+  error?: string;
+}
 
 /**
+ * Shared mint logic for Xonin NFT collections
+ * Mints an NFT from the specified contract and transfers it to the buyer
  *
- *
- * Protected API route that mints an Xonin Shapes NFT and transfers it to the buyer
- * This route is protected by the x402 payment middleware configured in middleware.ts
+ * @param contractAddress - The NFT contract address to mint from
+ * @param buyerAddress - The address to transfer the minted NFT to
+ * @returns MintResult object with success status and transaction details
  */
-export async function GET(request: NextRequest) {
+export async function mintNFT(
+  contractAddress: Address,
+  buyerAddress: Address,
+): Promise<MintResult> {
   try {
-    // Get the X-PAYMENT header
-    // const paymentHeader = request.headers.get("x-payment");
-    // console.log("paymentHeader", paymentHeader);
-
-    // if (!paymentHeader) {
-    //   return NextResponse.json(
-    //     { error: "X-PAYMENT header is required" },
-    //     { status: 402 }
-    //   );
-    // }
-
-    // Decode the payment payload
-    // const decodedPayment = exact.evm.decodePayment(paymentHeader);
-
-    // Extract the buyer's address from the authorization.from field
-    // const buyerAddress = (decodedPayment.payload as ExactEvmPayload).authorization.from as Address;
-
-    const buyerAddress = process.env.RESOURCE_WALLET_ADDRESS as Address;
-    console.log("Buyer address:", buyerAddress);
-
     // Initialize CDP client
     const cdp = new CdpClient({
       apiKeyId: process.env.CDP_API_KEY_ID as string,
@@ -51,17 +44,17 @@ export async function GET(request: NextRequest) {
       walletSecret: process.env.CDP_WALLET_SECRET as string,
     });
 
-    // Get or create the owner account for the smart account
+    // Get or create the owner account for the smart account (generic name for both collections)
     console.log("Getting or creating owner account...");
     const owner = await cdp.evm.getOrCreateAccount({
-      name: "xonin-shapes-owner",
+      name: "xonin-owner",
     });
     console.log("Owner account address:", owner.address);
 
-    // Get or create the smart account with the owner
+    // Get or create the smart account with the owner (generic name for both collections)
     console.log("Getting or creating smart account...");
     const smartAccount = (await cdp.evm.getOrCreateSmartAccount({
-      name: "xonin-shapes-smart",
+      name: "xonin-smart",
       owner,
     })) as EvmSmartAccount;
     console.log("Smart account address:", smartAccount.address);
@@ -83,12 +76,12 @@ export async function GET(request: NextRequest) {
     console.log("Required mint price:", formatEther(mintPrice), "ETH");
 
     if (smartAccountBalance < mintPrice) {
-      console.log("Smart account balance insufficient. Checking XONIN_SHAPES contract balance...");
+      console.log("Smart account balance insufficient. Checking contract balance...");
 
       const contractBalance = await publicClient.getBalance({
-        address: XONIN_SHAPES as Address,
+        address: contractAddress,
       });
-      console.log("XONIN_SHAPES contract balance:", formatEther(contractBalance), "ETH");
+      console.log("Contract balance:", formatEther(contractBalance), "ETH");
 
       if (contractBalance >= mintPrice) {
         console.log("Contract has sufficient balance. Withdrawing ETH...");
@@ -104,7 +97,7 @@ export async function GET(request: NextRequest) {
           return await owner.sendTransaction({
             network: "base",
             transaction: {
-              to: XONIN_SHAPES as Address,
+              to: contractAddress,
               data: withdrawData,
             },
           });
@@ -117,10 +110,10 @@ export async function GET(request: NextRequest) {
 
         if (withdrawReceipt.status !== "success") {
           console.error("Withdraw transaction failed");
-          return NextResponse.json(
-            { success: false, error: "Failed to withdraw ETH from contract" },
-            { status: 500 },
-          );
+          return {
+            success: false,
+            error: "Failed to withdraw ETH from contract",
+          };
         }
 
         console.log("Withdraw confirmed. Transferring ETH to smart account...");
@@ -143,25 +136,19 @@ export async function GET(request: NextRequest) {
 
         if (transferEthReceipt.status !== "success") {
           console.error("ETH transfer to smart account failed");
-          return NextResponse.json(
-            { success: false, error: "Failed to transfer ETH to smart account" },
-            { status: 500 },
-          );
+          return {
+            success: false,
+            error: "Failed to transfer ETH to smart account",
+          };
         }
 
         console.log("Smart account funded successfully");
       } else {
         console.error("Insufficient funds in both smart account and contract");
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Insufficient funds to mint NFT",
-            smartAccountBalance: smartAccountBalance.toString(),
-            contractBalance: contractBalance.toString(),
-            required: mintPrice.toString(),
-          },
-          { status: 500 },
-        );
+        return {
+          success: false,
+          error: "Insufficient funds to mint NFT",
+        };
       }
     } else {
       console.log("Smart account has sufficient balance");
@@ -175,13 +162,13 @@ export async function GET(request: NextRequest) {
 
     console.log("Sending mint transaction...");
     // Send user operation to mint the NFT
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await withUserOperationRetry(async () => {
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await (smartAccount.sendUserOperation as any)({
         network: "base",
         calls: [
           {
-            to: XONIN_SHAPES as Address,
+            to: contractAddress,
             value: parseEther((process.env.MINT_PRICE as string) || "0.001") as bigint,
             data: mintData as Hex,
           },
@@ -202,10 +189,10 @@ export async function GET(request: NextRequest) {
 
     if (userOperation.status !== "complete") {
       console.error("User operation failed");
-      return NextResponse.json(
-        { success: false, error: "Mint transaction failed" },
-        { status: 500 },
-      );
+      return {
+        success: false,
+        error: "Mint transaction failed",
+      };
     }
 
     const transactionHash = userOperation.transactionHash as Hex;
@@ -252,10 +239,10 @@ export async function GET(request: NextRequest) {
 
     if (tokenId === null) {
       console.error("Could not find tokenId in transaction logs");
-      return NextResponse.json(
-        { success: false, error: "Failed to extract tokenId from mint transaction" },
-        { status: 500 },
-      );
+      return {
+        success: false,
+        error: "Failed to extract tokenId from mint transaction",
+      };
     }
 
     console.log("Minted tokenId:", tokenId.toString());
@@ -263,7 +250,7 @@ export async function GET(request: NextRequest) {
     // Get tokenURI from the contract
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tokenURI = (await (publicClient.readContract as any)({
-      address: XONIN_SHAPES as Address,
+      address: contractAddress,
       abi,
       functionName: "tokenURI",
       args: [tokenId],
@@ -278,14 +265,14 @@ export async function GET(request: NextRequest) {
 
     console.log("Sending transfer transaction to buyer...");
     // Send user operation to transfer the NFT to the buyer
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transferResult = await withUserOperationRetry(async () => {
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await (cdp.evm.sendUserOperation as any)({
         smartAccount,
         network: "base",
         calls: [
           {
-            to: XONIN_SHAPES as Address,
+            to: contractAddress,
             value: parseEther("0") as bigint,
             data: transferData,
           },
@@ -305,43 +292,31 @@ export async function GET(request: NextRequest) {
 
     if (transferUserOp.status !== "complete") {
       console.error("Transfer user operation failed");
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Transfer to buyer failed",
-          tokenId: tokenId.toString(),
-          note: "NFT was minted but transfer failed - still owned by smart account",
-        },
-        { status: 500 },
-      );
+      return {
+        success: false,
+        error: "NFT was minted but transfer to buyer failed",
+        tokenId: tokenId.toString(),
+      };
     }
 
     const transferTxHash = transferUserOp.transactionHash;
     console.log("Transfer transaction confirmed:", transferTxHash);
 
     // Return success response
-    return NextResponse.json({
+    return {
       success: true,
       tokenId: tokenId.toString(),
       tokenURI: tokenURI,
       buyerAddress,
       mintTransactionHash: transactionHash,
       transferTransactionHash: transferTxHash,
-      openSeaUrl: `https://opensea.io/item/base/${XONIN_SHAPES}/${tokenId.toString()}`,
-    });
+      openSeaUrl: `https://opensea.io/item/base/${contractAddress}/${tokenId.toString()}`,
+    };
   } catch (error) {
-    console.error("Error in mint route:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : "Failed to mint NFT",
-      },
-      { status: 500 },
-    );
+    console.error("Error in mint function:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to mint NFT",
+    };
   }
-}
-
-export async function POST(request: NextRequest) {
-  // Support both GET and POST methods
-  return GET(request);
 }

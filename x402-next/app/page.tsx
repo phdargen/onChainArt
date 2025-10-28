@@ -59,7 +59,7 @@ export default function Home() {
         }
 
         // Set maxValue to support payments in USDC base units (USDC has 6 decimals)
-        const mintPriceInUsdc = parseFloat(process.env.MINT_PRICE || "0.001");
+        const mintPriceInUsdc = parseFloat(process.env.MINT_PRICE_USDC || "0.001");
         const maxValueInBaseUnits = BigInt(Math.ceil(mintPriceInUsdc * 10 ** 6)*2); // Convert USDC to base units
         const fetchWithPayment = wrapFetchWithPayment(
           fetch,
@@ -134,7 +134,7 @@ export default function Home() {
           <h2 className="text-xl font-semibold mb-4 text-gray-900 font-mono">Mint NFT</h2>
           
           <p className="text-sm text-gray-600 mb-6 font-mono">
-            Choose a collection to mint. Payment of ${process.env.MINT_PRICE || "0.001"} USDC will be processed via x402 protocol.
+            Choose a collection to mint. Payment of ${process.env.MINT_PRICE_USDC || "0.001"} USDC will be processed via x402 protocol.
           </p>
           
           {/* Xonin GIF Display */}

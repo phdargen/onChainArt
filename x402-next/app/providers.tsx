@@ -18,6 +18,9 @@ export function Providers(props: { children: ReactNode }) {
         wallet: {
           display: "modal",
           preference: 'all',
+          supportedWallets: {
+            rabby: true,
+          },
         },
       }}
     >

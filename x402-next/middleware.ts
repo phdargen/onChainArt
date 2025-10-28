@@ -21,7 +21,7 @@ export const middleware = paymentMiddleware(
       config: {
         discoverable: true,
         description:
-          "Xonin - A generative art NFT collection featuring unique abstract designs of layered vivid curves and geometric shapes, crafted with 100 distinct color palettes. The artworks are created, rendered and stored fully onchain to ensure immutability and permanence. Employed art style: Shapes. Website: https://xonin.vercel.app; X: https://x.com/home.",
+          "Xonin - A generative art NFT collection featuring unique abstract designs of layered vivid curves and geometric shapes, crafted with 100 distinct color palettes. The artworks are created, rendered and stored fully onchain to ensure immutability and permanence. Employed art style: Shapes. Website: https://xonin.vercel.app; X: https://x.com/XoninNFT.",
         inputSchema: {
           bodyType: "json",
           bodyFields: {},
@@ -43,23 +43,23 @@ export const middleware = paymentMiddleware(
             },
             buyerAddress: {
               type: "string",
-              description: "The wallet address that received the minted NFT",
+              description: "Wallet address that received NFT",
             },
             mintTransactionHash: {
               type: "string",
-              description: "Transaction hash of the mint operation",
+              description: "Transaction hash of mint operation",
             },
             transferTransactionHash: {
               type: "string",
-              description: "Transaction hash of the transfer to buyer",
+              description: "Transaction hash of transfer to buyer",
             },
             openSeaUrl: {
               type: "string",
-              description: "OpenSea URL to view the minted NFT",
+              description: "OpenSea URL to view NFT",
             },
             error: {
               type: "string",
-              description: "Error message with details about what failed. May include context about partial failures (e.g., NFT was minted but transfer failed)",
+              description: "Error message",
             },
           },
           required: ["success"],
@@ -72,7 +72,7 @@ export const middleware = paymentMiddleware(
       config: {
         discoverable: true,
         description:
-          "Xonin - A generative art NFT collection featuring unique abstract designs of layered vivid curves and geometric shapes, crafted with 100 distinct color palettes. The artworks are created, rendered and stored fully onchain to ensure immutability and permanence. Employed art style: Paths. Website: https://xonin.vercel.app; X: https://x.com/home.",
+          "Xonin - A generative art NFT collection featuring unique abstract designs of layered vivid curves and geometric shapes, crafted with 100 distinct color palettes. The artworks are created, rendered and stored fully onchain to ensure immutability and permanence. Employed art style: Paths. Website: https://xonin.vercel.app; X: https://x.com/XoninNFT.",
         inputSchema: {
           bodyType: "json",
           bodyFields: {},
@@ -94,23 +94,23 @@ export const middleware = paymentMiddleware(
             },
             buyerAddress: {
               type: "string",
-              description: "The wallet address that received the minted NFT",
+              description: "Wallet address that received NFT",
             },
             mintTransactionHash: {
               type: "string",
-              description: "Transaction hash of the mint operation",
+              description: "Transaction hash of mint operation",
             },
             transferTransactionHash: {
               type: "string",
-              description: "Transaction hash of the transfer to buyer",
+              description: "Transaction hash of transfer to buyer",
             },
             openSeaUrl: {
               type: "string",
-              description: "OpenSea URL to view the minted NFT",
+              description: "OpenSea URL to view NFT",
             },
             error: {
               type: "string",
-              description: "Error message with details about what failed. May include context about partial failures (e.g., NFT was minted but transfer failed)",
+              description: "Error message",
             },
           },
           required: ["success"],

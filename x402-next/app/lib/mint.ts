@@ -78,8 +78,10 @@ export async function mintNFT(
     if (smartAccountBalance < mintPrice) {
       console.log("Smart account balance insufficient. Checking contract balance...");
 
-      const contractBalance = await publicClient.getBalance({
-        address: contractAddress,
+      const contractBalance = await withTransactionRetry(async () => {
+        return await publicClient.getBalance({
+          address: contractAddress,
+        });
       });
       console.log(`Contract '${contractAddress}' balance:`, formatEther(contractBalance), "ETH");
 
@@ -104,8 +106,10 @@ export async function mintNFT(
         });
 
         console.log("Waiting for withdraw transaction to be confirmed...");
-        const withdrawReceipt = await publicClient.waitForTransactionReceipt({
-          hash: withdrawResult.transactionHash as Hex,
+        const withdrawReceipt = await withTransactionRetry(async () => {
+          return await publicClient.waitForTransactionReceipt({
+            hash: withdrawResult.transactionHash as Hex,
+          });
         });
 
         if (withdrawReceipt.status !== "success") {
@@ -130,8 +134,10 @@ export async function mintNFT(
         });
 
         console.log("Waiting for ETH transfer to be confirmed...");
-        const transferEthReceipt = await publicClient.waitForTransactionReceipt({
-          hash: transferEthResult.transactionHash as Hex,
+        const transferEthReceipt = await withTransactionRetry(async () => {
+          return await publicClient.waitForTransactionReceipt({
+            hash: transferEthResult.transactionHash as Hex,
+          });
         });
 
         if (transferEthReceipt.status !== "success") {
@@ -199,8 +205,10 @@ export async function mintNFT(
     console.log("Mint transaction confirmed:", transactionHash);
 
     // Wait for transaction receipt to get logs
-    const receipt = await publicClient.waitForTransactionReceipt({
-      hash: transactionHash,
+    const receipt = await withTransactionRetry(async () => {
+      return await publicClient.waitForTransactionReceipt({
+        hash: transactionHash,
+      });
     });
 
     // Parse Transfer event logs to find the minted tokenId
@@ -248,12 +256,14 @@ export async function mintNFT(
     console.log("Minted tokenId:", tokenId.toString());
 
     // Get tokenURI from the contract
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tokenURI = (await (publicClient.readContract as any)({
-      address: contractAddress,
-      abi,
-      functionName: "tokenURI",
-      args: [tokenId],
+    const tokenURI = (await withTransactionRetry(async () => {
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return await (publicClient.readContract as any)({
+        address: contractAddress,
+        abi,
+        functionName: "tokenURI",
+        args: [tokenId],
+      });
     })) as string;
 
     // Encode the transferFrom call to transfer NFT to buyer

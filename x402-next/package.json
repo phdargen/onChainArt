@@ -18,7 +18,7 @@
   "dependencies": {
     "@coinbase/cdp-sdk": "^1.38.4",
     "@coinbase/onchainkit": "^1.1.1",
-    "@coinbase/x402": "^0.7.0",
+    "@coinbase/x402": "^0.7.1",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.14",
     "@tailwindcss/typography": "^0.5.19",
@@ -30,7 +30,7 @@
     "viem": "^2.21.26",
     "wagmi": "^2.18.2",
     "x402-fetch": "^0.7.0",
-    "x402-next": "^0.7.0"
+    "x402-next": "^0.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",

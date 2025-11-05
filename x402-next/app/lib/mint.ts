@@ -22,6 +22,10 @@ interface MintResult {
   transferTransactionHash?: string;
   openSeaUrl?: string;
   error?: string;
+  // Additional metadata for failed transactions
+  withdrawTransactionHash?: string;
+  ethTransferTransactionHash?: string;
+  userOpHash?: string;
 }
 
 /**
@@ -117,6 +121,7 @@ export async function mintNFT(
           return {
             success: false,
             error: "Failed to withdraw ETH from contract",
+            withdrawTransactionHash: withdrawResult.transactionHash,
           };
         }
 
@@ -145,6 +150,8 @@ export async function mintNFT(
           return {
             success: false,
             error: "Failed to transfer ETH to smart account",
+            ethTransferTransactionHash: transferEthResult.transactionHash,
+            withdrawTransactionHash: withdrawResult.transactionHash,
           };
         }
 
@@ -198,6 +205,12 @@ export async function mintNFT(
       return {
         success: false,
         error: "Mint transaction failed",
+        userOpHash: result.userOpHash,
+        mintTransactionHash:
+          "transactionHash" in userOperation
+            ? (userOperation.transactionHash as string)
+            : undefined,
+        buyerAddress,
       };
     }
 
@@ -250,6 +263,8 @@ export async function mintNFT(
       return {
         success: false,
         error: "Failed to extract tokenId from mint transaction",
+        mintTransactionHash: transactionHash,
+        buyerAddress,
       };
     }
 
@@ -306,6 +321,15 @@ export async function mintNFT(
         success: false,
         error: "NFT was minted but transfer to buyer failed",
         tokenId: tokenId.toString(),
+        tokenURI: tokenURI,
+        mintTransactionHash: transactionHash,
+        transferTransactionHash:
+          "transactionHash" in transferUserOp
+            ? (transferUserOp.transactionHash as string)
+            : undefined,
+        userOpHash: transferResult.userOpHash,
+        buyerAddress,
+        openSeaUrl: `https://opensea.io/item/base/${contractAddress}/${tokenId.toString()}`,
       };
     }
 

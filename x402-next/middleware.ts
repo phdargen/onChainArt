@@ -59,7 +59,21 @@ export const middleware = paymentMiddleware(
             },
             error: {
               type: "string",
-              description: "Error message",
+              description: "Error message if operation failed",
+            },
+            withdrawTransactionHash: {
+              type: "string",
+              description:
+                "Transaction hash of ETH withdrawal from contract (for failed withdrawals)",
+            },
+            ethTransferTransactionHash: {
+              type: "string",
+              description:
+                "Transaction hash of ETH transfer to smart account (for failed transfers)",
+            },
+            userOpHash: {
+              type: "string",
+              description: "User operation hash for debugging failed transactions",
             },
           },
           required: ["success"],
@@ -110,7 +124,21 @@ export const middleware = paymentMiddleware(
             },
             error: {
               type: "string",
-              description: "Error message",
+              description: "Error message if operation failed",
+            },
+            withdrawTransactionHash: {
+              type: "string",
+              description:
+                "Transaction hash of ETH withdrawal from contract (for failed withdrawals)",
+            },
+            ethTransferTransactionHash: {
+              type: "string",
+              description:
+                "Transaction hash of ETH transfer to smart account (for failed transfers)",
+            },
+            userOpHash: {
+              type: "string",
+              description: "User operation hash for debugging failed transactions",
             },
           },
           required: ["success"],

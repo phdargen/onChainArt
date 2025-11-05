@@ -4,6 +4,7 @@ import { XONIN_SHAPES } from "../../lib/xonin/constants";
 import { mintNFT } from "../../lib/mint";
 import { exact } from "x402/schemes";
 import type { ExactEvmPayload } from "x402/types";
+import { redis } from "../../lib/redis";
 
 /**
  * Protected API route that mints a Xonin Shapes NFT and transfers it to the buyer
@@ -29,6 +30,14 @@ export async function GET(request: NextRequest) {
 
   // Call shared mint function with Shapes contract address
   const result = await mintNFT(XONIN_SHAPES as Address, buyerAddress);
+
+  // Save response to Redis list
+  const redisKey = `mint-shapes:${buyerAddress}`;
+  try {
+    await redis.rpush(redisKey, JSON.stringify(result));
+  } catch (error) {
+    console.error("Failed to save response to Redis:", error);
+  }
 
   // Return appropriate response
   if (result.success) {

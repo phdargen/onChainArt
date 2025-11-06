@@ -12,7 +12,8 @@ export function Providers(props: { children: ReactNode }) {
       config={{
         appearance: {
           mode: "auto",
-          name: "Xonin NFT Mint",
+          name: "Xonin",
+          logo: "https://xonin-x402.vercel.app/token0.png",
           theme: 'default',
         },
         wallet: {
